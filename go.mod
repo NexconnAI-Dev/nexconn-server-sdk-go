@@ -1,3 +1,3 @@
-module gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go
+module github.com/NexconnAI-Dev/nexconn-server-sdk-go
 
 go 1.18
