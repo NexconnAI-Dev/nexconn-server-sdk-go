@@ -1,5 +1,9 @@
 openapi: 3.0.3
 info:
+  contact:
+    email: customercare@nexconn.ai
+    name: Nexconn
+    url: https://www.nexconn.ai/
   description: "OpenAPI specification aligned with the current Nexconn public documentation,\
     \ PDF source documents, and generated SDK requirements."
   license:
