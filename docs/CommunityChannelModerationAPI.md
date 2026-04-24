@@ -30,7 +30,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
@@ -104,7 +104,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
@@ -178,7 +178,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
@@ -252,7 +252,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
@@ -326,7 +326,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
@@ -400,7 +400,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
@@ -474,7 +474,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
@@ -548,7 +548,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {

@@ -11,14 +11,20 @@ OpenAPI specification aligned with the current Nexconn public documentation, PDF
 
 ## Installation
 
+The module is hosted on **GitHub** at `https://github.com/NexconnAI-Dev/nexconn-server-sdk-go`.
+
+From your module root (next to `go.mod`), add the dependency:
+
 ```sh
-go get gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go
+go get github.com/NexconnAI-Dev/nexconn-server-sdk-go@latest
 ```
+
+Or add a `require github.com/NexconnAI-Dev/nexconn-server-sdk-go v…` line to `go.mod` and run `go mod tidy`. Prefer a **release tag** instead of `@latest` when tags exist (for example `go get github.com/NexconnAI-Dev/nexconn-server-sdk-go@v0.1.0`).
 
 Import:
 
 ```go
-import ncsdk "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+import ncsdk "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 ```
 
 ## Quick Start
@@ -34,11 +40,11 @@ import (
 	"log"
 	"os"
 
-	nexconnsdk "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	ncsdk "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 func main() {
-	cfg := nexconnsdk.NewConfiguration()
+	cfg := ncsdk.NewConfiguration()
 	cfg.SetNexconnCredentials(
 		os.Getenv("NEXCONN_APP_KEY"),
 		os.Getenv("NEXCONN_APP_SECRET"),
@@ -55,10 +61,10 @@ func main() {
 
 	// cfg.SetErrorSwitchingThreshold(1)
 
-	client := nexconnsdk.NewAPIClient(cfg)
+	client := ncsdk.NewAPIClient(cfg)
 	ctx := context.Background()
 
-	req := nexconnsdk.NewAccessTokenIssueRequest("user_123", "Alice")
+	req := ncsdk.NewAccessTokenIssueRequest("user_123", "Alice")
 	req.SetAvatarUrl("https://example.com/avatar.png")
 
 	resp, httpResp, err := client.UserManagementAPI.
@@ -83,7 +89,7 @@ import (
 	"errors"
 	"fmt"
 
-	nexconnsdk "gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go"
+	ncsdk "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
 )
 
 resp, httpResp, err := client.GroupChannelManagementAPI.
@@ -91,7 +97,7 @@ resp, httpResp, err := client.GroupChannelManagementAPI.
 	GroupChannelCreateRequest(req).
 	Execute()
 if err != nil {
-	var apiErr *nexconnsdk.GenericOpenAPIError
+	var apiErr *ncsdk.GenericOpenAPIError
 	if errors.As(err, &apiErr) {
 		fmt.Printf("HTTP %d: errorCode=%d, errorMessage=%s\n",
 			apiErr.HttpStatus(), apiErr.ErrorCode(), apiErr.ErrorMessage())
@@ -657,7 +663,7 @@ Each of these functions takes a value of the given basic type and returns a poin
 
 ## Package Info
 
-- Repository: `gitlab2.rongcloud.net/public-server/nexconn-server-sdk-go`
+- Repository: `https://github.com/NexconnAI-Dev/nexconn-server-sdk-go`
 - Package version: `0.1.0`
 
 ## License
