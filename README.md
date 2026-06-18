@@ -4,8 +4,8 @@ OpenAPI specification aligned with the current Nexconn public documentation, PDF
 
 ## Overview
 
-- API version: 0.1.0
-- Package version: 0.1.0
+- API version: 0.1.1
+- Package version: 0.1.1
 - Generator version: 7.14.0
 - Build package: org.openapitools.codegen.languages.GoClientCodegen
 
@@ -143,7 +143,7 @@ if err != nil {
 
 - Automatic Nexconn request signing when `SetNexconnCredentials()` is configured
 - Built-in multi-domain failover support via `SetPrimaryBackupDomains()`
-- Default `User-Agent`: `ncsdk/0.1.0`
+- Default `User-Agent`: `ncsdk/0.1.1`
 - Automatic `X-Request-ID` generation
 
 ## Configuration of Server URL
@@ -256,7 +256,9 @@ Class | Method | HTTP request | Description
 *MessageManagementAPI* | [**ListCommunityChannelMessageMetadata**](docs/MessageManagementAPI.md#listcommunitychannelmessagemetadata) | **Post** /v4/community-channel/message/metadata/list | List community-channel message metadata
 *MessageManagementAPI* | [**SendCommunityChannelMessage**](docs/MessageManagementAPI.md#sendcommunitychannelmessage) | **Post** /v4/community-channel/message/send | Send a community channel message
 *MessageManagementAPI* | [**SendDirectChannelMessage**](docs/MessageManagementAPI.md#senddirectchannelmessage) | **Post** /v4/direct-channel/message/send | Send a direct message
+*MessageManagementAPI* | [**SendDirectChannelStreamMessage**](docs/MessageManagementAPI.md#senddirectchannelstreammessage) | **Post** /v4/direct-channel/message/stream/send | Send a direct channel stream message
 *MessageManagementAPI* | [**SendGroupChannelMessage**](docs/MessageManagementAPI.md#sendgroupchannelmessage) | **Post** /v4/group-channel/message/send | Send a group message
+*MessageManagementAPI* | [**SendGroupChannelStreamMessage**](docs/MessageManagementAPI.md#sendgroupchannelstreammessage) | **Post** /v4/group-channel/message/stream/send | Send a group channel stream message
 *MessageManagementAPI* | [**SendOpenChannelMessage**](docs/MessageManagementAPI.md#sendopenchannelmessage) | **Post** /v4/open-channel/message/send | Send an open channel message
 *MessageManagementAPI* | [**SetChannelTypeMessageMetadata**](docs/MessageManagementAPI.md#setchanneltypemessagemetadata) | **Post** /v4/channel-type/message/metadata/set | Set message metadata
 *MessageManagementAPI* | [**SetCommunityChannelMessageMetadata**](docs/MessageManagementAPI.md#setcommunitychannelmessagemetadata) | **Post** /v4/community-channel/message/metadata/set | Set community-channel message metadata
@@ -433,6 +435,7 @@ Class | Method | HTTP request | Description
 - [CommunityUserSubchannelListResponseResult](docs/CommunityUserSubchannelListResponseResult.md)
 - [DirectChannelMessageSendRequest](docs/DirectChannelMessageSendRequest.md)
 - [DirectChannelMessageUpdateRequest](docs/DirectChannelMessageUpdateRequest.md)
+- [DirectChannelStreamMessageSendRequest](docs/DirectChannelStreamMessageSendRequest.md)
 - [FriendAddRequest](docs/FriendAddRequest.md)
 - [FriendCleanRequest](docs/FriendCleanRequest.md)
 - [FriendDeleteRequest](docs/FriendDeleteRequest.md)
@@ -498,6 +501,7 @@ Class | Method | HTTP request | Description
 - [GroupChannelProfileListResponseResult](docs/GroupChannelProfileListResponseResult.md)
 - [GroupChannelProfileUpdateRequest](docs/GroupChannelProfileUpdateRequest.md)
 - [GroupChannelQuitRequest](docs/GroupChannelQuitRequest.md)
+- [GroupChannelStreamMessageSendRequest](docs/GroupChannelStreamMessageSendRequest.md)
 - [GroupChannelSummaryItem](docs/GroupChannelSummaryItem.md)
 - [GroupChannelTransferOwnerRequest](docs/GroupChannelTransferOwnerRequest.md)
 - [GroupChannelUserMuteListAddRequest](docs/GroupChannelUserMuteListAddRequest.md)
@@ -575,6 +579,9 @@ Class | Method | HTTP request | Description
 - [ProfanityWordListedItem](docs/ProfanityWordListedItem.md)
 - [SingleMessageIdResponse](docs/SingleMessageIdResponse.md)
 - [SingleMessageIdResponseResult](docs/SingleMessageIdResponseResult.md)
+- [StreamMessageContent](docs/StreamMessageContent.md)
+- [StreamMessageSendResponse](docs/StreamMessageSendResponse.md)
+- [StreamMessageSendResponseResult](docs/StreamMessageSendResponseResult.md)
 - [SystemChannelBroadcastAllRequest](docs/SystemChannelBroadcastAllRequest.md)
 - [SystemChannelBroadcastDeleteRequest](docs/SystemChannelBroadcastDeleteRequest.md)
 - [SystemChannelBroadcastOnlineRequest](docs/SystemChannelBroadcastOnlineRequest.md)
@@ -664,7 +671,7 @@ Each of these functions takes a value of the given basic type and returns a poin
 ## Package Info
 
 - Repository: `https://github.com/NexconnAI-Dev/nexconn-server-sdk-go`
-- Package version: `0.1.0`
+- Package version: `0.1.1`
 
 ## License
 

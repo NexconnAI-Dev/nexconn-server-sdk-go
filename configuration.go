@@ -3,7 +3,7 @@ Nexconn Server API
 
 OpenAPI specification aligned with the current Nexconn public documentation, PDF source documents, and generated SDK requirements.
 
-API version: 0.1.0
+API version: 0.1.1
 Contact: customercare@nexconn.ai
 */
 
@@ -101,7 +101,7 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "nexconn-sdk-go/0.1.0",
+		UserAgent:        "nexconn-sdk-go/0.1.1",
 		Debug:            false,
 		NonceGenerator:   defaultNonceGenerator,
 		autoFailoverEnabled: true,

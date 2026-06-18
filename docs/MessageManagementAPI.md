@@ -12,7 +12,9 @@ Method | HTTP request | Description
 [**ListCommunityChannelMessageMetadata**](MessageManagementAPI.md#ListCommunityChannelMessageMetadata) | **Post** /v4/community-channel/message/metadata/list | List community-channel message metadata
 [**SendCommunityChannelMessage**](MessageManagementAPI.md#SendCommunityChannelMessage) | **Post** /v4/community-channel/message/send | Send a community channel message
 [**SendDirectChannelMessage**](MessageManagementAPI.md#SendDirectChannelMessage) | **Post** /v4/direct-channel/message/send | Send a direct message
+[**SendDirectChannelStreamMessage**](MessageManagementAPI.md#SendDirectChannelStreamMessage) | **Post** /v4/direct-channel/message/stream/send | Send a direct channel stream message
 [**SendGroupChannelMessage**](MessageManagementAPI.md#SendGroupChannelMessage) | **Post** /v4/group-channel/message/send | Send a group message
+[**SendGroupChannelStreamMessage**](MessageManagementAPI.md#SendGroupChannelStreamMessage) | **Post** /v4/group-channel/message/stream/send | Send a group channel stream message
 [**SendOpenChannelMessage**](MessageManagementAPI.md#SendOpenChannelMessage) | **Post** /v4/open-channel/message/send | Send an open channel message
 [**SetChannelTypeMessageMetadata**](MessageManagementAPI.md#SetChannelTypeMessageMetadata) | **Post** /v4/channel-type/message/metadata/set | Set message metadata
 [**SetCommunityChannelMessageMetadata**](MessageManagementAPI.md#SetCommunityChannelMessageMetadata) | **Post** /v4/community-channel/message/metadata/set | Set community-channel message metadata
@@ -703,6 +705,82 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## SendDirectChannelStreamMessage
+
+> StreamMessageSendResponse SendDirectChannelStreamMessage(ctx).DirectChannelStreamMessageSendRequest(directChannelStreamMessageSendRequest).Execute()
+
+Send a direct channel stream message
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
+)
+
+func main() {
+	directChannelStreamMessageSendRequest := *openapiclient.NewDirectChannelStreamMessageSendRequest("FromUserId_example", "ToUserId_example", "MessageType_example", *openapiclient.NewStreamMessageContent("Content_example", int64(123), false)) // DirectChannelStreamMessageSendRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	configuration.SetRongCloudCredentials(
+		os.Getenv("RONGCLOUD_APP_KEY"),
+		os.Getenv("RONGCLOUD_APP_SECRET"),
+	)
+	if err := configuration.SetPrimaryBackupDomains(
+		os.Getenv("RONGCLOUD_PRIMARY_API_DOMAIN"),
+		os.Getenv("RONGCLOUD_SECONDARY_API_DOMAIN"),
+	); err != nil {
+		log.Fatalf("configure domains failed: %v", err)
+	}
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.MessageManagementAPI.SendDirectChannelStreamMessage(context.Background()).DirectChannelStreamMessageSendRequest(directChannelStreamMessageSendRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `MessageManagementAPI.SendDirectChannelStreamMessage``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `SendDirectChannelStreamMessage`: StreamMessageSendResponse
+	fmt.Fprintf(os.Stdout, "Response from `MessageManagementAPI.SendDirectChannelStreamMessage`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSendDirectChannelStreamMessageRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **directChannelStreamMessageSendRequest** | [**DirectChannelStreamMessageSendRequest**](DirectChannelStreamMessageSendRequest.md) |  | 
+
+### Return type
+
+[**StreamMessageSendResponse**](StreamMessageSendResponse.md)
+
+### Authorization
+
+[NexconnSignature](../README.md#NexconnSignature)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## SendGroupChannelMessage
 
 > ChannelMessageSendResponse SendGroupChannelMessage(ctx).GroupChannelMessageSendRequest(groupChannelMessageSendRequest).Execute()
@@ -764,6 +842,82 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ChannelMessageSendResponse**](ChannelMessageSendResponse.md)
+
+### Authorization
+
+[NexconnSignature](../README.md#NexconnSignature)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SendGroupChannelStreamMessage
+
+> StreamMessageSendResponse SendGroupChannelStreamMessage(ctx).GroupChannelStreamMessageSendRequest(groupChannelStreamMessageSendRequest).Execute()
+
+Send a group channel stream message
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
+)
+
+func main() {
+	groupChannelStreamMessageSendRequest := *openapiclient.NewGroupChannelStreamMessageSendRequest("FromUserId_example", "ToChannelId_example", "MessageType_example", *openapiclient.NewStreamMessageContent("Content_example", int64(123), false)) // GroupChannelStreamMessageSendRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	configuration.SetRongCloudCredentials(
+		os.Getenv("RONGCLOUD_APP_KEY"),
+		os.Getenv("RONGCLOUD_APP_SECRET"),
+	)
+	if err := configuration.SetPrimaryBackupDomains(
+		os.Getenv("RONGCLOUD_PRIMARY_API_DOMAIN"),
+		os.Getenv("RONGCLOUD_SECONDARY_API_DOMAIN"),
+	); err != nil {
+		log.Fatalf("configure domains failed: %v", err)
+	}
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.MessageManagementAPI.SendGroupChannelStreamMessage(context.Background()).GroupChannelStreamMessageSendRequest(groupChannelStreamMessageSendRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `MessageManagementAPI.SendGroupChannelStreamMessage``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `SendGroupChannelStreamMessage`: StreamMessageSendResponse
+	fmt.Fprintf(os.Stdout, "Response from `MessageManagementAPI.SendGroupChannelStreamMessage`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSendGroupChannelStreamMessageRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **groupChannelStreamMessageSendRequest** | [**GroupChannelStreamMessageSendRequest**](GroupChannelStreamMessageSendRequest.md) |  | 
+
+### Return type
+
+[**StreamMessageSendResponse**](StreamMessageSendResponse.md)
 
 ### Authorization
 

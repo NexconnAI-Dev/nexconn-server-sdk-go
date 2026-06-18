@@ -3,7 +3,7 @@ Nexconn Server API
 
 OpenAPI specification aligned with the current Nexconn public documentation, PDF source documents, and generated SDK requirements.
 
-API version: 0.1.0
+API version: 0.1.1
 Contact: customercare@nexconn.ai
 */
 
@@ -1135,6 +1135,130 @@ func (a *MessageManagementAPIService) SendDirectChannelMessageExecute(r ApiSendD
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiSendDirectChannelStreamMessageRequest struct {
+	ctx context.Context
+	ApiService *MessageManagementAPIService
+	directChannelStreamMessageSendRequest *DirectChannelStreamMessageSendRequest
+}
+
+func (r ApiSendDirectChannelStreamMessageRequest) DirectChannelStreamMessageSendRequest(directChannelStreamMessageSendRequest DirectChannelStreamMessageSendRequest) ApiSendDirectChannelStreamMessageRequest {
+	r.directChannelStreamMessageSendRequest = &directChannelStreamMessageSendRequest
+	return r
+}
+
+func (r ApiSendDirectChannelStreamMessageRequest) Execute() (*StreamMessageSendResponse, *http.Response, error) {
+	return r.ApiService.SendDirectChannelStreamMessageExecute(r)
+}
+
+/*
+SendDirectChannelStreamMessage Send a direct channel stream message
+
+Rate limit: 100/sec.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiSendDirectChannelStreamMessageRequest
+*/
+func (a *MessageManagementAPIService) SendDirectChannelStreamMessage(ctx context.Context) ApiSendDirectChannelStreamMessageRequest {
+	return ApiSendDirectChannelStreamMessageRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return StreamMessageSendResponse
+func (a *MessageManagementAPIService) SendDirectChannelStreamMessageExecute(r ApiSendDirectChannelStreamMessageRequest) (*StreamMessageSendResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *StreamMessageSendResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MessageManagementAPIService.SendDirectChannelStreamMessage")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v4/direct-channel/message/stream/send"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.directChannelStreamMessageSendRequest == nil {
+		return localVarReturnValue, nil, reportError("directChannelStreamMessageSendRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.directChannelStreamMessageSendRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["NexconnSignature"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["App-Key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiSendGroupChannelMessageRequest struct {
 	ctx context.Context
 	ApiService *MessageManagementAPIService
@@ -1208,6 +1332,130 @@ func (a *MessageManagementAPIService) SendGroupChannelMessageExecute(r ApiSendGr
 	}
 	// body params
 	localVarPostBody = r.groupChannelMessageSendRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["NexconnSignature"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["App-Key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiSendGroupChannelStreamMessageRequest struct {
+	ctx context.Context
+	ApiService *MessageManagementAPIService
+	groupChannelStreamMessageSendRequest *GroupChannelStreamMessageSendRequest
+}
+
+func (r ApiSendGroupChannelStreamMessageRequest) GroupChannelStreamMessageSendRequest(groupChannelStreamMessageSendRequest GroupChannelStreamMessageSendRequest) ApiSendGroupChannelStreamMessageRequest {
+	r.groupChannelStreamMessageSendRequest = &groupChannelStreamMessageSendRequest
+	return r
+}
+
+func (r ApiSendGroupChannelStreamMessageRequest) Execute() (*StreamMessageSendResponse, *http.Response, error) {
+	return r.ApiService.SendGroupChannelStreamMessageExecute(r)
+}
+
+/*
+SendGroupChannelStreamMessage Send a group channel stream message
+
+Rate limit: 100/sec.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiSendGroupChannelStreamMessageRequest
+*/
+func (a *MessageManagementAPIService) SendGroupChannelStreamMessage(ctx context.Context) ApiSendGroupChannelStreamMessageRequest {
+	return ApiSendGroupChannelStreamMessageRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return StreamMessageSendResponse
+func (a *MessageManagementAPIService) SendGroupChannelStreamMessageExecute(r ApiSendGroupChannelStreamMessageRequest) (*StreamMessageSendResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *StreamMessageSendResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MessageManagementAPIService.SendGroupChannelStreamMessage")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v4/group-channel/message/stream/send"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.groupChannelStreamMessageSendRequest == nil {
+		return localVarReturnValue, nil, reportError("groupChannelStreamMessageSendRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.groupChannelStreamMessageSendRequest
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

@@ -3,7 +3,7 @@ Nexconn Server API
 
 OpenAPI specification aligned with the current Nexconn public documentation, PDF source documents, and generated SDK requirements.
 
-API version: 0.1.0
+API version: 0.1.1
 Contact: customercare@nexconn.ai
 */
 
@@ -44,7 +44,7 @@ var (
 	queryDescape    = strings.NewReplacer( "%5B", "[", "%5D", "]" )
 )
 
-// APIClient manages communication with the Nexconn Server API API v0.1.0
+// APIClient manages communication with the Nexconn Server API API v0.1.1
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration
