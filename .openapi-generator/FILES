@@ -124,6 +124,7 @@ docs/CommunityUserSubchannelListResponse.md
 docs/CommunityUserSubchannelListResponseResult.md
 docs/DirectChannelMessageSendRequest.md
 docs/DirectChannelMessageUpdateRequest.md
+docs/DirectChannelStreamMessageSendRequest.md
 docs/FriendAddRequest.md
 docs/FriendCleanRequest.md
 docs/FriendDeleteRequest.md
@@ -192,6 +193,7 @@ docs/GroupChannelProfileListResponse.md
 docs/GroupChannelProfileListResponseResult.md
 docs/GroupChannelProfileUpdateRequest.md
 docs/GroupChannelQuitRequest.md
+docs/GroupChannelStreamMessageSendRequest.md
 docs/GroupChannelSummaryItem.md
 docs/GroupChannelTransferOwnerRequest.md
 docs/GroupChannelUserMuteListAddRequest.md
@@ -276,6 +278,9 @@ docs/ProfanityWordListResponseResult.md
 docs/ProfanityWordListedItem.md
 docs/SingleMessageIdResponse.md
 docs/SingleMessageIdResponseResult.md
+docs/StreamMessageContent.md
+docs/StreamMessageSendResponse.md
+docs/StreamMessageSendResponseResult.md
 docs/SystemChannelBroadcastAllRequest.md
 docs/SystemChannelBroadcastDeleteRequest.md
 docs/SystemChannelBroadcastOnlineRequest.md
@@ -439,6 +444,7 @@ model_community_user_subchannel_list_response.go
 model_community_user_subchannel_list_response_result.go
 model_direct_channel_message_send_request.go
 model_direct_channel_message_update_request.go
+model_direct_channel_stream_message_send_request.go
 model_friend_add_request.go
 model_friend_clean_request.go
 model_friend_delete_request.go
@@ -504,6 +510,7 @@ model_group_channel_profile_list_response.go
 model_group_channel_profile_list_response_result.go
 model_group_channel_profile_update_request.go
 model_group_channel_quit_request.go
+model_group_channel_stream_message_send_request.go
 model_group_channel_summary_item.go
 model_group_channel_transfer_owner_request.go
 model_group_channel_user_mute_list_add_request.go
@@ -581,6 +588,9 @@ model_profanity_word_list_response_result.go
 model_profanity_word_listed_item.go
 model_single_message_id_response.go
 model_single_message_id_response_result.go
+model_stream_message_content.go
+model_stream_message_send_response.go
+model_stream_message_send_response_result.go
 model_system_channel_broadcast_all_request.go
 model_system_channel_broadcast_delete_request.go
 model_system_channel_broadcast_online_request.go

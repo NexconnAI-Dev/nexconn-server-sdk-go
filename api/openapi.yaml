@@ -10,7 +10,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   title: Nexconn Server API
-  version: 0.1.0
+  version: 0.1.1
 tags:
 - description: "User lifecycle, authentication, soft delete, bans, direct-channel\
     \ mute, and user tag operations. Core capabilities align with the official User\
@@ -666,6 +666,31 @@ paths:
       summary: Send a direct message
       tags:
       - MessageManagement
+  /v4/direct-channel/message/stream/send:
+    post:
+      description: "Rate limit: 100/sec."
+      externalDocs:
+        description: Official documentation
+        url: https://docs.nexconn.ai/platform-chat-api/message/send-private-stream
+      operationId: sendDirectChannelStreamMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DirectChannelStreamMessageSendRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StreamMessageSendResponse"
+          description: OK
+      security:
+      - NexconnSignature: []
+      summary: Send a direct channel stream message
+      tags:
+      - MessageManagement
   /v4/group-channel/message/send:
     post:
       description: "Rate limit: 20/sec (by target group count)."
@@ -689,6 +714,31 @@ paths:
       security:
       - NexconnSignature: []
       summary: Send a group message
+      tags:
+      - MessageManagement
+  /v4/group-channel/message/stream/send:
+    post:
+      description: "Rate limit: 100/sec."
+      externalDocs:
+        description: Official documentation
+        url: https://docs.nexconn.ai/platform-chat-api/message/send-group-stream
+      operationId: sendGroupChannelStreamMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupChannelStreamMessageSendRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StreamMessageSendResponse"
+          description: OK
+      security:
+      - NexconnSignature: []
+      summary: Send a group channel stream message
       tags:
       - MessageManagement
   /v4/open-channel/message/send:
@@ -4868,6 +4918,22 @@ components:
       required:
       - code
       type: object
+    StreamMessageSendResponse:
+      description: Response for stream message send. The `result` field is only present
+        in the response to the first chunk.
+      example:
+        result:
+          messageId: messageId
+        code: 0
+      properties:
+        code:
+          format: int32
+          type: integer
+        result:
+          $ref: "#/components/schemas/StreamMessageSendResponse_result"
+      required:
+      - code
+      type: object
     SingleMessageIdResponse:
       example:
         result:
@@ -5119,6 +5185,170 @@ components:
       - fromUserId
       - messageType
       - toChannelIds
+      type: object
+    DirectChannelStreamMessageSendRequest:
+      example:
+        fromUserId: fromUserId
+        toUserId: toUserId
+        messageType: RC:StreamMsg
+        content:
+          content: Hello
+          seq: 1
+          complete: false
+        isEchoToSender: 1
+        shouldPersist: 1
+      properties:
+        fromUserId:
+          description: Sender user ID. The sender should have an access token so push
+            notifications can display sender information correctly.
+          type: string
+        toUserId:
+          description: Recipient user ID. Only a single recipient is supported per
+            stream message.
+          type: string
+        messageType:
+          description: Message type. Fixed value `RC:StreamMsg` for stream messages.
+          type: string
+        content:
+          $ref: "#/components/schemas/StreamMessageContent"
+        isEchoToSender:
+          description: Whether to sync the message to the sender's client while the
+            sender is online. `1` enables sync and `0` disables it.
+          format: int32
+          type: integer
+        shouldPersist:
+          description: Whether to store the message in recipient cloud history. `0`
+            means do not store and `1` means store.
+          format: int32
+          type: integer
+        metadata:
+          additionalProperties:
+            type: string
+          description: Custom message metadata entries. Keys are limited to 32 characters
+            and values to 4096 characters. Up to 100 key-value pairs.
+          type: object
+        disableUpdateLastMsg:
+          description: Whether to keep this message from updating the channel's last-message
+            preview.
+          type: boolean
+      required:
+      - content
+      - fromUserId
+      - messageType
+      - toUserId
+      type: object
+    GroupChannelStreamMessageSendRequest:
+      example:
+        fromUserId: fromUserId
+        toChannelId: toChannelId
+        messageType: RC:StreamMsg
+        content:
+          content: Hello
+          seq: 1
+          complete: false
+        isEchoToSender: 1
+        shouldPersist: 1
+      properties:
+        fromUserId:
+          description: Sender user ID.
+          type: string
+        toChannelId:
+          description: Target group channel ID.
+          type: string
+        messageType:
+          description: Message type. Fixed value `RC:StreamMsg` for stream messages.
+          type: string
+        content:
+          $ref: "#/components/schemas/StreamMessageContent"
+        toUserIds:
+          description: Recipient member user IDs for a targeted group message. Up
+            to 10 users.
+          items:
+            type: string
+          type: array
+        isEchoToSender:
+          description: Whether to sync the message to the sender's client while the
+            sender is online. `1` enables sync and `0` disables it.
+          format: int32
+          type: integer
+        shouldPersist:
+          description: Whether to store the message in cloud message history. `0`
+            means do not store and `1` means store.
+          format: int32
+          type: integer
+        hasMention:
+          description: Whether this is an @mention message. Set to `1` when `content`
+            contains `mentionedInfo`.
+          format: int32
+          type: integer
+        metadata:
+          additionalProperties:
+            type: string
+          description: Custom message metadata entries. Keys are limited to 32 characters
+            and values to 4096 characters. Up to 100 key-value pairs.
+          type: object
+        disableUpdateLastMsg:
+          description: Whether to keep this message from updating the channel's last-message
+            preview.
+          type: boolean
+      required:
+      - content
+      - fromUserId
+      - messageType
+      - toChannelId
+      type: object
+    StreamMessageContent:
+      description: Stream message content payload.
+      example:
+        content: Hello
+        seq: 1
+        complete: false
+      properties:
+        content:
+          description: Stream data chunk. Total message size must not exceed 128 KB
+            across all chunks.
+          type: string
+        seq:
+          description: "Sequence number. Must be greater than 0, starting from 1,\
+            \ strictly incrementing and continuous."
+          format: int64
+          type: integer
+        complete:
+          description: Whether this is the final chunk in the stream. `true` marks
+            the end of the stream.
+          type: boolean
+        completeReason:
+          description: Custom completion reason code. Only effective when `complete`
+            is `true`.
+          format: int32
+          type: integer
+        type:
+          description: "Stream content type. Supported on the first chunk only. Default:\
+            \ text. Supported values: text, markdown, html."
+          type: string
+        messageId:
+          description: Stream message unique ID. Not required for the first chunk.
+            Required for subsequent chunks (use the value returned in the first chunk
+            response).
+          type: string
+          x-legacy-name: messageUID
+        user:
+          additionalProperties: true
+          description: Sender user information object. Supported on the first chunk
+            only.
+          type: object
+        mentionedInfo:
+          additionalProperties: true
+          description: '@mention information. Supported on the first chunk only.'
+          type: object
+        extra:
+          additionalProperties: true
+          description: Extension information. Supported on the first chunk only.
+          type: object
+      required:
+      - complete
+      - content
+      - seq
       type: object
     OpenChannelMessageSendRequest:
       example:
@@ -6054,6 +6284,15 @@ components:
         messageId: messageId
       properties:
         messageId:
+          type: string
+      type: object
+    StreamMessageSendResponse_result:
+      example:
+        messageId: messageId
+      properties:
+        messageId:
+          description: Stream message unique ID. Only present in the response to the
+            first chunk.
           type: string
       type: object
     SystemChannelPushResponse_result:
