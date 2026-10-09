@@ -22,7 +22,10 @@ type GroupChannelFreezeStatusItem struct {
 	ChannelId *string `json:"channelId,omitempty"`
 	// Freeze status defined by the source API.
 	Status *int32 `json:"status,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelFreezeStatusItem GroupChannelFreezeStatusItem
 
 // NewGroupChannelFreezeStatusItem instantiates a new GroupChannelFreezeStatusItem object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o GroupChannelFreezeStatusItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelFreezeStatusItem) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelFreezeStatusItem := _GroupChannelFreezeStatusItem{}
+
+	err = json.Unmarshal(data, &varGroupChannelFreezeStatusItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelFreezeStatusItem(varGroupChannelFreezeStatusItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelFreezeStatusItem struct {

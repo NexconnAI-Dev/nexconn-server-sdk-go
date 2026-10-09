@@ -35,7 +35,10 @@ type GroupChannelProfileItem struct {
 	CreatedAt *int64 `json:"createdAt,omitempty"`
 	// Current number of group members.
 	MemberCount *int32 `json:"memberCount,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelProfileItem GroupChannelProfileItem
 
 // NewGroupChannelProfileItem instantiates a new GroupChannelProfileItem object
 // This constructor will assign default values to properties that have it defined,
@@ -344,7 +347,40 @@ func (o GroupChannelProfileItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MemberCount) {
 		toSerialize["memberCount"] = o.MemberCount
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelProfileItem) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelProfileItem := _GroupChannelProfileItem{}
+
+	err = json.Unmarshal(data, &varGroupChannelProfileItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelProfileItem(varGroupChannelProfileItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "groupProfile")
+		delete(additionalProperties, "groupExtProfile")
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "owner")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "memberCount")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelProfileItem struct {

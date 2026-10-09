@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type MessageMetadataSetRequest struct {
 	// Message metadata to set. Keys support letters, digits, and `+ = - _`, with a maximum key length of 32 characters. Each request can set up to 100 entries. 
 	Metadata map[string]string `json:"metadata"`
 	IsEchoToSender *int32 `json:"isEchoToSender,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MessageMetadataSetRequest MessageMetadataSetRequest
@@ -225,6 +225,11 @@ func (o MessageMetadataSetRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsEchoToSender) {
 		toSerialize["isEchoToSender"] = o.IsEchoToSender
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -256,15 +261,25 @@ func (o *MessageMetadataSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varMessageMetadataSetRequest := _MessageMetadataSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMessageMetadataSetRequest)
+	err = json.Unmarshal(data, &varMessageMetadataSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MessageMetadataSetRequest(varMessageMetadataSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "isEchoToSender")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type CommunityChannelFreezeListGetRequest struct {
 	// Pagination field from `CommunityAllowedSenderListInput` / `AbstractCommunityPagingInput` (present in Java model; not all server code paths consume it).
 	Page *int32 `json:"page,omitempty"`
 	PageSize *int32 `json:"pageSize,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelFreezeListGetRequest CommunityChannelFreezeListGetRequest
@@ -196,6 +196,11 @@ func (o CommunityChannelFreezeListGetRequest) ToMap() (map[string]interface{}, e
 	if !IsNil(o.PageSize) {
 		toSerialize["pageSize"] = o.PageSize
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,23 @@ func (o *CommunityChannelFreezeListGetRequest) UnmarshalJSON(data []byte) (err e
 
 	varCommunityChannelFreezeListGetRequest := _CommunityChannelFreezeListGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelFreezeListGetRequest)
+	err = json.Unmarshal(data, &varCommunityChannelFreezeListGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelFreezeListGetRequest(varCommunityChannelFreezeListGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "page")
+		delete(additionalProperties, "pageSize")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

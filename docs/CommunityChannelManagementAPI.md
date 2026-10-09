@@ -13,7 +13,6 @@ Method | HTTP request | Description
 [**DeleteCommunitySubchannel**](CommunityChannelManagementAPI.md#DeleteCommunitySubchannel) | **Post** /v4/community-channel/subchannel/delete | Delete community subchannel
 [**DismissCommunityChannel**](CommunityChannelManagementAPI.md#DismissCommunityChannel) | **Post** /v4/community-channel/dismiss | Dismiss community channel
 [**JoinCommunityChannel**](CommunityChannelManagementAPI.md#JoinCommunityChannel) | **Post** /v4/community-channel/join | Join community channel
-[**ListCommunityChannelHistoryMessages**](CommunityChannelManagementAPI.md#ListCommunityChannelHistoryMessages) | **Post** /v4/community-channel/history-message/list | List community-channel history messages
 [**ListCommunityChannelSubchannelUserGroups**](CommunityChannelManagementAPI.md#ListCommunityChannelSubchannelUserGroups) | **Post** /v4/community-channel/channel/user-group/list | List community channel subchannel user groups
 [**ListCommunityChannelUserGroupSubchannels**](CommunityChannelManagementAPI.md#ListCommunityChannelUserGroupSubchannels) | **Post** /v4/community-channel/user-group/subchannel/list | List community channel user group subchannels
 [**ListCommunityChannelUserGroups**](CommunityChannelManagementAPI.md#ListCommunityChannelUserGroups) | **Post** /v4/community-channel/user-group/list | List community channel user groups
@@ -757,80 +756,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CodeOnlyResponse**](CodeOnlyResponse.md)
-
-### Authorization
-
-[NexconnSignature](../README.md#NexconnSignature)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## ListCommunityChannelHistoryMessages
-
-> MessageHistoryResponse ListCommunityChannelHistoryMessages(ctx).CommunityChannelHistoryMessageListRequest(communityChannelHistoryMessageListRequest).Execute()
-
-List community-channel history messages
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
-)
-
-func main() {
-	communityChannelHistoryMessageListRequest := *openapiclient.NewCommunityChannelHistoryMessageListRequest("ChannelId_example", "SubchannelId_example", int64(123), int64(123)) // CommunityChannelHistoryMessageListRequest | 
-
-	configuration := openapiclient.NewConfiguration()
-	configuration.SetRongCloudCredentials(
-		os.Getenv("RONGCLOUD_APP_KEY"),
-		os.Getenv("RONGCLOUD_APP_SECRET"),
-	)
-	if err := configuration.SetPrimaryBackupDomains(
-		os.Getenv("RONGCLOUD_PRIMARY_API_DOMAIN"),
-		os.Getenv("RONGCLOUD_SECONDARY_API_DOMAIN"),
-	); err != nil {
-		log.Fatalf("configure domains failed: %v", err)
-	}
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommunityChannelManagementAPI.ListCommunityChannelHistoryMessages(context.Background()).CommunityChannelHistoryMessageListRequest(communityChannelHistoryMessageListRequest).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CommunityChannelManagementAPI.ListCommunityChannelHistoryMessages``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `ListCommunityChannelHistoryMessages`: MessageHistoryResponse
-	fmt.Fprintf(os.Stdout, "Response from `CommunityChannelManagementAPI.ListCommunityChannelHistoryMessages`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiListCommunityChannelHistoryMessagesRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **communityChannelHistoryMessageListRequest** | [**CommunityChannelHistoryMessageListRequest**](CommunityChannelHistoryMessageListRequest.md) |  | 
-
-### Return type
-
-[**MessageHistoryResponse**](MessageHistoryResponse.md)
 
 ### Authorization
 

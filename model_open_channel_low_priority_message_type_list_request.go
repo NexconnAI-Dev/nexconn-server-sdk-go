@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &OpenChannelLowPriorityMessageTypeListRequest{}
 // OpenChannelLowPriorityMessageTypeListRequest struct for OpenChannelLowPriorityMessageTypeListRequest
 type OpenChannelLowPriorityMessageTypeListRequest struct {
 	MessageTypes []string `json:"messageTypes"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelLowPriorityMessageTypeListRequest OpenChannelLowPriorityMessageTypeListRequest
@@ -79,6 +79,11 @@ func (o OpenChannelLowPriorityMessageTypeListRequest) MarshalJSON() ([]byte, err
 func (o OpenChannelLowPriorityMessageTypeListRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["messageTypes"] = o.MessageTypes
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *OpenChannelLowPriorityMessageTypeListRequest) UnmarshalJSON(data []byte
 
 	varOpenChannelLowPriorityMessageTypeListRequest := _OpenChannelLowPriorityMessageTypeListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelLowPriorityMessageTypeListRequest)
+	err = json.Unmarshal(data, &varOpenChannelLowPriorityMessageTypeListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelLowPriorityMessageTypeListRequest(varOpenChannelLowPriorityMessageTypeListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageTypes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &ChannelTagListResponseResult{}
 type ChannelTagListResponseResult struct {
 	TagId *string `json:"tagId,omitempty"`
 	Channels []ChannelTagTargetItem `json:"channels,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelTagListResponseResult ChannelTagListResponseResult
 
 // NewChannelTagListResponseResult instantiates a new ChannelTagListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o ChannelTagListResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Channels) {
 		toSerialize["channels"] = o.Channels
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelTagListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varChannelTagListResponseResult := _ChannelTagListResponseResult{}
+
+	err = json.Unmarshal(data, &varChannelTagListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelTagListResponseResult(varChannelTagListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tagId")
+		delete(additionalProperties, "channels")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelTagListResponseResult struct {

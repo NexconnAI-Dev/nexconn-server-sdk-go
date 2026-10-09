@@ -22,7 +22,10 @@ type UserBlocklistGetResponseResult struct {
 	// Next page cursor; matches `BlocklistListResult.pageToken` (not `next`).
 	PageToken *string `json:"pageToken,omitempty"`
 	BlockedUserIds []string `json:"blockedUserIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserBlocklistGetResponseResult UserBlocklistGetResponseResult
 
 // NewUserBlocklistGetResponseResult instantiates a new UserBlocklistGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o UserBlocklistGetResponseResult) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.BlockedUserIds) {
 		toSerialize["blockedUserIds"] = o.BlockedUserIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserBlocklistGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varUserBlocklistGetResponseResult := _UserBlocklistGetResponseResult{}
+
+	err = json.Unmarshal(data, &varUserBlocklistGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserBlocklistGetResponseResult(varUserBlocklistGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "blockedUserIds")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserBlocklistGetResponseResult struct {

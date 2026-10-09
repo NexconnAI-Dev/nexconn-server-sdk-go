@@ -21,7 +21,10 @@ var _ MappedNullable = &ChannelAttributeTagItem{}
 type ChannelAttributeTagItem struct {
 	TagId *string `json:"tagId,omitempty"`
 	TagName *string `json:"tagName,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelAttributeTagItem ChannelAttributeTagItem
 
 // NewChannelAttributeTagItem instantiates a new ChannelAttributeTagItem object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o ChannelAttributeTagItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TagName) {
 		toSerialize["tagName"] = o.TagName
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelAttributeTagItem) UnmarshalJSON(data []byte) (err error) {
+	varChannelAttributeTagItem := _ChannelAttributeTagItem{}
+
+	err = json.Unmarshal(data, &varChannelAttributeTagItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelAttributeTagItem(varChannelAttributeTagItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tagId")
+		delete(additionalProperties, "tagName")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelAttributeTagItem struct {

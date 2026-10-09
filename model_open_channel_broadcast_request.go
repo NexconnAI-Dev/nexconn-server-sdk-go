@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type OpenChannelBroadcastRequest struct {
 	Content string `json:"content"`
 	// Whether to sync the broadcast message to the sender's client while the sender is online.
 	IsEchoToSender *int32 `json:"isEchoToSender,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelBroadcastRequest OpenChannelBroadcastRequest
@@ -173,6 +173,11 @@ func (o OpenChannelBroadcastRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsEchoToSender) {
 		toSerialize["isEchoToSender"] = o.IsEchoToSender
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *OpenChannelBroadcastRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varOpenChannelBroadcastRequest := _OpenChannelBroadcastRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelBroadcastRequest)
+	err = json.Unmarshal(data, &varOpenChannelBroadcastRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelBroadcastRequest(varOpenChannelBroadcastRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "isEchoToSender")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

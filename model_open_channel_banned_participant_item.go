@@ -22,7 +22,10 @@ type OpenChannelBannedParticipantItem struct {
 	ParticipantId *string `json:"participantId,omitempty"`
 	// Ban expiration time in `YYYY-MM-DD HH:MM:SS` format.
 	BanExpiresAt *string `json:"banExpiresAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelBannedParticipantItem OpenChannelBannedParticipantItem
 
 // NewOpenChannelBannedParticipantItem instantiates a new OpenChannelBannedParticipantItem object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o OpenChannelBannedParticipantItem) ToMap() (map[string]interface{}, error
 	if !IsNil(o.BanExpiresAt) {
 		toSerialize["banExpiresAt"] = o.BanExpiresAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelBannedParticipantItem) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelBannedParticipantItem := _OpenChannelBannedParticipantItem{}
+
+	err = json.Unmarshal(data, &varOpenChannelBannedParticipantItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelBannedParticipantItem(varOpenChannelBannedParticipantItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participantId")
+		delete(additionalProperties, "banExpiresAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelBannedParticipantItem struct {

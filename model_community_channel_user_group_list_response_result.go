@@ -20,7 +20,10 @@ var _ MappedNullable = &CommunityChannelUserGroupListResponseResult{}
 // CommunityChannelUserGroupListResponseResult struct for CommunityChannelUserGroupListResponseResult
 type CommunityChannelUserGroupListResponseResult struct {
 	UserGroups []CommunityChannelUserGroupItem `json:"userGroups,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommunityChannelUserGroupListResponseResult CommunityChannelUserGroupListResponseResult
 
 // NewCommunityChannelUserGroupListResponseResult instantiates a new CommunityChannelUserGroupListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o CommunityChannelUserGroupListResponseResult) ToMap() (map[string]interfa
 	if !IsNil(o.UserGroups) {
 		toSerialize["userGroups"] = o.UserGroups
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommunityChannelUserGroupListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varCommunityChannelUserGroupListResponseResult := _CommunityChannelUserGroupListResponseResult{}
+
+	err = json.Unmarshal(data, &varCommunityChannelUserGroupListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommunityChannelUserGroupListResponseResult(varCommunityChannelUserGroupListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userGroups")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommunityChannelUserGroupListResponseResult struct {

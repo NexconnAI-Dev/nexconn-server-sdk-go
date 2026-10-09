@@ -21,7 +21,10 @@ var _ MappedNullable = &GroupChannelJoinedListResponseResult{}
 type GroupChannelJoinedListResponseResult struct {
 	PageToken *string `json:"pageToken,omitempty"`
 	Groups []GroupChannelJoinedItem `json:"groups,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelJoinedListResponseResult GroupChannelJoinedListResponseResult
 
 // NewGroupChannelJoinedListResponseResult instantiates a new GroupChannelJoinedListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o GroupChannelJoinedListResponseResult) ToMap() (map[string]interface{}, e
 	if !IsNil(o.Groups) {
 		toSerialize["groups"] = o.Groups
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelJoinedListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelJoinedListResponseResult := _GroupChannelJoinedListResponseResult{}
+
+	err = json.Unmarshal(data, &varGroupChannelJoinedListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelJoinedListResponseResult(varGroupChannelJoinedListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "groups")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelJoinedListResponseResult struct {

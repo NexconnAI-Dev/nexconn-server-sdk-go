@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CommunityChannelAllowedSenderListGetResponse{}
 type CommunityChannelAllowedSenderListGetResponse struct {
 	Code int32 `json:"code"`
 	Result *CommunityChannelAllowedSenderListGetResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelAllowedSenderListGetResponse CommunityChannelAllowedSenderListGetResponse
@@ -115,6 +115,11 @@ func (o CommunityChannelAllowedSenderListGetResponse) ToMap() (map[string]interf
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *CommunityChannelAllowedSenderListGetResponse) UnmarshalJSON(data []byte
 
 	varCommunityChannelAllowedSenderListGetResponse := _CommunityChannelAllowedSenderListGetResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelAllowedSenderListGetResponse)
+	err = json.Unmarshal(data, &varCommunityChannelAllowedSenderListGetResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelAllowedSenderListGetResponse(varCommunityChannelAllowedSenderListGetResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

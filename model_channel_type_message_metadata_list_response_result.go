@@ -21,7 +21,10 @@ var _ MappedNullable = &ChannelTypeMessageMetadataListResponseResult{}
 type ChannelTypeMessageMetadataListResponseResult struct {
 	// Ordered list from `MessageMetadataResult` / `MetadataItem` (not a key-value object).
 	Metadata []MessageMetadataListItem `json:"metadata,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelTypeMessageMetadataListResponseResult ChannelTypeMessageMetadataListResponseResult
 
 // NewChannelTypeMessageMetadataListResponseResult instantiates a new ChannelTypeMessageMetadataListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o ChannelTypeMessageMetadataListResponseResult) ToMap() (map[string]interf
 	if !IsNil(o.Metadata) {
 		toSerialize["metadata"] = o.Metadata
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelTypeMessageMetadataListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varChannelTypeMessageMetadataListResponseResult := _ChannelTypeMessageMetadataListResponseResult{}
+
+	err = json.Unmarshal(data, &varChannelTypeMessageMetadataListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelTypeMessageMetadataListResponseResult(varChannelTypeMessageMetadataListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelTypeMessageMetadataListResponseResult struct {

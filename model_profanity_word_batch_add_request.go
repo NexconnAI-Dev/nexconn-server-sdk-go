@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &ProfanityWordBatchAddRequest{}
 // ProfanityWordBatchAddRequest struct for ProfanityWordBatchAddRequest
 type ProfanityWordBatchAddRequest struct {
 	Words []ProfanityWordItem `json:"words"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProfanityWordBatchAddRequest ProfanityWordBatchAddRequest
@@ -79,6 +79,11 @@ func (o ProfanityWordBatchAddRequest) MarshalJSON() ([]byte, error) {
 func (o ProfanityWordBatchAddRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["words"] = o.Words
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *ProfanityWordBatchAddRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varProfanityWordBatchAddRequest := _ProfanityWordBatchAddRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProfanityWordBatchAddRequest)
+	err = json.Unmarshal(data, &varProfanityWordBatchAddRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProfanityWordBatchAddRequest(varProfanityWordBatchAddRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "words")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

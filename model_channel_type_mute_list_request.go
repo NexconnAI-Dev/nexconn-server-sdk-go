@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type ChannelTypeMuteListRequest struct {
 	PageSize *int32 `json:"pageSize,omitempty"`
 	Offset *int32 `json:"offset,omitempty"`
 	ChannelType string `json:"channelType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelTypeMuteListRequest ChannelTypeMuteListRequest
@@ -159,6 +159,11 @@ func (o ChannelTypeMuteListRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["offset"] = o.Offset
 	}
 	toSerialize["channelType"] = o.ChannelType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -186,15 +191,22 @@ func (o *ChannelTypeMuteListRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varChannelTypeMuteListRequest := _ChannelTypeMuteListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelTypeMuteListRequest)
+	err = json.Unmarshal(data, &varChannelTypeMuteListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelTypeMuteListRequest(varChannelTypeMuteListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "offset")
+		delete(additionalProperties, "channelType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

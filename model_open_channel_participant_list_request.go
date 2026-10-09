@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type OpenChannelParticipantListRequest struct {
 	PageSize *int32 `json:"pageSize,omitempty"`
 	// `1` for ascending join time and `2` for descending join time.
 	Order *int32 `json:"order,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelParticipantListRequest OpenChannelParticipantListRequest
@@ -152,6 +152,11 @@ func (o OpenChannelParticipantListRequest) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -179,15 +184,22 @@ func (o *OpenChannelParticipantListRequest) UnmarshalJSON(data []byte) (err erro
 
 	varOpenChannelParticipantListRequest := _OpenChannelParticipantListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelParticipantListRequest)
+	err = json.Unmarshal(data, &varOpenChannelParticipantListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelParticipantListRequest(varOpenChannelParticipantListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

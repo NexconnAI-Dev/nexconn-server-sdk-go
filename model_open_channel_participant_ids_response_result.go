@@ -20,7 +20,10 @@ var _ MappedNullable = &OpenChannelParticipantIdsResponseResult{}
 // OpenChannelParticipantIdsResponseResult struct for OpenChannelParticipantIdsResponseResult
 type OpenChannelParticipantIdsResponseResult struct {
 	ParticipantIds []string `json:"participantIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelParticipantIdsResponseResult OpenChannelParticipantIdsResponseResult
 
 // NewOpenChannelParticipantIdsResponseResult instantiates a new OpenChannelParticipantIdsResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o OpenChannelParticipantIdsResponseResult) ToMap() (map[string]interface{}
 	if !IsNil(o.ParticipantIds) {
 		toSerialize["participantIds"] = o.ParticipantIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelParticipantIdsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelParticipantIdsResponseResult := _OpenChannelParticipantIdsResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelParticipantIdsResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelParticipantIdsResponseResult(varOpenChannelParticipantIdsResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participantIds")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelParticipantIdsResponseResult struct {

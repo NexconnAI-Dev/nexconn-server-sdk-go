@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type StreamMessageContent struct {
 	MentionedInfo map[string]interface{} `json:"mentionedInfo,omitempty"`
 	// Extension information. Supported on the first chunk only.
 	Extra map[string]interface{} `json:"extra,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _StreamMessageContent StreamMessageContent
@@ -358,6 +358,11 @@ func (o StreamMessageContent) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Extra) {
 		toSerialize["extra"] = o.Extra
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -387,15 +392,28 @@ func (o *StreamMessageContent) UnmarshalJSON(data []byte) (err error) {
 
 	varStreamMessageContent := _StreamMessageContent{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varStreamMessageContent)
+	err = json.Unmarshal(data, &varStreamMessageContent)
 
 	if err != nil {
 		return err
 	}
 
 	*o = StreamMessageContent(varStreamMessageContent)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "seq")
+		delete(additionalProperties, "complete")
+		delete(additionalProperties, "completeReason")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "user")
+		delete(additionalProperties, "mentionedInfo")
+		delete(additionalProperties, "extra")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

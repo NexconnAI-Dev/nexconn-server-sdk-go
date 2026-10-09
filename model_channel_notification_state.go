@@ -20,7 +20,10 @@ var _ MappedNullable = &ChannelNotificationState{}
 // ChannelNotificationState struct for ChannelNotificationState
 type ChannelNotificationState struct {
 	Level *int32 `json:"level,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelNotificationState ChannelNotificationState
 
 // NewChannelNotificationState instantiates a new ChannelNotificationState object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o ChannelNotificationState) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Level) {
 		toSerialize["level"] = o.Level
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelNotificationState) UnmarshalJSON(data []byte) (err error) {
+	varChannelNotificationState := _ChannelNotificationState{}
+
+	err = json.Unmarshal(data, &varChannelNotificationState)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelNotificationState(varChannelNotificationState)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "level")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelNotificationState struct {

@@ -20,7 +20,10 @@ var _ MappedNullable = &ChannelMessageSendResponseResult{}
 // ChannelMessageSendResponseResult struct for ChannelMessageSendResponseResult
 type ChannelMessageSendResponseResult struct {
 	MessageIds []MessageChannelDelivery `json:"messageIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelMessageSendResponseResult ChannelMessageSendResponseResult
 
 // NewChannelMessageSendResponseResult instantiates a new ChannelMessageSendResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o ChannelMessageSendResponseResult) ToMap() (map[string]interface{}, error
 	if !IsNil(o.MessageIds) {
 		toSerialize["messageIds"] = o.MessageIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelMessageSendResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varChannelMessageSendResponseResult := _ChannelMessageSendResponseResult{}
+
+	err = json.Unmarshal(data, &varChannelMessageSendResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelMessageSendResponseResult(varChannelMessageSendResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageIds")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelMessageSendResponseResult struct {

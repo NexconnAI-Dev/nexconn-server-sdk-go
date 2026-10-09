@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type DirectChannelStreamMessageSendRequest struct {
 	Metadata *map[string]string `json:"metadata,omitempty"`
 	// Whether to keep this message from updating the channel's last-message preview.
 	DisableUpdateLastMsg *bool `json:"disableUpdateLastMsg,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DirectChannelStreamMessageSendRequest DirectChannelStreamMessageSendRequest
@@ -311,6 +311,11 @@ func (o DirectChannelStreamMessageSendRequest) ToMap() (map[string]interface{}, 
 	if !IsNil(o.DisableUpdateLastMsg) {
 		toSerialize["disableUpdateLastMsg"] = o.DisableUpdateLastMsg
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -341,15 +346,27 @@ func (o *DirectChannelStreamMessageSendRequest) UnmarshalJSON(data []byte) (err 
 
 	varDirectChannelStreamMessageSendRequest := _DirectChannelStreamMessageSendRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDirectChannelStreamMessageSendRequest)
+	err = json.Unmarshal(data, &varDirectChannelStreamMessageSendRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DirectChannelStreamMessageSendRequest(varDirectChannelStreamMessageSendRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "toUserId")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "isEchoToSender")
+		delete(additionalProperties, "shouldPersist")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "disableUpdateLastMsg")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CommunityChannelFreezeListSetRequest struct {
 	SubchannelId *string `json:"subchannelId,omitempty"`
 	// Freeze status for the community channel or subchannel.
 	Status bool `json:"status"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelFreezeListSetRequest CommunityChannelFreezeListSetRequest
@@ -143,6 +143,11 @@ func (o CommunityChannelFreezeListSetRequest) ToMap() (map[string]interface{}, e
 		toSerialize["subchannelId"] = o.SubchannelId
 	}
 	toSerialize["status"] = o.Status
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -171,15 +176,22 @@ func (o *CommunityChannelFreezeListSetRequest) UnmarshalJSON(data []byte) (err e
 
 	varCommunityChannelFreezeListSetRequest := _CommunityChannelFreezeListSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelFreezeListSetRequest)
+	err = json.Unmarshal(data, &varCommunityChannelFreezeListSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelFreezeListSetRequest(varCommunityChannelFreezeListSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

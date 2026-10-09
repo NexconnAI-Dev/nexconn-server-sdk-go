@@ -9,7 +9,11 @@ Method | HTTP request | Description
 [**DeleteCommunityChannelMessageMetadata**](MessageManagementAPI.md#DeleteCommunityChannelMessageMetadata) | **Post** /v4/community-channel/message/metadata/delete | Delete community-channel message metadata keys
 [**DeleteMessage**](MessageManagementAPI.md#DeleteMessage) | **Post** /v4/message/delete | Delete a message (recall)
 [**ListChannelTypeMessageMetadata**](MessageManagementAPI.md#ListChannelTypeMessageMetadata) | **Post** /v4/channel-type/message/metadata/list | Get message metadata
+[**ListCommunityChannelHistoryMessages**](MessageManagementAPI.md#ListCommunityChannelHistoryMessages) | **Post** /v4/community-channel/history-message/list | List community-channel history messages
 [**ListCommunityChannelMessageMetadata**](MessageManagementAPI.md#ListCommunityChannelMessageMetadata) | **Post** /v4/community-channel/message/metadata/list | List community-channel message metadata
+[**ListDirectChannelHistoryMessages**](MessageManagementAPI.md#ListDirectChannelHistoryMessages) | **Post** /v4/direct-channel/history-message/list | List direct-channel history messages
+[**ListGroupChannelHistoryMessages**](MessageManagementAPI.md#ListGroupChannelHistoryMessages) | **Post** /v4/group-channel/history-message/list | List group-channel history messages
+[**ListOpenChannelHistoryMessages**](MessageManagementAPI.md#ListOpenChannelHistoryMessages) | **Post** /v4/open-channel/history-message/list | List open-channel history messages
 [**SendCommunityChannelMessage**](MessageManagementAPI.md#SendCommunityChannelMessage) | **Post** /v4/community-channel/message/send | Send a community channel message
 [**SendDirectChannelMessage**](MessageManagementAPI.md#SendDirectChannelMessage) | **Post** /v4/direct-channel/message/send | Send a direct message
 [**SendDirectChannelStreamMessage**](MessageManagementAPI.md#SendDirectChannelStreamMessage) | **Post** /v4/direct-channel/message/stream/send | Send a direct channel stream message
@@ -479,6 +483,82 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## ListCommunityChannelHistoryMessages
+
+> MessageHistoryResponse ListCommunityChannelHistoryMessages(ctx).CommunityChannelHistoryMessageListRequest(communityChannelHistoryMessageListRequest).Execute()
+
+List community-channel history messages
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
+)
+
+func main() {
+	communityChannelHistoryMessageListRequest := *openapiclient.NewCommunityChannelHistoryMessageListRequest("ChannelId_example", "UserId_example", int64(123), int64(123), false) // CommunityChannelHistoryMessageListRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	configuration.SetRongCloudCredentials(
+		os.Getenv("RONGCLOUD_APP_KEY"),
+		os.Getenv("RONGCLOUD_APP_SECRET"),
+	)
+	if err := configuration.SetPrimaryBackupDomains(
+		os.Getenv("RONGCLOUD_PRIMARY_API_DOMAIN"),
+		os.Getenv("RONGCLOUD_SECONDARY_API_DOMAIN"),
+	); err != nil {
+		log.Fatalf("configure domains failed: %v", err)
+	}
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.MessageManagementAPI.ListCommunityChannelHistoryMessages(context.Background()).CommunityChannelHistoryMessageListRequest(communityChannelHistoryMessageListRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `MessageManagementAPI.ListCommunityChannelHistoryMessages``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListCommunityChannelHistoryMessages`: MessageHistoryResponse
+	fmt.Fprintf(os.Stdout, "Response from `MessageManagementAPI.ListCommunityChannelHistoryMessages`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListCommunityChannelHistoryMessagesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **communityChannelHistoryMessageListRequest** | [**CommunityChannelHistoryMessageListRequest**](CommunityChannelHistoryMessageListRequest.md) |  | 
+
+### Return type
+
+[**MessageHistoryResponse**](MessageHistoryResponse.md)
+
+### Authorization
+
+[NexconnSignature](../README.md#NexconnSignature)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## ListCommunityChannelMessageMetadata
 
 > CommunityChannelMessageMetadataListResponse ListCommunityChannelMessageMetadata(ctx).CommunityChannelMessageMetadataListRequest(communityChannelMessageMetadataListRequest).Execute()
@@ -538,6 +618,234 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CommunityChannelMessageMetadataListResponse**](CommunityChannelMessageMetadataListResponse.md)
+
+### Authorization
+
+[NexconnSignature](../README.md#NexconnSignature)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListDirectChannelHistoryMessages
+
+> DirectGroupHistoryMessageResponse ListDirectChannelHistoryMessages(ctx).DirectChannelHistoryMessageListRequest(directChannelHistoryMessageListRequest).Execute()
+
+List direct-channel history messages
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
+)
+
+func main() {
+	directChannelHistoryMessageListRequest := *openapiclient.NewDirectChannelHistoryMessageListRequest("UserId_example", "ChannelId_example", int64(123), int64(123), false) // DirectChannelHistoryMessageListRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	configuration.SetRongCloudCredentials(
+		os.Getenv("RONGCLOUD_APP_KEY"),
+		os.Getenv("RONGCLOUD_APP_SECRET"),
+	)
+	if err := configuration.SetPrimaryBackupDomains(
+		os.Getenv("RONGCLOUD_PRIMARY_API_DOMAIN"),
+		os.Getenv("RONGCLOUD_SECONDARY_API_DOMAIN"),
+	); err != nil {
+		log.Fatalf("configure domains failed: %v", err)
+	}
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.MessageManagementAPI.ListDirectChannelHistoryMessages(context.Background()).DirectChannelHistoryMessageListRequest(directChannelHistoryMessageListRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `MessageManagementAPI.ListDirectChannelHistoryMessages``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListDirectChannelHistoryMessages`: DirectGroupHistoryMessageResponse
+	fmt.Fprintf(os.Stdout, "Response from `MessageManagementAPI.ListDirectChannelHistoryMessages`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListDirectChannelHistoryMessagesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **directChannelHistoryMessageListRequest** | [**DirectChannelHistoryMessageListRequest**](DirectChannelHistoryMessageListRequest.md) |  | 
+
+### Return type
+
+[**DirectGroupHistoryMessageResponse**](DirectGroupHistoryMessageResponse.md)
+
+### Authorization
+
+[NexconnSignature](../README.md#NexconnSignature)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListGroupChannelHistoryMessages
+
+> DirectGroupHistoryMessageResponse ListGroupChannelHistoryMessages(ctx).GroupChannelHistoryMessageListRequest(groupChannelHistoryMessageListRequest).Execute()
+
+List group-channel history messages
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
+)
+
+func main() {
+	groupChannelHistoryMessageListRequest := *openapiclient.NewGroupChannelHistoryMessageListRequest("UserId_example", "ChannelId_example", int64(123), int64(123), false) // GroupChannelHistoryMessageListRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	configuration.SetRongCloudCredentials(
+		os.Getenv("RONGCLOUD_APP_KEY"),
+		os.Getenv("RONGCLOUD_APP_SECRET"),
+	)
+	if err := configuration.SetPrimaryBackupDomains(
+		os.Getenv("RONGCLOUD_PRIMARY_API_DOMAIN"),
+		os.Getenv("RONGCLOUD_SECONDARY_API_DOMAIN"),
+	); err != nil {
+		log.Fatalf("configure domains failed: %v", err)
+	}
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.MessageManagementAPI.ListGroupChannelHistoryMessages(context.Background()).GroupChannelHistoryMessageListRequest(groupChannelHistoryMessageListRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `MessageManagementAPI.ListGroupChannelHistoryMessages``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListGroupChannelHistoryMessages`: DirectGroupHistoryMessageResponse
+	fmt.Fprintf(os.Stdout, "Response from `MessageManagementAPI.ListGroupChannelHistoryMessages`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListGroupChannelHistoryMessagesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **groupChannelHistoryMessageListRequest** | [**GroupChannelHistoryMessageListRequest**](GroupChannelHistoryMessageListRequest.md) |  | 
+
+### Return type
+
+[**DirectGroupHistoryMessageResponse**](DirectGroupHistoryMessageResponse.md)
+
+### Authorization
+
+[NexconnSignature](../README.md#NexconnSignature)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListOpenChannelHistoryMessages
+
+> OpenChannelHistoryMessageResponse ListOpenChannelHistoryMessages(ctx).OpenChannelHistoryMessageListRequest(openChannelHistoryMessageListRequest).Execute()
+
+List open-channel history messages
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/NexconnAI-Dev/nexconn-server-sdk-go"
+)
+
+func main() {
+	openChannelHistoryMessageListRequest := *openapiclient.NewOpenChannelHistoryMessageListRequest("UserId_example", "ChannelId_example", int64(123), int64(123), false) // OpenChannelHistoryMessageListRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	configuration.SetRongCloudCredentials(
+		os.Getenv("RONGCLOUD_APP_KEY"),
+		os.Getenv("RONGCLOUD_APP_SECRET"),
+	)
+	if err := configuration.SetPrimaryBackupDomains(
+		os.Getenv("RONGCLOUD_PRIMARY_API_DOMAIN"),
+		os.Getenv("RONGCLOUD_SECONDARY_API_DOMAIN"),
+	); err != nil {
+		log.Fatalf("configure domains failed: %v", err)
+	}
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.MessageManagementAPI.ListOpenChannelHistoryMessages(context.Background()).OpenChannelHistoryMessageListRequest(openChannelHistoryMessageListRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `MessageManagementAPI.ListOpenChannelHistoryMessages``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListOpenChannelHistoryMessages`: OpenChannelHistoryMessageResponse
+	fmt.Fprintf(os.Stdout, "Response from `MessageManagementAPI.ListOpenChannelHistoryMessages`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListOpenChannelHistoryMessagesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **openChannelHistoryMessageListRequest** | [**OpenChannelHistoryMessageListRequest**](OpenChannelHistoryMessageListRequest.md) |  | 
+
+### Return type
+
+[**OpenChannelHistoryMessageResponse**](OpenChannelHistoryMessageResponse.md)
 
 ### Authorization
 

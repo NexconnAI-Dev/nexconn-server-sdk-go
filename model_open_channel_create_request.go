@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type OpenChannelCreateRequest struct {
 	MetadataOwnerId *string `json:"metadataOwnerId,omitempty"`
 	// Legacy `entryInfo`. Open-channel metadata key/value pairs.
 	Metadata *map[string]string `json:"metadata,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelCreateRequest OpenChannelCreateRequest
@@ -302,6 +302,11 @@ func (o OpenChannelCreateRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Metadata) {
 		toSerialize["metadata"] = o.Metadata
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -329,15 +334,26 @@ func (o *OpenChannelCreateRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varOpenChannelCreateRequest := _OpenChannelCreateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelCreateRequest)
+	err = json.Unmarshal(data, &varOpenChannelCreateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelCreateRequest(varOpenChannelCreateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "destroyType")
+		delete(additionalProperties, "ttlMinutes")
+		delete(additionalProperties, "shouldFreeze")
+		delete(additionalProperties, "allowedSendersList")
+		delete(additionalProperties, "metadataOwnerId")
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

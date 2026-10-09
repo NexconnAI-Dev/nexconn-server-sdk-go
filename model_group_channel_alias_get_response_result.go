@@ -20,7 +20,10 @@ var _ MappedNullable = &GroupChannelAliasGetResponseResult{}
 // GroupChannelAliasGetResponseResult struct for GroupChannelAliasGetResponseResult
 type GroupChannelAliasGetResponseResult struct {
 	Alias *string `json:"alias,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelAliasGetResponseResult GroupChannelAliasGetResponseResult
 
 // NewGroupChannelAliasGetResponseResult instantiates a new GroupChannelAliasGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o GroupChannelAliasGetResponseResult) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Alias) {
 		toSerialize["alias"] = o.Alias
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelAliasGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelAliasGetResponseResult := _GroupChannelAliasGetResponseResult{}
+
+	err = json.Unmarshal(data, &varGroupChannelAliasGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelAliasGetResponseResult(varGroupChannelAliasGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "alias")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelAliasGetResponseResult struct {

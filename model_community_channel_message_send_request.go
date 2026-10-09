@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -51,6 +50,7 @@ type CommunityChannelMessageSendRequest struct {
 	MetadataEnabled *bool `json:"hasMetadata,omitempty"`
 	// Custom message metadata entries. Only effective when `hasMetadata` is `true`.
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelMessageSendRequest CommunityChannelMessageSendRequest
@@ -571,6 +571,11 @@ func (o CommunityChannelMessageSendRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Metadata) {
 		toSerialize["metadata"] = o.Metadata
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -601,15 +606,34 @@ func (o *CommunityChannelMessageSendRequest) UnmarshalJSON(data []byte) (err err
 
 	varCommunityChannelMessageSendRequest := _CommunityChannelMessageSendRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelMessageSendRequest)
+	err = json.Unmarshal(data, &varCommunityChannelMessageSendRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelMessageSendRequest(varCommunityChannelMessageSendRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "toChannelIds")
+		delete(additionalProperties, "toUserIds")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "pushContent")
+		delete(additionalProperties, "pushData")
+		delete(additionalProperties, "shouldPersist")
+		delete(additionalProperties, "isCounted")
+		delete(additionalProperties, "hasMention")
+		delete(additionalProperties, "contentAvailable")
+		delete(additionalProperties, "pushExt")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "hasMetadata")
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

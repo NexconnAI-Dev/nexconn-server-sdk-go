@@ -24,7 +24,10 @@ type GroupChannelMutedMemberItem struct {
 	MutedAt *string `json:"mutedAt,omitempty"`
 	// Mute expiry time in `YYYY-MM-DD HH:MM:SS` format.
 	MuteExpiresAt *string `json:"muteExpiresAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelMutedMemberItem GroupChannelMutedMemberItem
 
 // NewGroupChannelMutedMemberItem instantiates a new GroupChannelMutedMemberItem object
 // This constructor will assign default values to properties that have it defined,
@@ -158,7 +161,35 @@ func (o GroupChannelMutedMemberItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MuteExpiresAt) {
 		toSerialize["muteExpiresAt"] = o.MuteExpiresAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelMutedMemberItem) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelMutedMemberItem := _GroupChannelMutedMemberItem{}
+
+	err = json.Unmarshal(data, &varGroupChannelMutedMemberItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelMutedMemberItem(varGroupChannelMutedMemberItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "mutedAt")
+		delete(additionalProperties, "muteExpiresAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelMutedMemberItem struct {

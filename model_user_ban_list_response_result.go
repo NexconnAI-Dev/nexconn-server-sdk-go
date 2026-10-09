@@ -20,7 +20,10 @@ var _ MappedNullable = &UserBanListResponseResult{}
 // UserBanListResponseResult struct for UserBanListResponseResult
 type UserBanListResponseResult struct {
 	BannedUsers []BannedUser `json:"bannedUsers,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserBanListResponseResult UserBanListResponseResult
 
 // NewUserBanListResponseResult instantiates a new UserBanListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o UserBanListResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.BannedUsers) {
 		toSerialize["bannedUsers"] = o.BannedUsers
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserBanListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varUserBanListResponseResult := _UserBanListResponseResult{}
+
+	err = json.Unmarshal(data, &varUserBanListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserBanListResponseResult(varUserBanListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bannedUsers")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserBanListResponseResult struct {

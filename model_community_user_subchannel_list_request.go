@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CommunityUserSubchannelListRequest struct {
 	UserId string `json:"userId"`
 	Page *int32 `json:"page,omitempty"`
 	PageSize *int32 `json:"pageSize,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityUserSubchannelListRequest CommunityUserSubchannelListRequest
@@ -182,6 +182,11 @@ func (o CommunityUserSubchannelListRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.PageSize) {
 		toSerialize["pageSize"] = o.PageSize
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -210,15 +215,23 @@ func (o *CommunityUserSubchannelListRequest) UnmarshalJSON(data []byte) (err err
 
 	varCommunityUserSubchannelListRequest := _CommunityUserSubchannelListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityUserSubchannelListRequest)
+	err = json.Unmarshal(data, &varCommunityUserSubchannelListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityUserSubchannelListRequest(varCommunityUserSubchannelListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "page")
+		delete(additionalProperties, "pageSize")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

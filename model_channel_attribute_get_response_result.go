@@ -25,7 +25,10 @@ type ChannelAttributeGetResponseResult struct {
 	Notification *ChannelNotificationState `json:"notification,omitempty"`
 	// Same shape as `ChannelAttributeResult.TagInfo` (no `createdAt`; distinct from user tag list items).
 	Tags []ChannelAttributeTagItem `json:"tags,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelAttributeGetResponseResult ChannelAttributeGetResponseResult
 
 // NewChannelAttributeGetResponseResult instantiates a new ChannelAttributeGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -229,7 +232,37 @@ func (o ChannelAttributeGetResponseResult) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.Tags) {
 		toSerialize["tags"] = o.Tags
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelAttributeGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varChannelAttributeGetResponseResult := _ChannelAttributeGetResponseResult{}
+
+	err = json.Unmarshal(data, &varChannelAttributeGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelAttributeGetResponseResult(varChannelAttributeGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "pin")
+		delete(additionalProperties, "notification")
+		delete(additionalProperties, "tags")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelAttributeGetResponseResult struct {

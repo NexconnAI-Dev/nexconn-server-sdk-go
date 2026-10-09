@@ -25,7 +25,10 @@ type UserGetResult struct {
 	AvatarUrl *string `json:"avatarUrl,omitempty"`
 	// User creation time as returned by the server (`GetUserInfoResult` serializes this as a string, e.g. formatted date-time).
 	CreatedAt *string `json:"createdAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserGetResult UserGetResult
 
 // NewUserGetResult instantiates a new UserGetResult object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o UserGetResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserGetResult) UnmarshalJSON(data []byte) (err error) {
+	varUserGetResult := _UserGetResult{}
+
+	err = json.Unmarshal(data, &varUserGetResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserGetResult(varUserGetResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "avatarUrl")
+		delete(additionalProperties, "createdAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserGetResult struct {

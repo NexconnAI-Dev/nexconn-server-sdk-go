@@ -100,7 +100,7 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "nexconn-sdk-go/0.1.1",
+		UserAgent:        "nexconn-sdk-go/0.1.2",
 		Debug:            false,
 		NonceGenerator:   defaultNonceGenerator,
 		autoFailoverEnabled: true,

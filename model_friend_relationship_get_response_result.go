@@ -20,7 +20,10 @@ var _ MappedNullable = &FriendRelationshipGetResponseResult{}
 // FriendRelationshipGetResponseResult struct for FriendRelationshipGetResponseResult
 type FriendRelationshipGetResponseResult struct {
 	Friendships []FriendRelationshipItem `json:"friendships,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FriendRelationshipGetResponseResult FriendRelationshipGetResponseResult
 
 // NewFriendRelationshipGetResponseResult instantiates a new FriendRelationshipGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o FriendRelationshipGetResponseResult) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Friendships) {
 		toSerialize["friendships"] = o.Friendships
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FriendRelationshipGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varFriendRelationshipGetResponseResult := _FriendRelationshipGetResponseResult{}
+
+	err = json.Unmarshal(data, &varFriendRelationshipGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FriendRelationshipGetResponseResult(varFriendRelationshipGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "friendships")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFriendRelationshipGetResponseResult struct {

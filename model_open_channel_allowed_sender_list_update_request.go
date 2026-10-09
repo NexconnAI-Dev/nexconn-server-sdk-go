@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type OpenChannelAllowedSenderListUpdateRequest struct {
 	// Notification extra payload in JSON string format.
 	Extra *string `json:"extra,omitempty"`
 	NeedNotify *bool `json:"needNotify,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelAllowedSenderListUpdateRequest OpenChannelAllowedSenderListUpdateRequest
@@ -179,6 +179,11 @@ func (o OpenChannelAllowedSenderListUpdateRequest) ToMap() (map[string]interface
 	if !IsNil(o.NeedNotify) {
 		toSerialize["needNotify"] = o.NeedNotify
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -207,15 +212,23 @@ func (o *OpenChannelAllowedSenderListUpdateRequest) UnmarshalJSON(data []byte) (
 
 	varOpenChannelAllowedSenderListUpdateRequest := _OpenChannelAllowedSenderListUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelAllowedSenderListUpdateRequest)
+	err = json.Unmarshal(data, &varOpenChannelAllowedSenderListUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelAllowedSenderListUpdateRequest(varOpenChannelAllowedSenderListUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "participantIds")
+		delete(additionalProperties, "extra")
+		delete(additionalProperties, "needNotify")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

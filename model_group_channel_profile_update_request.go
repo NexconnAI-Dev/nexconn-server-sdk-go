@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type GroupChannelProfileUpdateRequest struct {
 	Permissions map[string]interface{} `json:"permissions,omitempty"`
 	// Group extra profile object. Keys should use the `ext_` prefix and support up to 10 entries.
 	GroupExtProfile *map[string]string `json:"groupExtProfile,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelProfileUpdateRequest GroupChannelProfileUpdateRequest
@@ -191,6 +191,11 @@ func (o GroupChannelProfileUpdateRequest) ToMap() (map[string]interface{}, error
 	if !IsNil(o.GroupExtProfile) {
 		toSerialize["groupExtProfile"] = o.GroupExtProfile
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -218,15 +223,23 @@ func (o *GroupChannelProfileUpdateRequest) UnmarshalJSON(data []byte) (err error
 
 	varGroupChannelProfileUpdateRequest := _GroupChannelProfileUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelProfileUpdateRequest)
+	err = json.Unmarshal(data, &varGroupChannelProfileUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelProfileUpdateRequest(varGroupChannelProfileUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "groupProfile")
+		delete(additionalProperties, "permissions")
+		delete(additionalProperties, "groupExtProfile")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

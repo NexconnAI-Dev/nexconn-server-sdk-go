@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type UserBlocklistGetRequest struct {
 	PageSize *int32 `json:"pageSize,omitempty"`
 	// From `PageableInput.order`.
 	Order *int32 `json:"order,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserBlocklistGetRequest UserBlocklistGetRequest
@@ -196,6 +196,11 @@ func (o UserBlocklistGetRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,23 @@ func (o *UserBlocklistGetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserBlocklistGetRequest := _UserBlocklistGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserBlocklistGetRequest)
+	err = json.Unmarshal(data, &varUserBlocklistGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserBlocklistGetRequest(varUserBlocklistGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

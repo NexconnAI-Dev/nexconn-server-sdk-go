@@ -22,7 +22,10 @@ type FriendListResponseResult struct {
 	PageToken *string `json:"pageToken,omitempty"`
 	TotalCount *int32 `json:"totalCount,omitempty"`
 	Friends []FriendItem `json:"friends,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FriendListResponseResult FriendListResponseResult
 
 // NewFriendListResponseResult instantiates a new FriendListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -156,7 +159,35 @@ func (o FriendListResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Friends) {
 		toSerialize["friends"] = o.Friends
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FriendListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varFriendListResponseResult := _FriendListResponseResult{}
+
+	err = json.Unmarshal(data, &varFriendListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FriendListResponseResult(varFriendListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "totalCount")
+		delete(additionalProperties, "friends")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFriendListResponseResult struct {

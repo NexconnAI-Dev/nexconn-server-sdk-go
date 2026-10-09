@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type OpenChannelFreezeListUpdateRequest struct {
 	// Notification extra payload in JSON string format.
 	Extra *string `json:"extra,omitempty"`
 	NeedNotify *bool `json:"needNotify,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelFreezeListUpdateRequest OpenChannelFreezeListUpdateRequest
@@ -152,6 +152,11 @@ func (o OpenChannelFreezeListUpdateRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.NeedNotify) {
 		toSerialize["needNotify"] = o.NeedNotify
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -179,15 +184,22 @@ func (o *OpenChannelFreezeListUpdateRequest) UnmarshalJSON(data []byte) (err err
 
 	varOpenChannelFreezeListUpdateRequest := _OpenChannelFreezeListUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelFreezeListUpdateRequest)
+	err = json.Unmarshal(data, &varOpenChannelFreezeListUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelFreezeListUpdateRequest(varOpenChannelFreezeListUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "extra")
+		delete(additionalProperties, "needNotify")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

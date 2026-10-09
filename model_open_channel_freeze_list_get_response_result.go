@@ -20,7 +20,10 @@ var _ MappedNullable = &OpenChannelFreezeListGetResponseResult{}
 // OpenChannelFreezeListGetResponseResult struct for OpenChannelFreezeListGetResponseResult
 type OpenChannelFreezeListGetResponseResult struct {
 	ChannelIds []string `json:"channelIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelFreezeListGetResponseResult OpenChannelFreezeListGetResponseResult
 
 // NewOpenChannelFreezeListGetResponseResult instantiates a new OpenChannelFreezeListGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o OpenChannelFreezeListGetResponseResult) ToMap() (map[string]interface{},
 	if !IsNil(o.ChannelIds) {
 		toSerialize["channelIds"] = o.ChannelIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelFreezeListGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelFreezeListGetResponseResult := _OpenChannelFreezeListGetResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelFreezeListGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelFreezeListGetResponseResult(varOpenChannelFreezeListGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelIds")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelFreezeListGetResponseResult struct {

@@ -20,7 +20,10 @@ var _ MappedNullable = &GroupChannelUserMuteListGetResponseResult{}
 // GroupChannelUserMuteListGetResponseResult struct for GroupChannelUserMuteListGetResponseResult
 type GroupChannelUserMuteListGetResponseResult struct {
 	MutedMembers []GroupChannelMutedMemberItem `json:"mutedMembers,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelUserMuteListGetResponseResult GroupChannelUserMuteListGetResponseResult
 
 // NewGroupChannelUserMuteListGetResponseResult instantiates a new GroupChannelUserMuteListGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o GroupChannelUserMuteListGetResponseResult) ToMap() (map[string]interface
 	if !IsNil(o.MutedMembers) {
 		toSerialize["mutedMembers"] = o.MutedMembers
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelUserMuteListGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelUserMuteListGetResponseResult := _GroupChannelUserMuteListGetResponseResult{}
+
+	err = json.Unmarshal(data, &varGroupChannelUserMuteListGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelUserMuteListGetResponseResult(varGroupChannelUserMuteListGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "mutedMembers")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelUserMuteListGetResponseResult struct {

@@ -22,7 +22,10 @@ type MessageMetadataListItem struct {
 	Key *string `json:"key,omitempty"`
 	Value *string `json:"value,omitempty"`
 	UpdatedAt *int64 `json:"updatedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MessageMetadataListItem MessageMetadataListItem
 
 // NewMessageMetadataListItem instantiates a new MessageMetadataListItem object
 // This constructor will assign default values to properties that have it defined,
@@ -156,7 +159,35 @@ func (o MessageMetadataListItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UpdatedAt) {
 		toSerialize["updatedAt"] = o.UpdatedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MessageMetadataListItem) UnmarshalJSON(data []byte) (err error) {
+	varMessageMetadataListItem := _MessageMetadataListItem{}
+
+	err = json.Unmarshal(data, &varMessageMetadataListItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MessageMetadataListItem(varMessageMetadataListItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "updatedAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMessageMetadataListItem struct {

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type GroupChannelMemberSetRequest struct {
 	Nickname *string `json:"nickname,omitempty"`
 	// Member extra profile string defined by the source API.
 	Extra *string `json:"extra,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelMemberSetRequest GroupChannelMemberSetRequest
@@ -179,6 +179,11 @@ func (o GroupChannelMemberSetRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Extra) {
 		toSerialize["extra"] = o.Extra
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -207,15 +212,23 @@ func (o *GroupChannelMemberSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupChannelMemberSetRequest := _GroupChannelMemberSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelMemberSetRequest)
+	err = json.Unmarshal(data, &varGroupChannelMemberSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelMemberSetRequest(varGroupChannelMemberSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "nickname")
+		delete(additionalProperties, "extra")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

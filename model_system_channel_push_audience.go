@@ -24,7 +24,10 @@ type SystemChannelPushAudience struct {
 	TagOr []string `json:"tagOr,omitempty"`
 	PackageName *string `json:"packageName,omitempty"`
 	IsToAll *bool `json:"isToAll,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SystemChannelPushAudience SystemChannelPushAudience
 
 // NewSystemChannelPushAudience instantiates a new SystemChannelPushAudience object
 // This constructor will assign default values to properties that have it defined,
@@ -228,7 +231,37 @@ func (o SystemChannelPushAudience) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsToAll) {
 		toSerialize["isToAll"] = o.IsToAll
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SystemChannelPushAudience) UnmarshalJSON(data []byte) (err error) {
+	varSystemChannelPushAudience := _SystemChannelPushAudience{}
+
+	err = json.Unmarshal(data, &varSystemChannelPushAudience)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SystemChannelPushAudience(varSystemChannelPushAudience)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "tag")
+		delete(additionalProperties, "tagOr")
+		delete(additionalProperties, "packageName")
+		delete(additionalProperties, "isToAll")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSystemChannelPushAudience struct {

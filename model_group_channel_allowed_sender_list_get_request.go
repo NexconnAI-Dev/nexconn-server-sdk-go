@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &GroupChannelAllowedSenderListGetRequest{}
 // GroupChannelAllowedSenderListGetRequest struct for GroupChannelAllowedSenderListGetRequest
 type GroupChannelAllowedSenderListGetRequest struct {
 	ChannelId string `json:"channelId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelAllowedSenderListGetRequest GroupChannelAllowedSenderListGetRequest
@@ -79,6 +79,11 @@ func (o GroupChannelAllowedSenderListGetRequest) MarshalJSON() ([]byte, error) {
 func (o GroupChannelAllowedSenderListGetRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *GroupChannelAllowedSenderListGetRequest) UnmarshalJSON(data []byte) (er
 
 	varGroupChannelAllowedSenderListGetRequest := _GroupChannelAllowedSenderListGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelAllowedSenderListGetRequest)
+	err = json.Unmarshal(data, &varGroupChannelAllowedSenderListGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelAllowedSenderListGetRequest(varGroupChannelAllowedSenderListGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

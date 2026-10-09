@@ -21,7 +21,10 @@ var _ MappedNullable = &ChannelTypeMuteListResponseResult{}
 type ChannelTypeMuteListResponseResult struct {
 	TotalCount *int32 `json:"totalCount,omitempty"`
 	MutedUserIds []string `json:"mutedUserIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelTypeMuteListResponseResult ChannelTypeMuteListResponseResult
 
 // NewChannelTypeMuteListResponseResult instantiates a new ChannelTypeMuteListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o ChannelTypeMuteListResponseResult) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.MutedUserIds) {
 		toSerialize["mutedUserIds"] = o.MutedUserIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelTypeMuteListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varChannelTypeMuteListResponseResult := _ChannelTypeMuteListResponseResult{}
+
+	err = json.Unmarshal(data, &varChannelTypeMuteListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelTypeMuteListResponseResult(varChannelTypeMuteListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "totalCount")
+		delete(additionalProperties, "mutedUserIds")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelTypeMuteListResponseResult struct {

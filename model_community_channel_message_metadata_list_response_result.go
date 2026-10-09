@@ -21,7 +21,10 @@ var _ MappedNullable = &CommunityChannelMessageMetadataListResponseResult{}
 type CommunityChannelMessageMetadataListResponseResult struct {
 	// Same shape as channel-type list; array of `MetadataItem`.
 	Metadata []MessageMetadataListItem `json:"metadata,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommunityChannelMessageMetadataListResponseResult CommunityChannelMessageMetadataListResponseResult
 
 // NewCommunityChannelMessageMetadataListResponseResult instantiates a new CommunityChannelMessageMetadataListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o CommunityChannelMessageMetadataListResponseResult) ToMap() (map[string]i
 	if !IsNil(o.Metadata) {
 		toSerialize["metadata"] = o.Metadata
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommunityChannelMessageMetadataListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varCommunityChannelMessageMetadataListResponseResult := _CommunityChannelMessageMetadataListResponseResult{}
+
+	err = json.Unmarshal(data, &varCommunityChannelMessageMetadataListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommunityChannelMessageMetadataListResponseResult(varCommunityChannelMessageMetadataListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommunityChannelMessageMetadataListResponseResult struct {

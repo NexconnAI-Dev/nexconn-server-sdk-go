@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UserChannelTagRemoveRequest{}
 type UserChannelTagRemoveRequest struct {
 	UserId string `json:"userId"`
 	TagIds []string `json:"tagIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserChannelTagRemoveRequest UserChannelTagRemoveRequest
@@ -106,6 +106,11 @@ func (o UserChannelTagRemoveRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userId"] = o.UserId
 	toSerialize["tagIds"] = o.TagIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *UserChannelTagRemoveRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserChannelTagRemoveRequest := _UserChannelTagRemoveRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserChannelTagRemoveRequest)
+	err = json.Unmarshal(data, &varUserChannelTagRemoveRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserChannelTagRemoveRequest(varUserChannelTagRemoveRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "tagIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

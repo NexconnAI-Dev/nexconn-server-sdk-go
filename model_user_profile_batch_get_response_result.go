@@ -20,7 +20,10 @@ var _ MappedNullable = &UserProfileBatchGetResponseResult{}
 // UserProfileBatchGetResponseResult struct for UserProfileBatchGetResponseResult
 type UserProfileBatchGetResponseResult struct {
 	Users []UserProfileItem `json:"users,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserProfileBatchGetResponseResult UserProfileBatchGetResponseResult
 
 // NewUserProfileBatchGetResponseResult instantiates a new UserProfileBatchGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o UserProfileBatchGetResponseResult) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.Users) {
 		toSerialize["users"] = o.Users
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserProfileBatchGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varUserProfileBatchGetResponseResult := _UserProfileBatchGetResponseResult{}
+
+	err = json.Unmarshal(data, &varUserProfileBatchGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserProfileBatchGetResponseResult(varUserProfileBatchGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "users")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserProfileBatchGetResponseResult struct {

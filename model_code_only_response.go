@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CodeOnlyResponse{}
 type CodeOnlyResponse struct {
 	// Return code. `0` indicates success.
 	Code int32 `json:"code"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CodeOnlyResponse CodeOnlyResponse
@@ -80,6 +80,11 @@ func (o CodeOnlyResponse) MarshalJSON() ([]byte, error) {
 func (o CodeOnlyResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["code"] = o.Code
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *CodeOnlyResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varCodeOnlyResponse := _CodeOnlyResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCodeOnlyResponse)
+	err = json.Unmarshal(data, &varCodeOnlyResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CodeOnlyResponse(varCodeOnlyResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

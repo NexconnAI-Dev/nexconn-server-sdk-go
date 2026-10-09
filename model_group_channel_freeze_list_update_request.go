@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &GroupChannelFreezeListUpdateRequest{}
 // GroupChannelFreezeListUpdateRequest struct for GroupChannelFreezeListUpdateRequest
 type GroupChannelFreezeListUpdateRequest struct {
 	ChannelIds []string `json:"channelIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelFreezeListUpdateRequest GroupChannelFreezeListUpdateRequest
@@ -79,6 +79,11 @@ func (o GroupChannelFreezeListUpdateRequest) MarshalJSON() ([]byte, error) {
 func (o GroupChannelFreezeListUpdateRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelIds"] = o.ChannelIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *GroupChannelFreezeListUpdateRequest) UnmarshalJSON(data []byte) (err er
 
 	varGroupChannelFreezeListUpdateRequest := _GroupChannelFreezeListUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelFreezeListUpdateRequest)
+	err = json.Unmarshal(data, &varGroupChannelFreezeListUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelFreezeListUpdateRequest(varGroupChannelFreezeListUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

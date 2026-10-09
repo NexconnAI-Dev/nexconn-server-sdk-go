@@ -20,7 +20,10 @@ var _ MappedNullable = &FriendPermissionGetResponseResult{}
 // FriendPermissionGetResponseResult struct for FriendPermissionGetResponseResult
 type FriendPermissionGetResponseResult struct {
 	Permissions []FriendPermissionItem `json:"permissions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FriendPermissionGetResponseResult FriendPermissionGetResponseResult
 
 // NewFriendPermissionGetResponseResult instantiates a new FriendPermissionGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o FriendPermissionGetResponseResult) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.Permissions) {
 		toSerialize["permissions"] = o.Permissions
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FriendPermissionGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varFriendPermissionGetResponseResult := _FriendPermissionGetResponseResult{}
+
+	err = json.Unmarshal(data, &varFriendPermissionGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FriendPermissionGetResponseResult(varFriendPermissionGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "permissions")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFriendPermissionGetResponseResult struct {

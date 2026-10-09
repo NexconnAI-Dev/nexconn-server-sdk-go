@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type OpenChannelMessageSendRequest struct {
 	IsEchoToSender *int32 `json:"isEchoToSender,omitempty"`
 	// Message priority. `0` standard, `1` allowlisted, `2` high priority, `3` low priority.
 	Priority *int32 `json:"priority,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelMessageSendRequest OpenChannelMessageSendRequest
@@ -275,6 +275,11 @@ func (o OpenChannelMessageSendRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Priority) {
 		toSerialize["priority"] = o.Priority
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -305,15 +310,26 @@ func (o *OpenChannelMessageSendRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varOpenChannelMessageSendRequest := _OpenChannelMessageSendRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelMessageSendRequest)
+	err = json.Unmarshal(data, &varOpenChannelMessageSendRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelMessageSendRequest(varOpenChannelMessageSendRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "toChannelIds")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "shouldPersist")
+		delete(additionalProperties, "isEchoToSender")
+		delete(additionalProperties, "priority")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

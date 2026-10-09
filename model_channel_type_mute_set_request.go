@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type ChannelTypeMuteSetRequest struct {
 	MuteState int32 `json:"muteState"`
 	// Channel types to apply (e.g. `PERSON`, `GROUP`, `CHATROOM`). Server validates against supported enums.
 	ChannelTypes []string `json:"channelTypes"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelTypeMuteSetRequest ChannelTypeMuteSetRequest
@@ -135,6 +135,11 @@ func (o ChannelTypeMuteSetRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["userIds"] = o.UserIds
 	toSerialize["muteState"] = o.MuteState
 	toSerialize["channelTypes"] = o.ChannelTypes
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -164,15 +169,22 @@ func (o *ChannelTypeMuteSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varChannelTypeMuteSetRequest := _ChannelTypeMuteSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelTypeMuteSetRequest)
+	err = json.Unmarshal(data, &varChannelTypeMuteSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelTypeMuteSetRequest(varChannelTypeMuteSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userIds")
+		delete(additionalProperties, "muteState")
+		delete(additionalProperties, "channelTypes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

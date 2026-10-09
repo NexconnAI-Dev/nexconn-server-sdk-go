@@ -22,7 +22,10 @@ type FriendRelationshipItem struct {
 	UserId *string `json:"userId,omitempty"`
 	// Friend relationship result defined by the source API. `1` means both users are not friends, `2` and `3` are reserved, and `4` means the friendship is mutual. 
 	Result *int32 `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FriendRelationshipItem FriendRelationshipItem
 
 // NewFriendRelationshipItem instantiates a new FriendRelationshipItem object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o FriendRelationshipItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FriendRelationshipItem) UnmarshalJSON(data []byte) (err error) {
+	varFriendRelationshipItem := _FriendRelationshipItem{}
+
+	err = json.Unmarshal(data, &varFriendRelationshipItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FriendRelationshipItem(varFriendRelationshipItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFriendRelationshipItem struct {

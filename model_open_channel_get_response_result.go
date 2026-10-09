@@ -26,7 +26,10 @@ type OpenChannelGetResponseResult struct {
 	TtlMinutes *int32 `json:"ttlMinutes,omitempty"`
 	// Whole-channel mute status.
 	IsFrozen *bool `json:"isFrozen,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelGetResponseResult OpenChannelGetResponseResult
 
 // NewOpenChannelGetResponseResult instantiates a new OpenChannelGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -265,7 +268,38 @@ func (o OpenChannelGetResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.IsFrozen) {
 		toSerialize["isFrozen"] = o.IsFrozen
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelGetResponseResult := _OpenChannelGetResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelGetResponseResult(varOpenChannelGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "participantCount")
+		delete(additionalProperties, "destroyType")
+		delete(additionalProperties, "ttlMinutes")
+		delete(additionalProperties, "isFrozen")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelGetResponseResult struct {

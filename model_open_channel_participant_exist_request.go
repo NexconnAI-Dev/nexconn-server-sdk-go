@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type OpenChannelParticipantExistRequest struct {
 	ChannelId string `json:"channelId"`
 	// User IDs to check. Up to 1,000 users per request. Pass a single-element array to check one user.
 	ParticipantIds []string `json:"participantIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelParticipantExistRequest OpenChannelParticipantExistRequest
@@ -108,6 +108,11 @@ func (o OpenChannelParticipantExistRequest) ToMap() (map[string]interface{}, err
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["participantIds"] = o.ParticipantIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *OpenChannelParticipantExistRequest) UnmarshalJSON(data []byte) (err err
 
 	varOpenChannelParticipantExistRequest := _OpenChannelParticipantExistRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelParticipantExistRequest)
+	err = json.Unmarshal(data, &varOpenChannelParticipantExistRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelParticipantExistRequest(varOpenChannelParticipantExistRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "participantIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

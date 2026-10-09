@@ -23,7 +23,10 @@ type UserProfileListRequest struct {
 	PageSize *int32 `json:"pageSize,omitempty"`
 	// `0` for ascending order and `1` for descending order.
 	Order *int32 `json:"order,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserProfileListRequest UserProfileListRequest
 
 // NewUserProfileListRequest instantiates a new UserProfileListRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -165,7 +168,35 @@ func (o UserProfileListRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserProfileListRequest) UnmarshalJSON(data []byte) (err error) {
+	varUserProfileListRequest := _UserProfileListRequest{}
+
+	err = json.Unmarshal(data, &varUserProfileListRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserProfileListRequest(varUserProfileListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "page")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserProfileListRequest struct {

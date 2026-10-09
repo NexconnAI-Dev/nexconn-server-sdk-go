@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &OpenChannelParticipantMuteListGetResponse{}
 type OpenChannelParticipantMuteListGetResponse struct {
 	Code int32 `json:"code"`
 	Result *OpenChannelParticipantMuteListGetResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelParticipantMuteListGetResponse OpenChannelParticipantMuteListGetResponse
@@ -115,6 +115,11 @@ func (o OpenChannelParticipantMuteListGetResponse) ToMap() (map[string]interface
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *OpenChannelParticipantMuteListGetResponse) UnmarshalJSON(data []byte) (
 
 	varOpenChannelParticipantMuteListGetResponse := _OpenChannelParticipantMuteListGetResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelParticipantMuteListGetResponse)
+	err = json.Unmarshal(data, &varOpenChannelParticipantMuteListGetResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelParticipantMuteListGetResponse(varOpenChannelParticipantMuteListGetResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

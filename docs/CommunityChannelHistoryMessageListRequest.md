@@ -4,18 +4,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ChannelId** | **string** |  | 
-**SubchannelId** | **string** |  | 
-**StartAt** | **int64** |  | 
-**EndAt** | **int64** |  | 
-**FromUserId** | Pointer to **string** |  | [optional] 
-**PageSize** | Pointer to **int32** |  | [optional] [default to 20]
+**ChannelId** | **string** | Community channel ID. | 
+**SubchannelId** | Pointer to **string** | Optional community subchannel ID. When omitted, messages from the whole community channel are queried. | [optional] 
+**UserId** | **string** | User ID of the community-channel participant. | 
+**StartAt** | **int64** | Query start timestamp in Unix milliseconds. Must be greater than or equal to &#x60;endAt&#x60;; the range cannot exceed 14 days. | 
+**EndAt** | **int64** | Query end timestamp in Unix milliseconds. Messages are returned in descending timestamp order. | 
+**PageSize** | Pointer to **int32** | Number of messages to return. Must be between 1 and 100. | [optional] [default to 10]
+**IncludeStart** | **bool** | Whether to include the message at &#x60;startAt&#x60; when it matches the query boundary. | 
 
 ## Methods
 
 ### NewCommunityChannelHistoryMessageListRequest
 
-`func NewCommunityChannelHistoryMessageListRequest(channelId string, subchannelId string, startAt int64, endAt int64, ) *CommunityChannelHistoryMessageListRequest`
+`func NewCommunityChannelHistoryMessageListRequest(channelId string, userId string, startAt int64, endAt int64, includeStart bool, ) *CommunityChannelHistoryMessageListRequest`
 
 NewCommunityChannelHistoryMessageListRequest instantiates a new CommunityChannelHistoryMessageListRequest object
 This constructor will assign default values to properties that have it defined,
@@ -69,6 +70,31 @@ and a boolean to check if the value has been set.
 
 SetSubchannelId sets SubchannelId field to given value.
 
+### HasSubchannelId
+
+`func (o *CommunityChannelHistoryMessageListRequest) HasSubchannelId() bool`
+
+HasSubchannelId returns a boolean if a field has been set.
+
+### GetUserId
+
+`func (o *CommunityChannelHistoryMessageListRequest) GetUserId() string`
+
+GetUserId returns the UserId field if non-nil, zero value otherwise.
+
+### GetUserIdOk
+
+`func (o *CommunityChannelHistoryMessageListRequest) GetUserIdOk() (*string, bool)`
+
+GetUserIdOk returns a tuple with the UserId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUserId
+
+`func (o *CommunityChannelHistoryMessageListRequest) SetUserId(v string)`
+
+SetUserId sets UserId field to given value.
+
 
 ### GetStartAt
 
@@ -110,31 +136,6 @@ and a boolean to check if the value has been set.
 SetEndAt sets EndAt field to given value.
 
 
-### GetFromUserId
-
-`func (o *CommunityChannelHistoryMessageListRequest) GetFromUserId() string`
-
-GetFromUserId returns the FromUserId field if non-nil, zero value otherwise.
-
-### GetFromUserIdOk
-
-`func (o *CommunityChannelHistoryMessageListRequest) GetFromUserIdOk() (*string, bool)`
-
-GetFromUserIdOk returns a tuple with the FromUserId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetFromUserId
-
-`func (o *CommunityChannelHistoryMessageListRequest) SetFromUserId(v string)`
-
-SetFromUserId sets FromUserId field to given value.
-
-### HasFromUserId
-
-`func (o *CommunityChannelHistoryMessageListRequest) HasFromUserId() bool`
-
-HasFromUserId returns a boolean if a field has been set.
-
 ### GetPageSize
 
 `func (o *CommunityChannelHistoryMessageListRequest) GetPageSize() int32`
@@ -159,6 +160,26 @@ SetPageSize sets PageSize field to given value.
 `func (o *CommunityChannelHistoryMessageListRequest) HasPageSize() bool`
 
 HasPageSize returns a boolean if a field has been set.
+
+### GetIncludeStart
+
+`func (o *CommunityChannelHistoryMessageListRequest) GetIncludeStart() bool`
+
+GetIncludeStart returns the IncludeStart field if non-nil, zero value otherwise.
+
+### GetIncludeStartOk
+
+`func (o *CommunityChannelHistoryMessageListRequest) GetIncludeStartOk() (*bool, bool)`
+
+GetIncludeStartOk returns a tuple with the IncludeStart field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIncludeStart
+
+`func (o *CommunityChannelHistoryMessageListRequest) SetIncludeStart(v bool)`
+
+SetIncludeStart sets IncludeStart field to given value.
+
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

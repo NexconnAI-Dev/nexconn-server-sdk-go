@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type ChannelTypeMessageMetadataDeleteRequest struct {
 	Keys []string `json:"keys"`
 	// Legacy `syncToSender`. `0` by default.
 	SyncToSender *int32 `json:"syncToSender,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelTypeMessageMetadataDeleteRequest ChannelTypeMessageMetadataDeleteRequest
@@ -226,6 +226,11 @@ func (o ChannelTypeMessageMetadataDeleteRequest) ToMap() (map[string]interface{}
 	if !IsNil(o.SyncToSender) {
 		toSerialize["syncToSender"] = o.SyncToSender
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -257,15 +262,25 @@ func (o *ChannelTypeMessageMetadataDeleteRequest) UnmarshalJSON(data []byte) (er
 
 	varChannelTypeMessageMetadataDeleteRequest := _ChannelTypeMessageMetadataDeleteRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelTypeMessageMetadataDeleteRequest)
+	err = json.Unmarshal(data, &varChannelTypeMessageMetadataDeleteRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelTypeMessageMetadataDeleteRequest(varChannelTypeMessageMetadataDeleteRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "keys")
+		delete(additionalProperties, "syncToSender")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

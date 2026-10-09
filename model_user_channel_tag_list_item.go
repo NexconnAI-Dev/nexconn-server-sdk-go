@@ -23,7 +23,10 @@ type UserChannelTagListItem struct {
 	TagName *string `json:"tagName,omitempty"`
 	// Tag creation time returned by the source API.
 	CreatedAt *int64 `json:"createdAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserChannelTagListItem UserChannelTagListItem
 
 // NewUserChannelTagListItem instantiates a new UserChannelTagListItem object
 // This constructor will assign default values to properties that have it defined,
@@ -157,7 +160,35 @@ func (o UserChannelTagListItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserChannelTagListItem) UnmarshalJSON(data []byte) (err error) {
+	varUserChannelTagListItem := _UserChannelTagListItem{}
+
+	err = json.Unmarshal(data, &varUserChannelTagListItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserChannelTagListItem(varUserChannelTagListItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tagId")
+		delete(additionalProperties, "tagName")
+		delete(additionalProperties, "createdAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserChannelTagListItem struct {

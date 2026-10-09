@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UserBlocklistAddRequest{}
 type UserBlocklistAddRequest struct {
 	UserId string `json:"userId"`
 	TargetUserIds []string `json:"targetUserIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserBlocklistAddRequest UserBlocklistAddRequest
@@ -106,6 +106,11 @@ func (o UserBlocklistAddRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userId"] = o.UserId
 	toSerialize["targetUserIds"] = o.TargetUserIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *UserBlocklistAddRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserBlocklistAddRequest := _UserBlocklistAddRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserBlocklistAddRequest)
+	err = json.Unmarshal(data, &varUserBlocklistAddRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserBlocklistAddRequest(varUserBlocklistAddRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "targetUserIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

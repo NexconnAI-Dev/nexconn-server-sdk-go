@@ -21,7 +21,10 @@ var _ MappedNullable = &ProfanityWordBatchAddResponseResult{}
 type ProfanityWordBatchAddResponseResult struct {
 	// Remaining quota for configured profanity words.
 	RemainingQuota *int64 `json:"remainingQuota,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ProfanityWordBatchAddResponseResult ProfanityWordBatchAddResponseResult
 
 // NewProfanityWordBatchAddResponseResult instantiates a new ProfanityWordBatchAddResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o ProfanityWordBatchAddResponseResult) ToMap() (map[string]interface{}, er
 	if !IsNil(o.RemainingQuota) {
 		toSerialize["remainingQuota"] = o.RemainingQuota
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ProfanityWordBatchAddResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varProfanityWordBatchAddResponseResult := _ProfanityWordBatchAddResponseResult{}
+
+	err = json.Unmarshal(data, &varProfanityWordBatchAddResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ProfanityWordBatchAddResponseResult(varProfanityWordBatchAddResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "remainingQuota")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableProfanityWordBatchAddResponseResult struct {

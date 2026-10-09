@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type GroupChannelQuitRequest struct {
 	ShouldDeleteAllowedSendersList *int32 `json:"shouldDeleteAllowedSendersList,omitempty"`
 	// `0` means keep each leaving member's favorites record and `1` means remove it.
 	ShouldDeleteFavorites *int32 `json:"shouldDeleteFavorites,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelQuitRequest GroupChannelQuitRequest
@@ -217,6 +217,11 @@ func (o GroupChannelQuitRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ShouldDeleteFavorites) {
 		toSerialize["shouldDeleteFavorites"] = o.ShouldDeleteFavorites
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -245,15 +250,24 @@ func (o *GroupChannelQuitRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupChannelQuitRequest := _GroupChannelQuitRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelQuitRequest)
+	err = json.Unmarshal(data, &varGroupChannelQuitRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelQuitRequest(varGroupChannelQuitRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "userIds")
+		delete(additionalProperties, "shouldDeleteMute")
+		delete(additionalProperties, "shouldDeleteAllowedSendersList")
+		delete(additionalProperties, "shouldDeleteFavorites")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

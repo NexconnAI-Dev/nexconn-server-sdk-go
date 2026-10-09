@@ -20,7 +20,10 @@ var _ MappedNullable = &SingleMessageIdResponseResult{}
 // SingleMessageIdResponseResult struct for SingleMessageIdResponseResult
 type SingleMessageIdResponseResult struct {
 	MessageId *string `json:"messageId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SingleMessageIdResponseResult SingleMessageIdResponseResult
 
 // NewSingleMessageIdResponseResult instantiates a new SingleMessageIdResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o SingleMessageIdResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MessageId) {
 		toSerialize["messageId"] = o.MessageId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SingleMessageIdResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varSingleMessageIdResponseResult := _SingleMessageIdResponseResult{}
+
+	err = json.Unmarshal(data, &varSingleMessageIdResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SingleMessageIdResponseResult(varSingleMessageIdResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSingleMessageIdResponseResult struct {

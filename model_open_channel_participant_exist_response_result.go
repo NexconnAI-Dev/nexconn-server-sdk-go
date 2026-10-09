@@ -21,7 +21,10 @@ var _ MappedNullable = &OpenChannelParticipantExistResponseResult{}
 type OpenChannelParticipantExistResponseResult struct {
 	// Array of participant check results.
 	Participants []OpenChannelParticipantExistItem `json:"participants,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelParticipantExistResponseResult OpenChannelParticipantExistResponseResult
 
 // NewOpenChannelParticipantExistResponseResult instantiates a new OpenChannelParticipantExistResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o OpenChannelParticipantExistResponseResult) ToMap() (map[string]interface
 	if !IsNil(o.Participants) {
 		toSerialize["participants"] = o.Participants
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelParticipantExistResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelParticipantExistResponseResult := _OpenChannelParticipantExistResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelParticipantExistResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelParticipantExistResponseResult(varOpenChannelParticipantExistResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participants")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelParticipantExistResponseResult struct {

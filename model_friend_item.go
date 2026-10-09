@@ -24,7 +24,10 @@ type FriendItem struct {
 	Alias *string `json:"alias,omitempty"`
 	FriendExtProfile map[string]interface{} `json:"friendExtProfile,omitempty"`
 	AddedAt *int64 `json:"addedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FriendItem FriendItem
 
 // NewFriendItem instantiates a new FriendItem object
 // This constructor will assign default values to properties that have it defined,
@@ -228,7 +231,37 @@ func (o FriendItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AddedAt) {
 		toSerialize["addedAt"] = o.AddedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FriendItem) UnmarshalJSON(data []byte) (err error) {
+	varFriendItem := _FriendItem{}
+
+	err = json.Unmarshal(data, &varFriendItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FriendItem(varFriendItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "alias")
+		delete(additionalProperties, "friendExtProfile")
+		delete(additionalProperties, "addedAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFriendItem struct {

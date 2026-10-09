@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &UserConnectionStatusRequest{}
 // UserConnectionStatusRequest struct for UserConnectionStatusRequest
 type UserConnectionStatusRequest struct {
 	UserId string `json:"userId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserConnectionStatusRequest UserConnectionStatusRequest
@@ -79,6 +79,11 @@ func (o UserConnectionStatusRequest) MarshalJSON() ([]byte, error) {
 func (o UserConnectionStatusRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userId"] = o.UserId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *UserConnectionStatusRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserConnectionStatusRequest := _UserConnectionStatusRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserConnectionStatusRequest)
+	err = json.Unmarshal(data, &varUserConnectionStatusRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserConnectionStatusRequest(varUserConnectionStatusRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

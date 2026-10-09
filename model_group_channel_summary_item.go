@@ -27,7 +27,10 @@ type GroupChannelSummaryItem struct {
 	Creator *string `json:"creator,omitempty"`
 	Owner *string `json:"owner,omitempty"`
 	CreatedAt *int64 `json:"createdAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelSummaryItem GroupChannelSummaryItem
 
 // NewGroupChannelSummaryItem instantiates a new GroupChannelSummaryItem object
 // This constructor will assign default values to properties that have it defined,
@@ -266,7 +269,38 @@ func (o GroupChannelSummaryItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelSummaryItem) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelSummaryItem := _GroupChannelSummaryItem{}
+
+	err = json.Unmarshal(data, &varGroupChannelSummaryItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelSummaryItem(varGroupChannelSummaryItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "groupProfile")
+		delete(additionalProperties, "creator")
+		delete(additionalProperties, "owner")
+		delete(additionalProperties, "createdAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelSummaryItem struct {

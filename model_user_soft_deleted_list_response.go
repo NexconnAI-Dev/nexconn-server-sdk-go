@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UserSoftDeletedListResponse{}
 type UserSoftDeletedListResponse struct {
 	Code int32 `json:"code"`
 	Result *UserSoftDeletedListResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserSoftDeletedListResponse UserSoftDeletedListResponse
@@ -115,6 +115,11 @@ func (o UserSoftDeletedListResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *UserSoftDeletedListResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varUserSoftDeletedListResponse := _UserSoftDeletedListResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserSoftDeletedListResponse)
+	err = json.Unmarshal(data, &varUserSoftDeletedListResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserSoftDeletedListResponse(varUserSoftDeletedListResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &OpenChannelGetRequest{}
 // OpenChannelGetRequest struct for OpenChannelGetRequest
 type OpenChannelGetRequest struct {
 	ChannelId string `json:"channelId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelGetRequest OpenChannelGetRequest
@@ -79,6 +79,11 @@ func (o OpenChannelGetRequest) MarshalJSON() ([]byte, error) {
 func (o OpenChannelGetRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *OpenChannelGetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varOpenChannelGetRequest := _OpenChannelGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelGetRequest)
+	err = json.Unmarshal(data, &varOpenChannelGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelGetRequest(varOpenChannelGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

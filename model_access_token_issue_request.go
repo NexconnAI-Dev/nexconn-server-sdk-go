@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AccessTokenIssueRequest struct {
 	UserId string `json:"userId"`
 	Name string `json:"name"`
 	AvatarUrl *string `json:"avatarUrl,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AccessTokenIssueRequest AccessTokenIssueRequest
@@ -142,6 +142,11 @@ func (o AccessTokenIssueRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AvatarUrl) {
 		toSerialize["avatarUrl"] = o.AvatarUrl
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -170,15 +175,22 @@ func (o *AccessTokenIssueRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAccessTokenIssueRequest := _AccessTokenIssueRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccessTokenIssueRequest)
+	err = json.Unmarshal(data, &varAccessTokenIssueRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AccessTokenIssueRequest(varAccessTokenIssueRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "avatarUrl")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

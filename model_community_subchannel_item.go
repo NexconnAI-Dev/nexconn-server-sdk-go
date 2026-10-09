@@ -23,7 +23,10 @@ type CommunitySubchannelItem struct {
 	// Channel creation time returned by the source API.
 	CreatedAt *string `json:"createdAt,omitempty"`
 	ChannelVisibility *int32 `json:"channelVisibility,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommunitySubchannelItem CommunitySubchannelItem
 
 // NewCommunitySubchannelItem instantiates a new CommunitySubchannelItem object
 // This constructor will assign default values to properties that have it defined,
@@ -157,7 +160,35 @@ func (o CommunitySubchannelItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ChannelVisibility) {
 		toSerialize["channelVisibility"] = o.ChannelVisibility
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommunitySubchannelItem) UnmarshalJSON(data []byte) (err error) {
+	varCommunitySubchannelItem := _CommunitySubchannelItem{}
+
+	err = json.Unmarshal(data, &varCommunitySubchannelItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommunitySubchannelItem(varCommunitySubchannelItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "createdAt")
+		delete(additionalProperties, "channelVisibility")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommunitySubchannelItem struct {

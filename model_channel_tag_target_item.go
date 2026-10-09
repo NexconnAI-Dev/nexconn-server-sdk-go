@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ChannelTagTargetItem{}
 type ChannelTagTargetItem struct {
 	ChannelId string `json:"channelId"`
 	ChannelType int32 `json:"channelType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelTagTargetItem ChannelTagTargetItem
@@ -106,6 +106,11 @@ func (o ChannelTagTargetItem) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["channelType"] = o.ChannelType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *ChannelTagTargetItem) UnmarshalJSON(data []byte) (err error) {
 
 	varChannelTagTargetItem := _ChannelTagTargetItem{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelTagTargetItem)
+	err = json.Unmarshal(data, &varChannelTagTargetItem)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelTagTargetItem(varChannelTagTargetItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "channelType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

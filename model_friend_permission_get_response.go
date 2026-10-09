@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &FriendPermissionGetResponse{}
 type FriendPermissionGetResponse struct {
 	Code int32 `json:"code"`
 	Result *FriendPermissionGetResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FriendPermissionGetResponse FriendPermissionGetResponse
@@ -115,6 +115,11 @@ func (o FriendPermissionGetResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *FriendPermissionGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varFriendPermissionGetResponse := _FriendPermissionGetResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFriendPermissionGetResponse)
+	err = json.Unmarshal(data, &varFriendPermissionGetResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FriendPermissionGetResponse(varFriendPermissionGetResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -41,6 +40,7 @@ type MessageDeleteRequest struct {
 	Extra *string `json:"extra,omitempty"`
 	// Whether to keep the recall operation from updating the channel's last-message preview.
 	DisableUpdateLastMsg *bool `json:"disableUpdateLastMsg,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MessageDeleteRequest MessageDeleteRequest
@@ -386,6 +386,11 @@ func (o MessageDeleteRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.DisableUpdateLastMsg) {
 		toSerialize["disableUpdateLastMsg"] = o.DisableUpdateLastMsg
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -416,15 +421,29 @@ func (o *MessageDeleteRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varMessageDeleteRequest := _MessageDeleteRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMessageDeleteRequest)
+	err = json.Unmarshal(data, &varMessageDeleteRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MessageDeleteRequest(varMessageDeleteRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "sentAt")
+		delete(additionalProperties, "isAdmin")
+		delete(additionalProperties, "disablePush")
+		delete(additionalProperties, "extra")
+		delete(additionalProperties, "disableUpdateLastMsg")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

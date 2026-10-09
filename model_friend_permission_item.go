@@ -21,7 +21,10 @@ var _ MappedNullable = &FriendPermissionItem{}
 type FriendPermissionItem struct {
 	UserId *string `json:"userId,omitempty"`
 	PermissionType *int32 `json:"permissionType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FriendPermissionItem FriendPermissionItem
 
 // NewFriendPermissionItem instantiates a new FriendPermissionItem object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o FriendPermissionItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PermissionType) {
 		toSerialize["permissionType"] = o.PermissionType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FriendPermissionItem) UnmarshalJSON(data []byte) (err error) {
+	varFriendPermissionItem := _FriendPermissionItem{}
+
+	err = json.Unmarshal(data, &varFriendPermissionItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FriendPermissionItem(varFriendPermissionItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "permissionType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFriendPermissionItem struct {

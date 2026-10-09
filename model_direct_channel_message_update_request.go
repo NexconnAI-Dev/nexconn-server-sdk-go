@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type DirectChannelMessageUpdateRequest struct {
 	TargetId string `json:"targetId"`
 	MessageId string `json:"messageId"`
 	Content string `json:"content"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DirectChannelMessageUpdateRequest DirectChannelMessageUpdateRequest
@@ -161,6 +161,11 @@ func (o DirectChannelMessageUpdateRequest) ToMap() (map[string]interface{}, erro
 	toSerialize["targetId"] = o.TargetId
 	toSerialize["messageId"] = o.MessageId
 	toSerialize["content"] = o.Content
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -191,15 +196,23 @@ func (o *DirectChannelMessageUpdateRequest) UnmarshalJSON(data []byte) (err erro
 
 	varDirectChannelMessageUpdateRequest := _DirectChannelMessageUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDirectChannelMessageUpdateRequest)
+	err = json.Unmarshal(data, &varDirectChannelMessageUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DirectChannelMessageUpdateRequest(varDirectChannelMessageUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "targetId")
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "content")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

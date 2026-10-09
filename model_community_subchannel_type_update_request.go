@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CommunitySubchannelTypeUpdateRequest struct {
 	SubchannelId string `json:"subchannelId"`
 	// '0' for public and '1' for private.
 	ChannelVisibility *int32 `json:"channelVisibility,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunitySubchannelTypeUpdateRequest CommunitySubchannelTypeUpdateRequest
@@ -143,6 +143,11 @@ func (o CommunitySubchannelTypeUpdateRequest) ToMap() (map[string]interface{}, e
 	if !IsNil(o.ChannelVisibility) {
 		toSerialize["channelVisibility"] = o.ChannelVisibility
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -171,15 +176,22 @@ func (o *CommunitySubchannelTypeUpdateRequest) UnmarshalJSON(data []byte) (err e
 
 	varCommunitySubchannelTypeUpdateRequest := _CommunitySubchannelTypeUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunitySubchannelTypeUpdateRequest)
+	err = json.Unmarshal(data, &varCommunitySubchannelTypeUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunitySubchannelTypeUpdateRequest(varCommunitySubchannelTypeUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "channelVisibility")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

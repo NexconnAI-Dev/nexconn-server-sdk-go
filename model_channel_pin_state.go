@@ -21,7 +21,10 @@ var _ MappedNullable = &ChannelPinState{}
 type ChannelPinState struct {
 	IsPinned *bool `json:"isPinned,omitempty"`
 	PinnedAt *int64 `json:"pinnedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelPinState ChannelPinState
 
 // NewChannelPinState instantiates a new ChannelPinState object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o ChannelPinState) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PinnedAt) {
 		toSerialize["pinnedAt"] = o.PinnedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelPinState) UnmarshalJSON(data []byte) (err error) {
+	varChannelPinState := _ChannelPinState{}
+
+	err = json.Unmarshal(data, &varChannelPinState)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelPinState(varChannelPinState)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "isPinned")
+		delete(additionalProperties, "pinnedAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelPinState struct {
