@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ChannelMessageHistoryDeleteRequest struct {
 	ChannelId string `json:"channelId"`
 	// Optional cutoff (`msgTimestamp`). Serialized as string in `HistoryCleanInput`.
 	SentAt *string `json:"sentAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelMessageHistoryDeleteRequest ChannelMessageHistoryDeleteRequest
@@ -173,6 +173,11 @@ func (o ChannelMessageHistoryDeleteRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.SentAt) {
 		toSerialize["sentAt"] = o.SentAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *ChannelMessageHistoryDeleteRequest) UnmarshalJSON(data []byte) (err err
 
 	varChannelMessageHistoryDeleteRequest := _ChannelMessageHistoryDeleteRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelMessageHistoryDeleteRequest)
+	err = json.Unmarshal(data, &varChannelMessageHistoryDeleteRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelMessageHistoryDeleteRequest(varChannelMessageHistoryDeleteRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "sentAt")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

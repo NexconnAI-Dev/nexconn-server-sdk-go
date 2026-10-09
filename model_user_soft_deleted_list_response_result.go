@@ -21,7 +21,10 @@ var _ MappedNullable = &UserSoftDeletedListResponseResult{}
 type UserSoftDeletedListResponseResult struct {
 	// Soft-deleted user IDs. Legacy response field name is `users`.
 	UserIds []string `json:"userIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserSoftDeletedListResponseResult UserSoftDeletedListResponseResult
 
 // NewUserSoftDeletedListResponseResult instantiates a new UserSoftDeletedListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o UserSoftDeletedListResponseResult) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.UserIds) {
 		toSerialize["userIds"] = o.UserIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserSoftDeletedListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varUserSoftDeletedListResponseResult := _UserSoftDeletedListResponseResult{}
+
+	err = json.Unmarshal(data, &varUserSoftDeletedListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserSoftDeletedListResponseResult(varUserSoftDeletedListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userIds")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserSoftDeletedListResponseResult struct {

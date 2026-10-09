@@ -20,7 +20,10 @@ var _ MappedNullable = &OpenChannelAllowedSenderListGetResponseResult{}
 // OpenChannelAllowedSenderListGetResponseResult struct for OpenChannelAllowedSenderListGetResponseResult
 type OpenChannelAllowedSenderListGetResponseResult struct {
 	ParticipantIds []string `json:"participantIds,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelAllowedSenderListGetResponseResult OpenChannelAllowedSenderListGetResponseResult
 
 // NewOpenChannelAllowedSenderListGetResponseResult instantiates a new OpenChannelAllowedSenderListGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o OpenChannelAllowedSenderListGetResponseResult) ToMap() (map[string]inter
 	if !IsNil(o.ParticipantIds) {
 		toSerialize["participantIds"] = o.ParticipantIds
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelAllowedSenderListGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelAllowedSenderListGetResponseResult := _OpenChannelAllowedSenderListGetResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelAllowedSenderListGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelAllowedSenderListGetResponseResult(varOpenChannelAllowedSenderListGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participantIds")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelAllowedSenderListGetResponseResult struct {

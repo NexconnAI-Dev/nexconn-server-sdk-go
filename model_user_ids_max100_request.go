@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UserIdsMax100Request{}
 type UserIdsMax100Request struct {
 	// User ID array, up to 100 items per request.
 	UserIds []string `json:"userIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserIdsMax100Request UserIdsMax100Request
@@ -80,6 +80,11 @@ func (o UserIdsMax100Request) MarshalJSON() ([]byte, error) {
 func (o UserIdsMax100Request) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userIds"] = o.UserIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *UserIdsMax100Request) UnmarshalJSON(data []byte) (err error) {
 
 	varUserIdsMax100Request := _UserIdsMax100Request{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserIdsMax100Request)
+	err = json.Unmarshal(data, &varUserIdsMax100Request)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserIdsMax100Request(varUserIdsMax100Request)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

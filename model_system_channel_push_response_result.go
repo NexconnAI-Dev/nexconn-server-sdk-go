@@ -21,7 +21,10 @@ var _ MappedNullable = &SystemChannelPushResponseResult{}
 type SystemChannelPushResponseResult struct {
 	Id *string `json:"id,omitempty"`
 	MessageId *string `json:"messageId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SystemChannelPushResponseResult SystemChannelPushResponseResult
 
 // NewSystemChannelPushResponseResult instantiates a new SystemChannelPushResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o SystemChannelPushResponseResult) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.MessageId) {
 		toSerialize["messageId"] = o.MessageId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SystemChannelPushResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varSystemChannelPushResponseResult := _SystemChannelPushResponseResult{}
+
+	err = json.Unmarshal(data, &varSystemChannelPushResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SystemChannelPushResponseResult(varSystemChannelPushResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "messageId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSystemChannelPushResponseResult struct {

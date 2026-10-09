@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type OpenChannelMetadataBatchGetRequest struct {
 	ChannelId string `json:"channelId"`
 	// Metadata keys to fetch. When omitted, the service returns metadata according to its default rule.
 	MetadataKeys []string `json:"metadataKeys,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelMetadataBatchGetRequest OpenChannelMetadataBatchGetRequest
@@ -116,6 +116,11 @@ func (o OpenChannelMetadataBatchGetRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.MetadataKeys) {
 		toSerialize["metadataKeys"] = o.MetadataKeys
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,15 +148,21 @@ func (o *OpenChannelMetadataBatchGetRequest) UnmarshalJSON(data []byte) (err err
 
 	varOpenChannelMetadataBatchGetRequest := _OpenChannelMetadataBatchGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelMetadataBatchGetRequest)
+	err = json.Unmarshal(data, &varOpenChannelMetadataBatchGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelMetadataBatchGetRequest(varOpenChannelMetadataBatchGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "metadataKeys")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

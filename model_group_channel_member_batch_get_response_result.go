@@ -24,7 +24,10 @@ type GroupChannelMemberBatchGetResponseResult struct {
 	// From `EGMemberListResult.totalCount`.
 	TotalCount *int32 `json:"totalCount,omitempty"`
 	Members []GroupChannelMemberItem `json:"members,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelMemberBatchGetResponseResult GroupChannelMemberBatchGetResponseResult
 
 // NewGroupChannelMemberBatchGetResponseResult instantiates a new GroupChannelMemberBatchGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -158,7 +161,35 @@ func (o GroupChannelMemberBatchGetResponseResult) ToMap() (map[string]interface{
 	if !IsNil(o.Members) {
 		toSerialize["members"] = o.Members
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelMemberBatchGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelMemberBatchGetResponseResult := _GroupChannelMemberBatchGetResponseResult{}
+
+	err = json.Unmarshal(data, &varGroupChannelMemberBatchGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelMemberBatchGetResponseResult(varGroupChannelMemberBatchGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "totalCount")
+		delete(additionalProperties, "members")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelMemberBatchGetResponseResult struct {

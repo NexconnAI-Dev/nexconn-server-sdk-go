@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type FriendListRequest struct {
 	PageSize *int32 `json:"pageSize,omitempty"`
 	// `0` for ascending order and `1` for descending order.
 	Order *int32 `json:"order,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FriendListRequest FriendListRequest
@@ -192,6 +192,11 @@ func (o FriendListRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -219,15 +224,23 @@ func (o *FriendListRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varFriendListRequest := _FriendListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFriendListRequest)
+	err = json.Unmarshal(data, &varFriendListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FriendListRequest(varFriendListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &OpenChannelFreezeCheckResponseResult{}
 type OpenChannelFreezeCheckResponseResult struct {
 	// '1' means frozen and '0' means not frozen.
 	Status *int32 `json:"status,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelFreezeCheckResponseResult OpenChannelFreezeCheckResponseResult
 
 // NewOpenChannelFreezeCheckResponseResult instantiates a new OpenChannelFreezeCheckResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o OpenChannelFreezeCheckResponseResult) ToMap() (map[string]interface{}, e
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelFreezeCheckResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelFreezeCheckResponseResult := _OpenChannelFreezeCheckResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelFreezeCheckResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelFreezeCheckResponseResult(varOpenChannelFreezeCheckResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelFreezeCheckResponseResult struct {

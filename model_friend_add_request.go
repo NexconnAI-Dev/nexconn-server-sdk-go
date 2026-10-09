@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type FriendAddRequest struct {
 	// `1` means add with verification and `2` means add directly.
 	Action *int32 `json:"action,omitempty"`
 	Extra *string `json:"extra,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FriendAddRequest FriendAddRequest
@@ -179,6 +179,11 @@ func (o FriendAddRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Extra) {
 		toSerialize["extra"] = o.Extra
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -207,15 +212,23 @@ func (o *FriendAddRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varFriendAddRequest := _FriendAddRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFriendAddRequest)
+	err = json.Unmarshal(data, &varFriendAddRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FriendAddRequest(varFriendAddRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "targetId")
+		delete(additionalProperties, "action")
+		delete(additionalProperties, "extra")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -23,7 +23,10 @@ type OpenChannelParticipantExistItem struct {
 	ParticipantId *string `json:"participantId,omitempty"`
 	// Whether the user is in the open channel. `1` = yes, `0` = no.
 	IsInOpenChannel *int32 `json:"isInOpenChannel,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelParticipantExistItem OpenChannelParticipantExistItem
 
 // NewOpenChannelParticipantExistItem instantiates a new OpenChannelParticipantExistItem object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o OpenChannelParticipantExistItem) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.IsInOpenChannel) {
 		toSerialize["isInOpenChannel"] = o.IsInOpenChannel
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelParticipantExistItem) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelParticipantExistItem := _OpenChannelParticipantExistItem{}
+
+	err = json.Unmarshal(data, &varOpenChannelParticipantExistItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelParticipantExistItem(varOpenChannelParticipantExistItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participantId")
+		delete(additionalProperties, "isInOpenChannel")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelParticipantExistItem struct {

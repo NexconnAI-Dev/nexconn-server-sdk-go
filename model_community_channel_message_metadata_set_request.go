@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CommunityChannelMessageMetadataSetRequest struct {
 	SubchannelId *string `json:"subchannelId,omitempty"`
 	// Community-channel message metadata to set. Keys support letters, digits, and `+ = - _`, with a maximum key length of 32 characters. Each request can set up to 20 entries. 
 	Metadata map[string]string `json:"metadata"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelMessageMetadataSetRequest CommunityChannelMessageMetadataSetRequest
@@ -197,6 +197,11 @@ func (o CommunityChannelMessageMetadataSetRequest) ToMap() (map[string]interface
 		toSerialize["subchannelId"] = o.SubchannelId
 	}
 	toSerialize["metadata"] = o.Metadata
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -227,15 +232,24 @@ func (o *CommunityChannelMessageMetadataSetRequest) UnmarshalJSON(data []byte) (
 
 	varCommunityChannelMessageMetadataSetRequest := _CommunityChannelMessageMetadataSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelMessageMetadataSetRequest)
+	err = json.Unmarshal(data, &varCommunityChannelMessageMetadataSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelMessageMetadataSetRequest(varCommunityChannelMessageMetadataSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

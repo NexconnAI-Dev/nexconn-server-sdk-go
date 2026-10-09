@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &OpenChannelFreezeCheckRequest{}
 // OpenChannelFreezeCheckRequest struct for OpenChannelFreezeCheckRequest
 type OpenChannelFreezeCheckRequest struct {
 	ChannelId string `json:"channelId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelFreezeCheckRequest OpenChannelFreezeCheckRequest
@@ -79,6 +79,11 @@ func (o OpenChannelFreezeCheckRequest) MarshalJSON() ([]byte, error) {
 func (o OpenChannelFreezeCheckRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *OpenChannelFreezeCheckRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varOpenChannelFreezeCheckRequest := _OpenChannelFreezeCheckRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelFreezeCheckRequest)
+	err = json.Unmarshal(data, &varOpenChannelFreezeCheckRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelFreezeCheckRequest(varOpenChannelFreezeCheckRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -20,7 +20,10 @@ var _ MappedNullable = &CommunityChannelMutedMemberItem{}
 // CommunityChannelMutedMemberItem struct for CommunityChannelMutedMemberItem
 type CommunityChannelMutedMemberItem struct {
 	UserId *string `json:"userId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommunityChannelMutedMemberItem CommunityChannelMutedMemberItem
 
 // NewCommunityChannelMutedMemberItem instantiates a new CommunityChannelMutedMemberItem object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o CommunityChannelMutedMemberItem) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.UserId) {
 		toSerialize["userId"] = o.UserId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommunityChannelMutedMemberItem) UnmarshalJSON(data []byte) (err error) {
+	varCommunityChannelMutedMemberItem := _CommunityChannelMutedMemberItem{}
+
+	err = json.Unmarshal(data, &varCommunityChannelMutedMemberItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommunityChannelMutedMemberItem(varCommunityChannelMutedMemberItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommunityChannelMutedMemberItem struct {

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type GroupChannelStreamMessageSendRequest struct {
 	Metadata *map[string]string `json:"metadata,omitempty"`
 	// Whether to keep this message from updating the channel's last-message preview.
 	DisableUpdateLastMsg *bool `json:"disableUpdateLastMsg,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelStreamMessageSendRequest GroupChannelStreamMessageSendRequest
@@ -385,6 +385,11 @@ func (o GroupChannelStreamMessageSendRequest) ToMap() (map[string]interface{}, e
 	if !IsNil(o.DisableUpdateLastMsg) {
 		toSerialize["disableUpdateLastMsg"] = o.DisableUpdateLastMsg
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -415,15 +420,29 @@ func (o *GroupChannelStreamMessageSendRequest) UnmarshalJSON(data []byte) (err e
 
 	varGroupChannelStreamMessageSendRequest := _GroupChannelStreamMessageSendRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelStreamMessageSendRequest)
+	err = json.Unmarshal(data, &varGroupChannelStreamMessageSendRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelStreamMessageSendRequest(varGroupChannelStreamMessageSendRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "toChannelId")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "toUserIds")
+		delete(additionalProperties, "isEchoToSender")
+		delete(additionalProperties, "shouldPersist")
+		delete(additionalProperties, "hasMention")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "disableUpdateLastMsg")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

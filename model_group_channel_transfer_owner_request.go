@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type GroupChannelTransferOwnerRequest struct {
 	ShouldDeleteAllowedSendersList *int32 `json:"shouldDeleteAllowedSendersList,omitempty"`
 	// `0` means keep favorites and `1` means remove them.
 	ShouldDeleteFavorites *int32 `json:"shouldDeleteFavorites,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelTransferOwnerRequest GroupChannelTransferOwnerRequest
@@ -254,6 +254,11 @@ func (o GroupChannelTransferOwnerRequest) ToMap() (map[string]interface{}, error
 	if !IsNil(o.ShouldDeleteFavorites) {
 		toSerialize["shouldDeleteFavorites"] = o.ShouldDeleteFavorites
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -282,15 +287,25 @@ func (o *GroupChannelTransferOwnerRequest) UnmarshalJSON(data []byte) (err error
 
 	varGroupChannelTransferOwnerRequest := _GroupChannelTransferOwnerRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelTransferOwnerRequest)
+	err = json.Unmarshal(data, &varGroupChannelTransferOwnerRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelTransferOwnerRequest(varGroupChannelTransferOwnerRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "newOwner")
+		delete(additionalProperties, "shouldLeave")
+		delete(additionalProperties, "shouldDeleteMute")
+		delete(additionalProperties, "shouldDeleteAllowedSendersList")
+		delete(additionalProperties, "shouldDeleteFavorites")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

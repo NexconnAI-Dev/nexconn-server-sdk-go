@@ -22,7 +22,10 @@ type OpenChannelParticipantItem struct {
 	ParticipantId *string `json:"participantId,omitempty"`
 	// Participant join time in `YYYY-MM-DD HH:MM:SS` format.
 	CreatedAt *string `json:"createdAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelParticipantItem OpenChannelParticipantItem
 
 // NewOpenChannelParticipantItem instantiates a new OpenChannelParticipantItem object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o OpenChannelParticipantItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelParticipantItem) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelParticipantItem := _OpenChannelParticipantItem{}
+
+	err = json.Unmarshal(data, &varOpenChannelParticipantItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelParticipantItem(varOpenChannelParticipantItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participantId")
+		delete(additionalProperties, "createdAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelParticipantItem struct {

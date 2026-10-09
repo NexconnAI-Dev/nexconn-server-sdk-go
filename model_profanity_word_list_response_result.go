@@ -20,7 +20,10 @@ var _ MappedNullable = &ProfanityWordListResponseResult{}
 // ProfanityWordListResponseResult struct for ProfanityWordListResponseResult
 type ProfanityWordListResponseResult struct {
 	Words []ProfanityWordListedItem `json:"words,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ProfanityWordListResponseResult ProfanityWordListResponseResult
 
 // NewProfanityWordListResponseResult instantiates a new ProfanityWordListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o ProfanityWordListResponseResult) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.Words) {
 		toSerialize["words"] = o.Words
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ProfanityWordListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varProfanityWordListResponseResult := _ProfanityWordListResponseResult{}
+
+	err = json.Unmarshal(data, &varProfanityWordListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ProfanityWordListResponseResult(varProfanityWordListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "words")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableProfanityWordListResponseResult struct {

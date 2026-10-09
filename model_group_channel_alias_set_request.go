@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type GroupChannelAliasSetRequest struct {
 	ChannelId string `json:"channelId"`
 	UserId string `json:"userId"`
 	Alias string `json:"alias"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelAliasSetRequest GroupChannelAliasSetRequest
@@ -133,6 +133,11 @@ func (o GroupChannelAliasSetRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["userId"] = o.UserId
 	toSerialize["alias"] = o.Alias
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -162,15 +167,22 @@ func (o *GroupChannelAliasSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupChannelAliasSetRequest := _GroupChannelAliasSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelAliasSetRequest)
+	err = json.Unmarshal(data, &varGroupChannelAliasSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelAliasSetRequest(varGroupChannelAliasSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "alias")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

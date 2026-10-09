@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type UserUpdateRequest struct {
 	UserId string `json:"userId"`
 	Name *string `json:"name,omitempty"`
 	AvatarUrl *string `json:"avatarUrl,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserUpdateRequest UserUpdateRequest
@@ -151,6 +151,11 @@ func (o UserUpdateRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AvatarUrl) {
 		toSerialize["avatarUrl"] = o.AvatarUrl
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -178,15 +183,22 @@ func (o *UserUpdateRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserUpdateRequest := _UserUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserUpdateRequest)
+	err = json.Unmarshal(data, &varUserUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserUpdateRequest(varUserUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "avatarUrl")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

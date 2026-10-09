@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type CommunityChannelUserGroupListRequest struct {
 	PageSize *int32 `json:"pageSize,omitempty"`
 	// Sort order from `CommunityChannelPageInput`.
 	Order *int32 `json:"order,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelUserGroupListRequest CommunityChannelUserGroupListRequest
@@ -196,6 +196,11 @@ func (o CommunityChannelUserGroupListRequest) ToMap() (map[string]interface{}, e
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -223,15 +228,23 @@ func (o *CommunityChannelUserGroupListRequest) UnmarshalJSON(data []byte) (err e
 
 	varCommunityChannelUserGroupListRequest := _CommunityChannelUserGroupListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelUserGroupListRequest)
+	err = json.Unmarshal(data, &varCommunityChannelUserGroupListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelUserGroupListRequest(varCommunityChannelUserGroupListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "page")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

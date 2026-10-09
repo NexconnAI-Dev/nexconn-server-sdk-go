@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -55,6 +54,7 @@ type DirectChannelMessageSendRequest struct {
 	DisableUpdateLastMsg *bool `json:"disableUpdateLastMsg,omitempty"`
 	// Whether to request read receipts for this persisted message. `1` requests read receipts and `0` disables them.
 	NeedReadReceipt *int32 `json:"needReadReceipt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DirectChannelMessageSendRequest DirectChannelMessageSendRequest
@@ -645,6 +645,11 @@ func (o DirectChannelMessageSendRequest) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.NeedReadReceipt) {
 		toSerialize["needReadReceipt"] = o.NeedReadReceipt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -675,15 +680,36 @@ func (o *DirectChannelMessageSendRequest) UnmarshalJSON(data []byte) (err error)
 
 	varDirectChannelMessageSendRequest := _DirectChannelMessageSendRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDirectChannelMessageSendRequest)
+	err = json.Unmarshal(data, &varDirectChannelMessageSendRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DirectChannelMessageSendRequest(varDirectChannelMessageSendRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "toUserIds")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "pushContent")
+		delete(additionalProperties, "pushData")
+		delete(additionalProperties, "isEchoToSender")
+		delete(additionalProperties, "count")
+		delete(additionalProperties, "verifyBlocklist")
+		delete(additionalProperties, "shouldPersist")
+		delete(additionalProperties, "contentAvailable")
+		delete(additionalProperties, "hasMetadata")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "disablePush")
+		delete(additionalProperties, "pushExt")
+		delete(additionalProperties, "disableUpdateLastMsg")
+		delete(additionalProperties, "needReadReceipt")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

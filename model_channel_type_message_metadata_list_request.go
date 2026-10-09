@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ChannelTypeMessageMetadataListRequest{}
 type ChannelTypeMessageMetadataListRequest struct {
 	MessageId string `json:"messageId"`
 	Page *int32 `json:"page,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelTypeMessageMetadataListRequest ChannelTypeMessageMetadataListRequest
@@ -115,6 +115,11 @@ func (o ChannelTypeMessageMetadataListRequest) ToMap() (map[string]interface{}, 
 	if !IsNil(o.Page) {
 		toSerialize["page"] = o.Page
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *ChannelTypeMessageMetadataListRequest) UnmarshalJSON(data []byte) (err 
 
 	varChannelTypeMessageMetadataListRequest := _ChannelTypeMessageMetadataListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelTypeMessageMetadataListRequest)
+	err = json.Unmarshal(data, &varChannelTypeMessageMetadataListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelTypeMessageMetadataListRequest(varChannelTypeMessageMetadataListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "page")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

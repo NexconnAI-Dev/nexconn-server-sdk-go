@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &GroupChannelKickUserFromAllRequest{}
 // GroupChannelKickUserFromAllRequest struct for GroupChannelKickUserFromAllRequest
 type GroupChannelKickUserFromAllRequest struct {
 	UserId string `json:"userId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelKickUserFromAllRequest GroupChannelKickUserFromAllRequest
@@ -79,6 +79,11 @@ func (o GroupChannelKickUserFromAllRequest) MarshalJSON() ([]byte, error) {
 func (o GroupChannelKickUserFromAllRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userId"] = o.UserId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *GroupChannelKickUserFromAllRequest) UnmarshalJSON(data []byte) (err err
 
 	varGroupChannelKickUserFromAllRequest := _GroupChannelKickUserFromAllRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelKickUserFromAllRequest)
+	err = json.Unmarshal(data, &varGroupChannelKickUserFromAllRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelKickUserFromAllRequest(varGroupChannelKickUserFromAllRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

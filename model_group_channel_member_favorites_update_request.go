@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type GroupChannelMemberFavoritesUpdateRequest struct {
 	UserId string `json:"userId"`
 	// Followed member user IDs.
 	FavoriteIds []string `json:"favoriteIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelMemberFavoritesUpdateRequest GroupChannelMemberFavoritesUpdateRequest
@@ -134,6 +134,11 @@ func (o GroupChannelMemberFavoritesUpdateRequest) ToMap() (map[string]interface{
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["userId"] = o.UserId
 	toSerialize["favoriteIds"] = o.FavoriteIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -163,15 +168,22 @@ func (o *GroupChannelMemberFavoritesUpdateRequest) UnmarshalJSON(data []byte) (e
 
 	varGroupChannelMemberFavoritesUpdateRequest := _GroupChannelMemberFavoritesUpdateRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelMemberFavoritesUpdateRequest)
+	err = json.Unmarshal(data, &varGroupChannelMemberFavoritesUpdateRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelMemberFavoritesUpdateRequest(varGroupChannelMemberFavoritesUpdateRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "favoriteIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

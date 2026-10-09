@@ -29,7 +29,10 @@ type GroupChannelMemberItem struct {
 	Extra *string `json:"extra,omitempty"`
 	// Timestamp when the member joined the group.
 	JoinedAt *int64 `json:"joinedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelMemberItem GroupChannelMemberItem
 
 // NewGroupChannelMemberItem instantiates a new GroupChannelMemberItem object
 // This constructor will assign default values to properties that have it defined,
@@ -233,7 +236,37 @@ func (o GroupChannelMemberItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.JoinedAt) {
 		toSerialize["joinedAt"] = o.JoinedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelMemberItem) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelMemberItem := _GroupChannelMemberItem{}
+
+	err = json.Unmarshal(data, &varGroupChannelMemberItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelMemberItem(varGroupChannelMemberItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "role")
+		delete(additionalProperties, "nickname")
+		delete(additionalProperties, "extra")
+		delete(additionalProperties, "joinedAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelMemberItem struct {

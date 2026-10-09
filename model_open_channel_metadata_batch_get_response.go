@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &OpenChannelMetadataBatchGetResponse{}
 type OpenChannelMetadataBatchGetResponse struct {
 	Code int32 `json:"code"`
 	Result *OpenChannelMetadataBatchGetResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelMetadataBatchGetResponse OpenChannelMetadataBatchGetResponse
@@ -115,6 +115,11 @@ func (o OpenChannelMetadataBatchGetResponse) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *OpenChannelMetadataBatchGetResponse) UnmarshalJSON(data []byte) (err er
 
 	varOpenChannelMetadataBatchGetResponse := _OpenChannelMetadataBatchGetResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelMetadataBatchGetResponse)
+	err = json.Unmarshal(data, &varOpenChannelMetadataBatchGetResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelMetadataBatchGetResponse(varOpenChannelMetadataBatchGetResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

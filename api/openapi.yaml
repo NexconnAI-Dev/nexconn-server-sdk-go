@@ -10,7 +10,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   title: Nexconn Server API
-  version: 0.1.1
+  version: 0.1.2
 tags:
 - description: "User lifecycle, authentication, soft delete, bans, direct-channel\
     \ mute, and user tag operations. Core capabilities align with the official User\
@@ -1017,8 +1017,56 @@ paths:
       summary: Delete server-side channel message history
       tags:
       - MessageManagement
+  /v4/direct-channel/history-message/list:
+    post:
+      description: "Rate limit: 10/sec. Query range is at most 14 days; messages are\
+        \ returned in descending timestamp order."
+      operationId: listDirectChannelHistoryMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DirectChannelHistoryMessageListRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DirectGroupHistoryMessageResponse"
+          description: OK
+      security:
+      - NexconnSignature: []
+      summary: List direct-channel history messages
+      tags:
+      - MessageManagement
+  /v4/group-channel/history-message/list:
+    post:
+      description: "Rate limit: 10/sec. Query range is at most 14 days; messages are\
+        \ returned in descending timestamp order."
+      operationId: listGroupChannelHistoryMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupChannelHistoryMessageListRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DirectGroupHistoryMessageResponse"
+          description: OK
+      security:
+      - NexconnSignature: []
+      summary: List group-channel history messages
+      tags:
+      - MessageManagement
   /v4/community-channel/history-message/list:
     post:
+      description: "Rate limit: 10/sec. Query range is at most 14 days; messages are\
+        \ returned in descending timestamp order."
       operationId: listCommunityChannelHistoryMessages
       requestBody:
         content:
@@ -1037,7 +1085,30 @@ paths:
       - NexconnSignature: []
       summary: List community-channel history messages
       tags:
-      - CommunityChannelManagement
+      - MessageManagement
+  /v4/open-channel/history-message/list:
+    post:
+      description: "Rate limit: 10/sec. Query range is at most 14 days; messages are\
+        \ returned in descending timestamp order."
+      operationId: listOpenChannelHistoryMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenChannelHistoryMessageListRequest"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenChannelHistoryMessageResponse"
+          description: OK
+      security:
+      - NexconnSignature: []
+      summary: List open-channel history messages
+      tags:
+      - MessageManagement
   /v4/channel-type/message/metadata/set:
     post:
       description: "Rate limit: 100/sec (max 20 for group messages)."
@@ -5916,64 +5987,202 @@ components:
       - channelType
       - fromUserId
       type: object
-    CommunityChannelHistoryMessageListRequest:
+    DirectChannelHistoryMessageListRequest:
       example:
-        fromUserId: fromUserId
-        pageSize: 14
-        endAt: 6
+        userId: userId
         channelId: channelId
-        subchannelId: subchannelId
-        startAt: 0
+        startAt: 1705276800000
+        endAt: 1704067200000
+        pageSize: 10
+        includeStart: true
       properties:
-        channelId:
+        userId:
+          description: User ID of the direct-channel participant.
           type: string
-        subchannelId:
+        channelId:
+          description: Direct channel ID.
           type: string
         startAt:
+          description: Query start timestamp in Unix milliseconds. Must be greater
+            than or equal to `endAt`; the range cannot exceed 14 days.
           format: int64
           type: integer
         endAt:
+          description: Query end timestamp in Unix milliseconds. Messages are returned
+            in descending timestamp order.
           format: int64
           type: integer
-        fromUserId:
-          type: string
         pageSize:
-          default: 20
+          default: 10
+          description: Number of messages to return. Must be between 1 and 100.
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
+        includeStart:
+          description: Whether to include the message at `startAt` when it matches
+            the query boundary.
+          type: boolean
       required:
       - channelId
       - endAt
+      - includeStart
       - startAt
-      - subchannelId
+      - userId
+      type: object
+    GroupChannelHistoryMessageListRequest:
+      example:
+        userId: userId
+        channelId: channelId
+        startAt: 1705276800000
+        endAt: 1704067200000
+        pageSize: 10
+        includeStart: true
+      properties:
+        userId:
+          description: User ID of the group-channel participant.
+          type: string
+        channelId:
+          description: Group channel ID.
+          type: string
+        startAt:
+          description: Query start timestamp in Unix milliseconds. Must be greater
+            than or equal to `endAt`; the range cannot exceed 14 days.
+          format: int64
+          type: integer
+        endAt:
+          description: Query end timestamp in Unix milliseconds. Messages are returned
+            in descending timestamp order.
+          format: int64
+          type: integer
+        pageSize:
+          default: 10
+          description: Number of messages to return. Must be between 1 and 100.
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        includeStart:
+          description: Whether to include the message at `startAt` when it matches
+            the query boundary.
+          type: boolean
+      required:
+      - channelId
+      - endAt
+      - includeStart
+      - startAt
+      - userId
+      type: object
+    CommunityChannelHistoryMessageListRequest:
+      example:
+        channelId: channelId
+        subchannelId: subchannelId
+        userId: userId
+        startAt: 1705276800000
+        endAt: 1704067200000
+        pageSize: 10
+        includeStart: true
+      properties:
+        channelId:
+          description: Community channel ID.
+          type: string
+        subchannelId:
+          description: "Optional community subchannel ID. When omitted, messages from\
+            \ the whole community channel are queried."
+          type: string
+        userId:
+          description: User ID of the community-channel participant.
+          type: string
+        startAt:
+          description: Query start timestamp in Unix milliseconds. Must be greater
+            than or equal to `endAt`; the range cannot exceed 14 days.
+          format: int64
+          type: integer
+        endAt:
+          description: Query end timestamp in Unix milliseconds. Messages are returned
+            in descending timestamp order.
+          format: int64
+          type: integer
+        pageSize:
+          default: 10
+          description: Number of messages to return. Must be between 1 and 100.
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        includeStart:
+          description: Whether to include the message at `startAt` when it matches
+            the query boundary.
+          type: boolean
+      required:
+      - channelId
+      - endAt
+      - includeStart
+      - startAt
+      - userId
+      type: object
+    OpenChannelHistoryMessageListRequest:
+      example:
+        userId: userId
+        channelId: channelId
+        startAt: 1705276800000
+        endAt: 1704067200000
+        pageSize: 10
+        includeStart: true
+      properties:
+        userId:
+          description: User ID of the open-channel participant.
+          type: string
+        channelId:
+          description: Open channel ID.
+          type: string
+        startAt:
+          description: Query start timestamp in Unix milliseconds. Must be greater
+            than or equal to `endAt`; the range cannot exceed 14 days.
+          format: int64
+          type: integer
+        endAt:
+          description: Query end timestamp in Unix milliseconds. Messages are returned
+            in descending timestamp order.
+          format: int64
+          type: integer
+        pageSize:
+          default: 10
+          description: Number of messages to return. Must be between 1 and 100.
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        includeStart:
+          description: Whether to include the message at `startAt` when it matches
+            the query boundary.
+          type: boolean
+      required:
+      - channelId
+      - endAt
+      - includeStart
+      - startAt
+      - userId
       type: object
     MessageHistoryResponse:
       example:
+        code: 0
         result:
           messages:
-          - messageId: messageId
-            metadata:
-              key: ""
-            messageType: messageType
-            fromUserId: fromUserId
-            channelType: 1
-            sentAt: 6
+          - channelId: channel_1001
+            subchannelId: RCDefault
+            fromUserId: user_1002
+            messageId: MSG-0001
+            sentAt: 1705270000000
+            messageType: RC:TxtMsg
+            content: "{\"content\":\"hello\"}"
             hasMetadata: true
-            channelId: channelId
-            subchannelId: subchannelId
-            content: content
-          - messageId: messageId
             metadata:
-              key: ""
-            messageType: messageType
-            fromUserId: fromUserId
-            channelType: 1
-            sentAt: 6
-            hasMetadata: true
-            channelId: channelId
-            subchannelId: subchannelId
-            content: content
-        code: 0
+            - key: key1
+              value: value1
+              updatedAt: 1705270000000
+            quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+              :\"user_1001\"}"
       properties:
         code:
           format: int32
@@ -5985,19 +6194,20 @@ components:
       type: object
     MessageRecord:
       example:
-        messageId: messageId
-        metadata:
-        - key: k
-          value: v
-          updatedAt: 1
-        messageType: messageType
-        fromUserId: fromUserId
-        channelType: 1
-        sentAt: 6
+        channelId: channel_1001
+        subchannelId: RCDefault
+        fromUserId: user_1002
+        messageId: MSG-0001
+        sentAt: 1705270000000
+        messageType: RC:TxtMsg
+        content: "{\"content\":\"hello\"}"
         hasMetadata: true
-        channelId: channelId
-        subchannelId: subchannelId
-        content: content
+        metadata:
+        - key: key1
+          value: value1
+          updatedAt: 1705270000000
+        quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+          :\"user_1001\"}"
       properties:
         channelId:
           description: Channel identifier of the stored message.
@@ -6019,10 +6229,6 @@ components:
         messageType:
           description: Message type of the stored message.
           type: string
-        channelType:
-          description: Channel type of the stored message.
-          format: int32
-          type: integer
         content:
           description: Raw message content payload as stored by the service.
           type: string
@@ -6031,11 +6237,195 @@ components:
           type: boolean
           x-go-name: MetadataEnabled
         metadata:
-          description: "List of metadata entries (`CommunityHistoryMessage` uses `List<MetadataItem>`,\
-            \ not a map)."
+          description: Structured message metadata entries. Omitted when the original
+            metadata is empty or cannot be parsed.
           items:
             $ref: "#/components/schemas/MessageMetadataListItem"
           type: array
+        quote:
+          description: "Quoted message details as a JSON string containing msgUID,\
+            \ objectName and fromUserId. Omitted for messages without a quote."
+          type: string
+      type: object
+    DirectGroupHistoryMessageResponse:
+      example:
+        code: 0
+        result:
+          messages:
+          - channelId: user_1002
+            fromUserId: user_1002
+            messageId: MSG-0001
+            sentAt: 1705270000000
+            messageType: RC:TxtMsg
+            content: "{\"content\":\"hello\"}"
+            hasMetadata: true
+            metadata:
+            - key: key1
+              value: value1
+              updatedAt: 1705270000000
+            aiGenerated: false
+            quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+              :\"user_1001\"}"
+      properties:
+        code:
+          format: int32
+          type: integer
+        result:
+          $ref: "#/components/schemas/DirectGroupHistoryMessageResult"
+      required:
+      - code
+      type: object
+    DirectGroupHistoryMessageResult:
+      example:
+        messages:
+        - channelId: user_1002
+          fromUserId: user_1002
+          messageId: MSG-0001
+          sentAt: 1705270000000
+          messageType: RC:TxtMsg
+          content: "{\"content\":\"hello\"}"
+          hasMetadata: true
+          metadata:
+          - key: key1
+            value: value1
+            updatedAt: 1705270000000
+          aiGenerated: false
+          quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+            :\"user_1001\"}"
+      properties:
+        messages:
+          items:
+            $ref: "#/components/schemas/DirectGroupHistoryMessageRecord"
+          type: array
+      type: object
+    DirectGroupHistoryMessageRecord:
+      example:
+        channelId: user_1002
+        fromUserId: user_1002
+        messageId: MSG-0001
+        sentAt: 1705270000000
+        messageType: RC:TxtMsg
+        content: "{\"content\":\"hello\"}"
+        hasMetadata: true
+        metadata:
+        - key: key1
+          value: value1
+          updatedAt: 1705270000000
+        aiGenerated: false
+        quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+          :\"user_1001\"}"
+      properties:
+        channelId:
+          description: Channel identifier of the stored message.
+          type: string
+        fromUserId:
+          description: Sender user ID of the stored message.
+          type: string
+        messageId:
+          description: Unique message ID.
+          type: string
+        sentAt:
+          description: Message send timestamp in milliseconds.
+          format: int64
+          type: integer
+        messageType:
+          description: Message type of the stored message.
+          type: string
+        content:
+          description: Raw message content payload as stored by the service.
+          type: string
+        hasMetadata:
+          description: Whether the message has metadata entries attached.
+          type: boolean
+          x-go-name: MetadataEnabled
+        metadata:
+          description: Structured message metadata entries. Omitted when the original
+            metadata is empty or cannot be parsed.
+          items:
+            $ref: "#/components/schemas/MessageMetadataListItem"
+          type: array
+        aiGenerated:
+          description: Whether the message was AI-generated. Returned only for direct
+            and group channels when the application has enabled this capability.
+          type: boolean
+        quote:
+          description: "Quoted message details as a JSON string containing msgUID,\
+            \ objectName and fromUserId. Omitted for messages without a quote."
+          type: string
+      type: object
+    OpenChannelHistoryMessageResponse:
+      example:
+        code: 0
+        result:
+          messages:
+          - channelId: channel_1001
+            fromUserId: user_1002
+            messageId: MSG-0001
+            sentAt: 1705270000000
+            messageType: RC:TxtMsg
+            content: "{\"content\":\"hello\"}"
+            quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+              :\"user_1001\"}"
+      properties:
+        code:
+          format: int32
+          type: integer
+        result:
+          $ref: "#/components/schemas/OpenChannelHistoryMessageResult"
+      required:
+      - code
+      type: object
+    OpenChannelHistoryMessageResult:
+      example:
+        messages:
+        - channelId: channel_1001
+          fromUserId: user_1002
+          messageId: MSG-0001
+          sentAt: 1705270000000
+          messageType: RC:TxtMsg
+          content: "{\"content\":\"hello\"}"
+          quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+            :\"user_1001\"}"
+      properties:
+        messages:
+          items:
+            $ref: "#/components/schemas/OpenChannelHistoryMessageRecord"
+          type: array
+      type: object
+    OpenChannelHistoryMessageRecord:
+      example:
+        channelId: channel_1001
+        fromUserId: user_1002
+        messageId: MSG-0001
+        sentAt: 1705270000000
+        messageType: RC:TxtMsg
+        content: "{\"content\":\"hello\"}"
+        quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+          :\"user_1001\"}"
+      properties:
+        channelId:
+          description: Channel identifier of the stored message.
+          type: string
+        fromUserId:
+          description: Sender user ID of the stored message.
+          type: string
+        messageId:
+          description: Unique message ID.
+          type: string
+        sentAt:
+          description: Message send timestamp in milliseconds.
+          format: int64
+          type: integer
+        messageType:
+          description: Message type of the stored message.
+          type: string
+        content:
+          description: Raw message content payload as stored by the service.
+          type: string
+        quote:
+          description: "Quoted message details as a JSON string containing msgUID,\
+            \ objectName and fromUserId. Omitted for messages without a quote."
+          type: string
       type: object
     MessageMetadataSetRequest:
       example:
@@ -6308,28 +6698,20 @@ components:
     MessageHistoryResponse_result:
       example:
         messages:
-        - messageId: messageId
-          metadata:
-            key: ""
-          messageType: messageType
-          fromUserId: fromUserId
-          channelType: 1
-          sentAt: 6
+        - channelId: channel_1001
+          subchannelId: RCDefault
+          fromUserId: user_1002
+          messageId: MSG-0001
+          sentAt: 1705270000000
+          messageType: RC:TxtMsg
+          content: "{\"content\":\"hello\"}"
           hasMetadata: true
-          channelId: channelId
-          subchannelId: subchannelId
-          content: content
-        - messageId: messageId
           metadata:
-            key: ""
-          messageType: messageType
-          fromUserId: fromUserId
-          channelType: 1
-          sentAt: 6
-          hasMetadata: true
-          channelId: channelId
-          subchannelId: subchannelId
-          content: content
+          - key: key1
+            value: value1
+            updatedAt: 1705270000000
+          quote: "{\"msgUID\":\"MSG-0000\",\"objectName\":\"RC:TxtMsg\",\"fromUserId\"\
+            :\"user_1001\"}"
       properties:
         messages:
           items:

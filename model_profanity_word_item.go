@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ProfanityWordItem struct {
 	Word string `json:"word"`
 	// Replacement content. When omitted, messages containing the word are blocked instead of replaced.
 	Replacement *string `json:"replacement,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProfanityWordItem ProfanityWordItem
@@ -117,6 +117,11 @@ func (o ProfanityWordItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Replacement) {
 		toSerialize["replacement"] = o.Replacement
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *ProfanityWordItem) UnmarshalJSON(data []byte) (err error) {
 
 	varProfanityWordItem := _ProfanityWordItem{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProfanityWordItem)
+	err = json.Unmarshal(data, &varProfanityWordItem)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProfanityWordItem(varProfanityWordItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "word")
+		delete(additionalProperties, "replacement")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

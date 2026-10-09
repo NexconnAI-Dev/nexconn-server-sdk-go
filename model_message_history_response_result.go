@@ -20,7 +20,10 @@ var _ MappedNullable = &MessageHistoryResponseResult{}
 // MessageHistoryResponseResult struct for MessageHistoryResponseResult
 type MessageHistoryResponseResult struct {
 	Messages []MessageRecord `json:"messages,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MessageHistoryResponseResult MessageHistoryResponseResult
 
 // NewMessageHistoryResponseResult instantiates a new MessageHistoryResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o MessageHistoryResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Messages) {
 		toSerialize["messages"] = o.Messages
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MessageHistoryResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varMessageHistoryResponseResult := _MessageHistoryResponseResult{}
+
+	err = json.Unmarshal(data, &varMessageHistoryResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MessageHistoryResponseResult(varMessageHistoryResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messages")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMessageHistoryResponseResult struct {

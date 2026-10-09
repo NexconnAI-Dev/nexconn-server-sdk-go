@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AccessTokenExpireRequest struct {
 	UserIds []string `json:"userIds"`
 	// Expiration timestamp in milliseconds.
 	ExpiresAt int64 `json:"expiresAt"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AccessTokenExpireRequest AccessTokenExpireRequest
@@ -107,6 +107,11 @@ func (o AccessTokenExpireRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userIds"] = o.UserIds
 	toSerialize["expiresAt"] = o.ExpiresAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *AccessTokenExpireRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAccessTokenExpireRequest := _AccessTokenExpireRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccessTokenExpireRequest)
+	err = json.Unmarshal(data, &varAccessTokenExpireRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AccessTokenExpireRequest(varAccessTokenExpireRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userIds")
+		delete(additionalProperties, "expiresAt")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

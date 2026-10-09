@@ -27,7 +27,10 @@ type OpenChannelMetadataEntry struct {
 	ShouldAutoDelete *int32 `json:"shouldAutoDelete,omitempty"`
 	// Parsed from source `lastSetTime` (milliseconds).
 	UpdatedAt *int64 `json:"updatedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelMetadataEntry OpenChannelMetadataEntry
 
 // NewOpenChannelMetadataEntry instantiates a new OpenChannelMetadataEntry object
 // This constructor will assign default values to properties that have it defined,
@@ -231,7 +234,37 @@ func (o OpenChannelMetadataEntry) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UpdatedAt) {
 		toSerialize["updatedAt"] = o.UpdatedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelMetadataEntry) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelMetadataEntry := _OpenChannelMetadataEntry{}
+
+	err = json.Unmarshal(data, &varOpenChannelMetadataEntry)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelMetadataEntry(varOpenChannelMetadataEntry)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "value")
+		delete(additionalProperties, "metadataOwnerId")
+		delete(additionalProperties, "shouldAutoDelete")
+		delete(additionalProperties, "updatedAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelMetadataEntry struct {

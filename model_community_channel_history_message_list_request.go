@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -21,12 +20,21 @@ var _ MappedNullable = &CommunityChannelHistoryMessageListRequest{}
 
 // CommunityChannelHistoryMessageListRequest struct for CommunityChannelHistoryMessageListRequest
 type CommunityChannelHistoryMessageListRequest struct {
+	// Community channel ID.
 	ChannelId string `json:"channelId"`
-	SubchannelId string `json:"subchannelId"`
+	// Optional community subchannel ID. When omitted, messages from the whole community channel are queried.
+	SubchannelId *string `json:"subchannelId,omitempty"`
+	// User ID of the community-channel participant.
+	UserId string `json:"userId"`
+	// Query start timestamp in Unix milliseconds. Must be greater than or equal to `endAt`; the range cannot exceed 14 days.
 	StartAt int64 `json:"startAt"`
+	// Query end timestamp in Unix milliseconds. Messages are returned in descending timestamp order.
 	EndAt int64 `json:"endAt"`
-	FromUserId *string `json:"fromUserId,omitempty"`
+	// Number of messages to return. Must be between 1 and 100.
 	PageSize *int32 `json:"pageSize,omitempty"`
+	// Whether to include the message at `startAt` when it matches the query boundary.
+	IncludeStart bool `json:"includeStart"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelHistoryMessageListRequest CommunityChannelHistoryMessageListRequest
@@ -35,14 +43,15 @@ type _CommunityChannelHistoryMessageListRequest CommunityChannelHistoryMessageLi
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCommunityChannelHistoryMessageListRequest(channelId string, subchannelId string, startAt int64, endAt int64) *CommunityChannelHistoryMessageListRequest {
+func NewCommunityChannelHistoryMessageListRequest(channelId string, userId string, startAt int64, endAt int64, includeStart bool) *CommunityChannelHistoryMessageListRequest {
 	this := CommunityChannelHistoryMessageListRequest{}
 	this.ChannelId = channelId
-	this.SubchannelId = subchannelId
+	this.UserId = userId
 	this.StartAt = startAt
 	this.EndAt = endAt
-	var pageSize int32 = 20
+	var pageSize int32 = 10
 	this.PageSize = &pageSize
+	this.IncludeStart = includeStart
 	return &this
 }
 
@@ -51,7 +60,7 @@ func NewCommunityChannelHistoryMessageListRequest(channelId string, subchannelId
 // but it doesn't guarantee that properties required by API are set
 func NewCommunityChannelHistoryMessageListRequestWithDefaults() *CommunityChannelHistoryMessageListRequest {
 	this := CommunityChannelHistoryMessageListRequest{}
-	var pageSize int32 = 20
+	var pageSize int32 = 10
 	this.PageSize = &pageSize
 	return &this
 }
@@ -80,28 +89,60 @@ func (o *CommunityChannelHistoryMessageListRequest) SetChannelId(v string) {
 	o.ChannelId = v
 }
 
-// GetSubchannelId returns the SubchannelId field value
+// GetSubchannelId returns the SubchannelId field value if set, zero value otherwise.
 func (o *CommunityChannelHistoryMessageListRequest) GetSubchannelId() string {
+	if o == nil || IsNil(o.SubchannelId) {
+		var ret string
+		return ret
+	}
+	return *o.SubchannelId
+}
+
+// GetSubchannelIdOk returns a tuple with the SubchannelId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CommunityChannelHistoryMessageListRequest) GetSubchannelIdOk() (*string, bool) {
+	if o == nil || IsNil(o.SubchannelId) {
+		return nil, false
+	}
+	return o.SubchannelId, true
+}
+
+// HasSubchannelId returns a boolean if a field has been set.
+func (o *CommunityChannelHistoryMessageListRequest) HasSubchannelId() bool {
+	if o != nil && !IsNil(o.SubchannelId) {
+		return true
+	}
+
+	return false
+}
+
+// SetSubchannelId gets a reference to the given string and assigns it to the SubchannelId field.
+func (o *CommunityChannelHistoryMessageListRequest) SetSubchannelId(v string) {
+	o.SubchannelId = &v
+}
+
+// GetUserId returns the UserId field value
+func (o *CommunityChannelHistoryMessageListRequest) GetUserId() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.SubchannelId
+	return o.UserId
 }
 
-// GetSubchannelIdOk returns a tuple with the SubchannelId field value
+// GetUserIdOk returns a tuple with the UserId field value
 // and a boolean to check if the value has been set.
-func (o *CommunityChannelHistoryMessageListRequest) GetSubchannelIdOk() (*string, bool) {
+func (o *CommunityChannelHistoryMessageListRequest) GetUserIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.SubchannelId, true
+	return &o.UserId, true
 }
 
-// SetSubchannelId sets field value
-func (o *CommunityChannelHistoryMessageListRequest) SetSubchannelId(v string) {
-	o.SubchannelId = v
+// SetUserId sets field value
+func (o *CommunityChannelHistoryMessageListRequest) SetUserId(v string) {
+	o.UserId = v
 }
 
 // GetStartAt returns the StartAt field value
@@ -152,38 +193,6 @@ func (o *CommunityChannelHistoryMessageListRequest) SetEndAt(v int64) {
 	o.EndAt = v
 }
 
-// GetFromUserId returns the FromUserId field value if set, zero value otherwise.
-func (o *CommunityChannelHistoryMessageListRequest) GetFromUserId() string {
-	if o == nil || IsNil(o.FromUserId) {
-		var ret string
-		return ret
-	}
-	return *o.FromUserId
-}
-
-// GetFromUserIdOk returns a tuple with the FromUserId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CommunityChannelHistoryMessageListRequest) GetFromUserIdOk() (*string, bool) {
-	if o == nil || IsNil(o.FromUserId) {
-		return nil, false
-	}
-	return o.FromUserId, true
-}
-
-// HasFromUserId returns a boolean if a field has been set.
-func (o *CommunityChannelHistoryMessageListRequest) HasFromUserId() bool {
-	if o != nil && !IsNil(o.FromUserId) {
-		return true
-	}
-
-	return false
-}
-
-// SetFromUserId gets a reference to the given string and assigns it to the FromUserId field.
-func (o *CommunityChannelHistoryMessageListRequest) SetFromUserId(v string) {
-	o.FromUserId = &v
-}
-
 // GetPageSize returns the PageSize field value if set, zero value otherwise.
 func (o *CommunityChannelHistoryMessageListRequest) GetPageSize() int32 {
 	if o == nil || IsNil(o.PageSize) {
@@ -216,6 +225,30 @@ func (o *CommunityChannelHistoryMessageListRequest) SetPageSize(v int32) {
 	o.PageSize = &v
 }
 
+// GetIncludeStart returns the IncludeStart field value
+func (o *CommunityChannelHistoryMessageListRequest) GetIncludeStart() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.IncludeStart
+}
+
+// GetIncludeStartOk returns a tuple with the IncludeStart field value
+// and a boolean to check if the value has been set.
+func (o *CommunityChannelHistoryMessageListRequest) GetIncludeStartOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IncludeStart, true
+}
+
+// SetIncludeStart sets field value
+func (o *CommunityChannelHistoryMessageListRequest) SetIncludeStart(v bool) {
+	o.IncludeStart = v
+}
+
 func (o CommunityChannelHistoryMessageListRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -227,15 +260,21 @@ func (o CommunityChannelHistoryMessageListRequest) MarshalJSON() ([]byte, error)
 func (o CommunityChannelHistoryMessageListRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
-	toSerialize["subchannelId"] = o.SubchannelId
+	if !IsNil(o.SubchannelId) {
+		toSerialize["subchannelId"] = o.SubchannelId
+	}
+	toSerialize["userId"] = o.UserId
 	toSerialize["startAt"] = o.StartAt
 	toSerialize["endAt"] = o.EndAt
-	if !IsNil(o.FromUserId) {
-		toSerialize["fromUserId"] = o.FromUserId
-	}
 	if !IsNil(o.PageSize) {
 		toSerialize["pageSize"] = o.PageSize
 	}
+	toSerialize["includeStart"] = o.IncludeStart
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -245,9 +284,10 @@ func (o *CommunityChannelHistoryMessageListRequest) UnmarshalJSON(data []byte) (
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"channelId",
-		"subchannelId",
+		"userId",
 		"startAt",
 		"endAt",
+		"includeStart",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -266,15 +306,26 @@ func (o *CommunityChannelHistoryMessageListRequest) UnmarshalJSON(data []byte) (
 
 	varCommunityChannelHistoryMessageListRequest := _CommunityChannelHistoryMessageListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelHistoryMessageListRequest)
+	err = json.Unmarshal(data, &varCommunityChannelHistoryMessageListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelHistoryMessageListRequest(varCommunityChannelHistoryMessageListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "startAt")
+		delete(additionalProperties, "endAt")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "includeStart")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

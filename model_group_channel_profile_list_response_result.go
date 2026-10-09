@@ -20,7 +20,10 @@ var _ MappedNullable = &GroupChannelProfileListResponseResult{}
 // GroupChannelProfileListResponseResult struct for GroupChannelProfileListResponseResult
 type GroupChannelProfileListResponseResult struct {
 	Profiles []GroupChannelProfileItem `json:"profiles,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelProfileListResponseResult GroupChannelProfileListResponseResult
 
 // NewGroupChannelProfileListResponseResult instantiates a new GroupChannelProfileListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o GroupChannelProfileListResponseResult) ToMap() (map[string]interface{}, 
 	if !IsNil(o.Profiles) {
 		toSerialize["profiles"] = o.Profiles
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelProfileListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelProfileListResponseResult := _GroupChannelProfileListResponseResult{}
+
+	err = json.Unmarshal(data, &varGroupChannelProfileListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelProfileListResponseResult(varGroupChannelProfileListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "profiles")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelProfileListResponseResult struct {

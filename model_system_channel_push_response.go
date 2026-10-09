@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SystemChannelPushResponse{}
 type SystemChannelPushResponse struct {
 	Code int32 `json:"code"`
 	Result *SystemChannelPushResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SystemChannelPushResponse SystemChannelPushResponse
@@ -115,6 +115,11 @@ func (o SystemChannelPushResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *SystemChannelPushResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varSystemChannelPushResponse := _SystemChannelPushResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSystemChannelPushResponse)
+	err = json.Unmarshal(data, &varSystemChannelPushResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SystemChannelPushResponse(varSystemChannelPushResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

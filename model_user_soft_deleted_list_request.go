@@ -21,7 +21,10 @@ var _ MappedNullable = &UserSoftDeletedListRequest{}
 type UserSoftDeletedListRequest struct {
 	Page *int32 `json:"page,omitempty"`
 	PageSize *int32 `json:"pageSize,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserSoftDeletedListRequest UserSoftDeletedListRequest
 
 // NewUserSoftDeletedListRequest instantiates a new UserSoftDeletedListRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -124,7 +127,34 @@ func (o UserSoftDeletedListRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PageSize) {
 		toSerialize["pageSize"] = o.PageSize
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserSoftDeletedListRequest) UnmarshalJSON(data []byte) (err error) {
+	varUserSoftDeletedListRequest := _UserSoftDeletedListRequest{}
+
+	err = json.Unmarshal(data, &varUserSoftDeletedListRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserSoftDeletedListRequest(varUserSoftDeletedListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "page")
+		delete(additionalProperties, "pageSize")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserSoftDeletedListRequest struct {

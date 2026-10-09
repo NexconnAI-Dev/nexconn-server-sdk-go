@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UserTagBatchGetResponse{}
 type UserTagBatchGetResponse struct {
 	Code int32 `json:"code"`
 	Result *UserTagBatchGetResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserTagBatchGetResponse UserTagBatchGetResponse
@@ -115,6 +115,11 @@ func (o UserTagBatchGetResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *UserTagBatchGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varUserTagBatchGetResponse := _UserTagBatchGetResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserTagBatchGetResponse)
+	err = json.Unmarshal(data, &varUserTagBatchGetResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserTagBatchGetResponse(varUserTagBatchGetResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

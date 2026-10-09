@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type UserProfileSetResponse struct {
 	Code int32 `json:"code"`
 	// Returns the failed profile key when the update fails.
 	ProfileKey *string `json:"profileKey,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserProfileSetResponse UserProfileSetResponse
@@ -116,6 +116,11 @@ func (o UserProfileSetResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ProfileKey) {
 		toSerialize["profileKey"] = o.ProfileKey
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,15 +148,21 @@ func (o *UserProfileSetResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varUserProfileSetResponse := _UserProfileSetResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserProfileSetResponse)
+	err = json.Unmarshal(data, &varUserProfileSetResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserProfileSetResponse(varUserProfileSetResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "profileKey")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

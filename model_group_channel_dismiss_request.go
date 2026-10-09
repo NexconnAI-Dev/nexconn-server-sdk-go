@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &GroupChannelDismissRequest{}
 // GroupChannelDismissRequest struct for GroupChannelDismissRequest
 type GroupChannelDismissRequest struct {
 	ChannelId string `json:"channelId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelDismissRequest GroupChannelDismissRequest
@@ -79,6 +79,11 @@ func (o GroupChannelDismissRequest) MarshalJSON() ([]byte, error) {
 func (o GroupChannelDismissRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *GroupChannelDismissRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupChannelDismissRequest := _GroupChannelDismissRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelDismissRequest)
+	err = json.Unmarshal(data, &varGroupChannelDismissRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelDismissRequest(varGroupChannelDismissRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

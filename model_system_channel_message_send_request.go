@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -43,6 +42,7 @@ type SystemChannelMessageSendRequest struct {
 	PushExt *string `json:"pushExt,omitempty"`
 	// Whether to keep this message from updating the system channel's last-message preview.
 	DisableUpdateLastMsg *bool `json:"disableUpdateLastMsg,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SystemChannelMessageSendRequest SystemChannelMessageSendRequest
@@ -423,6 +423,11 @@ func (o SystemChannelMessageSendRequest) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.DisableUpdateLastMsg) {
 		toSerialize["disableUpdateLastMsg"] = o.DisableUpdateLastMsg
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -453,15 +458,30 @@ func (o *SystemChannelMessageSendRequest) UnmarshalJSON(data []byte) (err error)
 
 	varSystemChannelMessageSendRequest := _SystemChannelMessageSendRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSystemChannelMessageSendRequest)
+	err = json.Unmarshal(data, &varSystemChannelMessageSendRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SystemChannelMessageSendRequest(varSystemChannelMessageSendRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "toUserIds")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "pushContent")
+		delete(additionalProperties, "pushData")
+		delete(additionalProperties, "shouldPersist")
+		delete(additionalProperties, "contentAvailable")
+		delete(additionalProperties, "disablePush")
+		delete(additionalProperties, "pushExt")
+		delete(additionalProperties, "disableUpdateLastMsg")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

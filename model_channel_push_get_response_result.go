@@ -21,7 +21,10 @@ var _ MappedNullable = &ChannelPushGetResponseResult{}
 type ChannelPushGetResponseResult struct {
 	// Effective notification level for the specified channel.
 	NoDisturbLevel *int32 `json:"noDisturbLevel,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ChannelPushGetResponseResult ChannelPushGetResponseResult
 
 // NewChannelPushGetResponseResult instantiates a new ChannelPushGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o ChannelPushGetResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.NoDisturbLevel) {
 		toSerialize["noDisturbLevel"] = o.NoDisturbLevel
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ChannelPushGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varChannelPushGetResponseResult := _ChannelPushGetResponseResult{}
+
+	err = json.Unmarshal(data, &varChannelPushGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ChannelPushGetResponseResult(varChannelPushGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "noDisturbLevel")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableChannelPushGetResponseResult struct {

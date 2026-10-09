@@ -764,6 +764,130 @@ func (a *MessageManagementAPIService) ListChannelTypeMessageMetadataExecute(r Ap
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiListCommunityChannelHistoryMessagesRequest struct {
+	ctx context.Context
+	ApiService *MessageManagementAPIService
+	communityChannelHistoryMessageListRequest *CommunityChannelHistoryMessageListRequest
+}
+
+func (r ApiListCommunityChannelHistoryMessagesRequest) CommunityChannelHistoryMessageListRequest(communityChannelHistoryMessageListRequest CommunityChannelHistoryMessageListRequest) ApiListCommunityChannelHistoryMessagesRequest {
+	r.communityChannelHistoryMessageListRequest = &communityChannelHistoryMessageListRequest
+	return r
+}
+
+func (r ApiListCommunityChannelHistoryMessagesRequest) Execute() (*MessageHistoryResponse, *http.Response, error) {
+	return r.ApiService.ListCommunityChannelHistoryMessagesExecute(r)
+}
+
+/*
+ListCommunityChannelHistoryMessages List community-channel history messages
+
+Rate limit: 10/sec. Query range is at most 14 days; messages are returned in descending timestamp order.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListCommunityChannelHistoryMessagesRequest
+*/
+func (a *MessageManagementAPIService) ListCommunityChannelHistoryMessages(ctx context.Context) ApiListCommunityChannelHistoryMessagesRequest {
+	return ApiListCommunityChannelHistoryMessagesRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return MessageHistoryResponse
+func (a *MessageManagementAPIService) ListCommunityChannelHistoryMessagesExecute(r ApiListCommunityChannelHistoryMessagesRequest) (*MessageHistoryResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *MessageHistoryResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MessageManagementAPIService.ListCommunityChannelHistoryMessages")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v4/community-channel/history-message/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.communityChannelHistoryMessageListRequest == nil {
+		return localVarReturnValue, nil, reportError("communityChannelHistoryMessageListRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.communityChannelHistoryMessageListRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["NexconnSignature"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["App-Key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiListCommunityChannelMessageMetadataRequest struct {
 	ctx context.Context
 	ApiService *MessageManagementAPIService
@@ -835,6 +959,378 @@ func (a *MessageManagementAPIService) ListCommunityChannelMessageMetadataExecute
 	}
 	// body params
 	localVarPostBody = r.communityChannelMessageMetadataListRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["NexconnSignature"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["App-Key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListDirectChannelHistoryMessagesRequest struct {
+	ctx context.Context
+	ApiService *MessageManagementAPIService
+	directChannelHistoryMessageListRequest *DirectChannelHistoryMessageListRequest
+}
+
+func (r ApiListDirectChannelHistoryMessagesRequest) DirectChannelHistoryMessageListRequest(directChannelHistoryMessageListRequest DirectChannelHistoryMessageListRequest) ApiListDirectChannelHistoryMessagesRequest {
+	r.directChannelHistoryMessageListRequest = &directChannelHistoryMessageListRequest
+	return r
+}
+
+func (r ApiListDirectChannelHistoryMessagesRequest) Execute() (*DirectGroupHistoryMessageResponse, *http.Response, error) {
+	return r.ApiService.ListDirectChannelHistoryMessagesExecute(r)
+}
+
+/*
+ListDirectChannelHistoryMessages List direct-channel history messages
+
+Rate limit: 10/sec. Query range is at most 14 days; messages are returned in descending timestamp order.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListDirectChannelHistoryMessagesRequest
+*/
+func (a *MessageManagementAPIService) ListDirectChannelHistoryMessages(ctx context.Context) ApiListDirectChannelHistoryMessagesRequest {
+	return ApiListDirectChannelHistoryMessagesRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return DirectGroupHistoryMessageResponse
+func (a *MessageManagementAPIService) ListDirectChannelHistoryMessagesExecute(r ApiListDirectChannelHistoryMessagesRequest) (*DirectGroupHistoryMessageResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *DirectGroupHistoryMessageResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MessageManagementAPIService.ListDirectChannelHistoryMessages")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v4/direct-channel/history-message/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.directChannelHistoryMessageListRequest == nil {
+		return localVarReturnValue, nil, reportError("directChannelHistoryMessageListRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.directChannelHistoryMessageListRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["NexconnSignature"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["App-Key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListGroupChannelHistoryMessagesRequest struct {
+	ctx context.Context
+	ApiService *MessageManagementAPIService
+	groupChannelHistoryMessageListRequest *GroupChannelHistoryMessageListRequest
+}
+
+func (r ApiListGroupChannelHistoryMessagesRequest) GroupChannelHistoryMessageListRequest(groupChannelHistoryMessageListRequest GroupChannelHistoryMessageListRequest) ApiListGroupChannelHistoryMessagesRequest {
+	r.groupChannelHistoryMessageListRequest = &groupChannelHistoryMessageListRequest
+	return r
+}
+
+func (r ApiListGroupChannelHistoryMessagesRequest) Execute() (*DirectGroupHistoryMessageResponse, *http.Response, error) {
+	return r.ApiService.ListGroupChannelHistoryMessagesExecute(r)
+}
+
+/*
+ListGroupChannelHistoryMessages List group-channel history messages
+
+Rate limit: 10/sec. Query range is at most 14 days; messages are returned in descending timestamp order.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListGroupChannelHistoryMessagesRequest
+*/
+func (a *MessageManagementAPIService) ListGroupChannelHistoryMessages(ctx context.Context) ApiListGroupChannelHistoryMessagesRequest {
+	return ApiListGroupChannelHistoryMessagesRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return DirectGroupHistoryMessageResponse
+func (a *MessageManagementAPIService) ListGroupChannelHistoryMessagesExecute(r ApiListGroupChannelHistoryMessagesRequest) (*DirectGroupHistoryMessageResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *DirectGroupHistoryMessageResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MessageManagementAPIService.ListGroupChannelHistoryMessages")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v4/group-channel/history-message/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.groupChannelHistoryMessageListRequest == nil {
+		return localVarReturnValue, nil, reportError("groupChannelHistoryMessageListRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.groupChannelHistoryMessageListRequest
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["NexconnSignature"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["App-Key"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListOpenChannelHistoryMessagesRequest struct {
+	ctx context.Context
+	ApiService *MessageManagementAPIService
+	openChannelHistoryMessageListRequest *OpenChannelHistoryMessageListRequest
+}
+
+func (r ApiListOpenChannelHistoryMessagesRequest) OpenChannelHistoryMessageListRequest(openChannelHistoryMessageListRequest OpenChannelHistoryMessageListRequest) ApiListOpenChannelHistoryMessagesRequest {
+	r.openChannelHistoryMessageListRequest = &openChannelHistoryMessageListRequest
+	return r
+}
+
+func (r ApiListOpenChannelHistoryMessagesRequest) Execute() (*OpenChannelHistoryMessageResponse, *http.Response, error) {
+	return r.ApiService.ListOpenChannelHistoryMessagesExecute(r)
+}
+
+/*
+ListOpenChannelHistoryMessages List open-channel history messages
+
+Rate limit: 10/sec. Query range is at most 14 days; messages are returned in descending timestamp order.
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListOpenChannelHistoryMessagesRequest
+*/
+func (a *MessageManagementAPIService) ListOpenChannelHistoryMessages(ctx context.Context) ApiListOpenChannelHistoryMessagesRequest {
+	return ApiListOpenChannelHistoryMessagesRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return OpenChannelHistoryMessageResponse
+func (a *MessageManagementAPIService) ListOpenChannelHistoryMessagesExecute(r ApiListOpenChannelHistoryMessagesRequest) (*OpenChannelHistoryMessageResponse, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *OpenChannelHistoryMessageResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MessageManagementAPIService.ListOpenChannelHistoryMessages")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v4/open-channel/history-message/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.openChannelHistoryMessageListRequest == nil {
+		return localVarReturnValue, nil, reportError("openChannelHistoryMessageListRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.openChannelHistoryMessageListRequest
 	if r.ctx != nil {
 		// API Key Authentication
 		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {

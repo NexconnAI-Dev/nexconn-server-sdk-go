@@ -23,7 +23,10 @@ type UserProfileItem struct {
 	Version *int64 `json:"version,omitempty"`
 	UserProfile map[string]interface{} `json:"userProfile,omitempty"`
 	UserExtProfile map[string]interface{} `json:"userExtProfile,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserProfileItem UserProfileItem
 
 // NewUserProfileItem instantiates a new UserProfileItem object
 // This constructor will assign default values to properties that have it defined,
@@ -192,7 +195,36 @@ func (o UserProfileItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UserExtProfile) {
 		toSerialize["userExtProfile"] = o.UserExtProfile
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserProfileItem) UnmarshalJSON(data []byte) (err error) {
+	varUserProfileItem := _UserProfileItem{}
+
+	err = json.Unmarshal(data, &varUserProfileItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserProfileItem(varUserProfileItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "version")
+		delete(additionalProperties, "userProfile")
+		delete(additionalProperties, "userExtProfile")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserProfileItem struct {

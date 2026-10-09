@@ -21,7 +21,10 @@ var _ MappedNullable = &UserChannelTagListResponseResult{}
 type UserChannelTagListResponseResult struct {
 	UserId *string `json:"userId,omitempty"`
 	Tags []UserChannelTagListItem `json:"tags,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserChannelTagListResponseResult UserChannelTagListResponseResult
 
 // NewUserChannelTagListResponseResult instantiates a new UserChannelTagListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o UserChannelTagListResponseResult) ToMap() (map[string]interface{}, error
 	if !IsNil(o.Tags) {
 		toSerialize["tags"] = o.Tags
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserChannelTagListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varUserChannelTagListResponseResult := _UserChannelTagListResponseResult{}
+
+	err = json.Unmarshal(data, &varUserChannelTagListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserChannelTagListResponseResult(varUserChannelTagListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "tags")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserChannelTagListResponseResult struct {

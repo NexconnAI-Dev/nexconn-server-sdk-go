@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type SystemChannelPushRequest struct {
 	Audience SystemChannelPushAudience `json:"audience"`
 	Message SystemChannelPushMessage `json:"message"`
 	Notification SystemChannelPushNotification `json:"notification"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SystemChannelPushRequest SystemChannelPushRequest
@@ -187,6 +187,11 @@ func (o SystemChannelPushRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["audience"] = o.Audience
 	toSerialize["message"] = o.Message
 	toSerialize["notification"] = o.Notification
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -218,15 +223,24 @@ func (o *SystemChannelPushRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varSystemChannelPushRequest := _SystemChannelPushRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSystemChannelPushRequest)
+	err = json.Unmarshal(data, &varSystemChannelPushRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SystemChannelPushRequest(varSystemChannelPushRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "platform")
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "audience")
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "notification")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

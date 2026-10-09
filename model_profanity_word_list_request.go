@@ -21,7 +21,10 @@ var _ MappedNullable = &ProfanityWordListRequest{}
 type ProfanityWordListRequest struct {
 	// Legacy `type`. `0` for replacement words, `1` for blocked words, and `2` for all words. PDF documents this field as a string.
 	FilterType *string `json:"filterType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ProfanityWordListRequest ProfanityWordListRequest
 
 // NewProfanityWordListRequest instantiates a new ProfanityWordListRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -89,7 +92,33 @@ func (o ProfanityWordListRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FilterType) {
 		toSerialize["filterType"] = o.FilterType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ProfanityWordListRequest) UnmarshalJSON(data []byte) (err error) {
+	varProfanityWordListRequest := _ProfanityWordListRequest{}
+
+	err = json.Unmarshal(data, &varProfanityWordListRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ProfanityWordListRequest(varProfanityWordListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "filterType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableProfanityWordListRequest struct {

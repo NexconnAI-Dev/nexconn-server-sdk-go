@@ -31,15 +31,18 @@ type MessageRecord struct {
 	SentAt *int64 `json:"sentAt,omitempty"`
 	// Message type of the stored message.
 	MessageType *string `json:"messageType,omitempty"`
-	// Channel type of the stored message.
-	ChannelType *int32 `json:"channelType,omitempty"`
 	// Raw message content payload as stored by the service.
 	Content *string `json:"content,omitempty"`
 	// Whether the message has metadata entries attached.
 	MetadataEnabled *bool `json:"hasMetadata,omitempty"`
-	// List of metadata entries (`CommunityHistoryMessage` uses `List<MetadataItem>`, not a map).
+	// Structured message metadata entries. Omitted when the original metadata is empty or cannot be parsed.
 	Metadata []MessageMetadataListItem `json:"metadata,omitempty"`
+	// Quoted message details as a JSON string containing msgUID, objectName and fromUserId. Omitted for messages without a quote.
+	Quote *string `json:"quote,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MessageRecord MessageRecord
 
 // NewMessageRecord instantiates a new MessageRecord object
 // This constructor will assign default values to properties that have it defined,
@@ -250,38 +253,6 @@ func (o *MessageRecord) SetMessageType(v string) {
 	o.MessageType = &v
 }
 
-// GetChannelType returns the ChannelType field value if set, zero value otherwise.
-func (o *MessageRecord) GetChannelType() int32 {
-	if o == nil || IsNil(o.ChannelType) {
-		var ret int32
-		return ret
-	}
-	return *o.ChannelType
-}
-
-// GetChannelTypeOk returns a tuple with the ChannelType field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *MessageRecord) GetChannelTypeOk() (*int32, bool) {
-	if o == nil || IsNil(o.ChannelType) {
-		return nil, false
-	}
-	return o.ChannelType, true
-}
-
-// HasChannelType returns a boolean if a field has been set.
-func (o *MessageRecord) HasChannelType() bool {
-	if o != nil && !IsNil(o.ChannelType) {
-		return true
-	}
-
-	return false
-}
-
-// SetChannelType gets a reference to the given int32 and assigns it to the ChannelType field.
-func (o *MessageRecord) SetChannelType(v int32) {
-	o.ChannelType = &v
-}
-
 // GetContent returns the Content field value if set, zero value otherwise.
 func (o *MessageRecord) GetContent() string {
 	if o == nil || IsNil(o.Content) {
@@ -378,6 +349,38 @@ func (o *MessageRecord) SetMetadata(v []MessageMetadataListItem) {
 	o.Metadata = v
 }
 
+// GetQuote returns the Quote field value if set, zero value otherwise.
+func (o *MessageRecord) GetQuote() string {
+	if o == nil || IsNil(o.Quote) {
+		var ret string
+		return ret
+	}
+	return *o.Quote
+}
+
+// GetQuoteOk returns a tuple with the Quote field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *MessageRecord) GetQuoteOk() (*string, bool) {
+	if o == nil || IsNil(o.Quote) {
+		return nil, false
+	}
+	return o.Quote, true
+}
+
+// HasQuote returns a boolean if a field has been set.
+func (o *MessageRecord) HasQuote() bool {
+	if o != nil && !IsNil(o.Quote) {
+		return true
+	}
+
+	return false
+}
+
+// SetQuote gets a reference to the given string and assigns it to the Quote field.
+func (o *MessageRecord) SetQuote(v string) {
+	o.Quote = &v
+}
+
 func (o MessageRecord) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -406,9 +409,6 @@ func (o MessageRecord) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MessageType) {
 		toSerialize["messageType"] = o.MessageType
 	}
-	if !IsNil(o.ChannelType) {
-		toSerialize["channelType"] = o.ChannelType
-	}
 	if !IsNil(o.Content) {
 		toSerialize["content"] = o.Content
 	}
@@ -418,7 +418,45 @@ func (o MessageRecord) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Metadata) {
 		toSerialize["metadata"] = o.Metadata
 	}
+	if !IsNil(o.Quote) {
+		toSerialize["quote"] = o.Quote
+	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MessageRecord) UnmarshalJSON(data []byte) (err error) {
+	varMessageRecord := _MessageRecord{}
+
+	err = json.Unmarshal(data, &varMessageRecord)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MessageRecord(varMessageRecord)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "sentAt")
+		delete(additionalProperties, "messageType")
+		delete(additionalProperties, "content")
+		delete(additionalProperties, "hasMetadata")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "quote")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMessageRecord struct {

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type ChannelAttributeGetRequest struct {
 	UserId string `json:"userId"`
 	ChannelId string `json:"channelId"`
 	ChannelType int32 `json:"channelType"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelAttributeGetRequest ChannelAttributeGetRequest
@@ -133,6 +133,11 @@ func (o ChannelAttributeGetRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["userId"] = o.UserId
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["channelType"] = o.ChannelType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -162,15 +167,22 @@ func (o *ChannelAttributeGetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varChannelAttributeGetRequest := _ChannelAttributeGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelAttributeGetRequest)
+	err = json.Unmarshal(data, &varChannelAttributeGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelAttributeGetRequest(varChannelAttributeGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "channelType")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

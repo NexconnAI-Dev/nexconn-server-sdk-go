@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type ChannelPushGetRequest struct {
 	ChannelId string `json:"channelId"`
 	// Legacy `busChannel`. Used for community-channel subchannel level settings.
 	SubchannelId *string `json:"subchannelId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelPushGetRequest ChannelPushGetRequest
@@ -173,6 +173,11 @@ func (o ChannelPushGetRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SubchannelId) {
 		toSerialize["subchannelId"] = o.SubchannelId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *ChannelPushGetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varChannelPushGetRequest := _ChannelPushGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelPushGetRequest)
+	err = json.Unmarshal(data, &varChannelPushGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelPushGetRequest(varChannelPushGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "requestId")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "subchannelId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

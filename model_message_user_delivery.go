@@ -21,7 +21,10 @@ var _ MappedNullable = &MessageUserDelivery{}
 type MessageUserDelivery struct {
 	UserId *string `json:"userId,omitempty"`
 	MessageId *string `json:"messageId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MessageUserDelivery MessageUserDelivery
 
 // NewMessageUserDelivery instantiates a new MessageUserDelivery object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o MessageUserDelivery) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.MessageId) {
 		toSerialize["messageId"] = o.MessageId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MessageUserDelivery) UnmarshalJSON(data []byte) (err error) {
+	varMessageUserDelivery := _MessageUserDelivery{}
+
+	err = json.Unmarshal(data, &varMessageUserDelivery)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MessageUserDelivery(varMessageUserDelivery)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "messageId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMessageUserDelivery struct {

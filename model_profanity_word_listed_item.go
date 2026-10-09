@@ -25,7 +25,10 @@ type ProfanityWordListedItem struct {
 	Replacement *string `json:"replacement,omitempty"`
 	// Result type. `0` means replacement word and `1` means blocked word.
 	FilterType *string `json:"filterType,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ProfanityWordListedItem ProfanityWordListedItem
 
 // NewProfanityWordListedItem instantiates a new ProfanityWordListedItem object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o ProfanityWordListedItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FilterType) {
 		toSerialize["filterType"] = o.FilterType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ProfanityWordListedItem) UnmarshalJSON(data []byte) (err error) {
+	varProfanityWordListedItem := _ProfanityWordListedItem{}
+
+	err = json.Unmarshal(data, &varProfanityWordListedItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ProfanityWordListedItem(varProfanityWordListedItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "word")
+		delete(additionalProperties, "replacement")
+		delete(additionalProperties, "filterType")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableProfanityWordListedItem struct {

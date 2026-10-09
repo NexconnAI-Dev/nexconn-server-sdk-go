@@ -22,7 +22,10 @@ type BannedUser struct {
 	UserId *string `json:"userId,omitempty"`
 	// Ban expiry time as returned by the server (`BannedUserItem` uses string).
 	BanExpiresAt *string `json:"banExpiresAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _BannedUser BannedUser
 
 // NewBannedUser instantiates a new BannedUser object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o BannedUser) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.BanExpiresAt) {
 		toSerialize["banExpiresAt"] = o.BanExpiresAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *BannedUser) UnmarshalJSON(data []byte) (err error) {
+	varBannedUser := _BannedUser{}
+
+	err = json.Unmarshal(data, &varBannedUser)
+
+	if err != nil {
+		return err
+	}
+
+	*o = BannedUser(varBannedUser)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "banExpiresAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableBannedUser struct {

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UserOperationResponse{}
 type UserOperationResponse struct {
 	Code int32 `json:"code"`
 	Result *UserOperationResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserOperationResponse UserOperationResponse
@@ -115,6 +115,11 @@ func (o UserOperationResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *UserOperationResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varUserOperationResponse := _UserOperationResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserOperationResponse)
+	err = json.Unmarshal(data, &varUserOperationResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserOperationResponse(varUserOperationResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

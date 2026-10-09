@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type OpenChannelParticipantExistResponse struct {
 	// Return code. `0` indicates success.
 	Code int32 `json:"code"`
 	Result *OpenChannelParticipantExistResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelParticipantExistResponse OpenChannelParticipantExistResponse
@@ -116,6 +116,11 @@ func (o OpenChannelParticipantExistResponse) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,15 +148,21 @@ func (o *OpenChannelParticipantExistResponse) UnmarshalJSON(data []byte) (err er
 
 	varOpenChannelParticipantExistResponse := _OpenChannelParticipantExistResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelParticipantExistResponse)
+	err = json.Unmarshal(data, &varOpenChannelParticipantExistResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelParticipantExistResponse(varOpenChannelParticipantExistResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

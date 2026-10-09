@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &GroupChannelListResponse{}
 type GroupChannelListResponse struct {
 	Code int32 `json:"code"`
 	Result *GroupChannelListResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelListResponse GroupChannelListResponse
@@ -115,6 +115,11 @@ func (o GroupChannelListResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *GroupChannelListResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupChannelListResponse := _GroupChannelListResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelListResponse)
+	err = json.Unmarshal(data, &varGroupChannelListResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelListResponse(varGroupChannelListResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

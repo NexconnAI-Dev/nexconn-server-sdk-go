@@ -21,7 +21,10 @@ var _ MappedNullable = &UserConnectionStatusResponseResult{}
 type UserConnectionStatusResponseResult struct {
 	// `1` means online and `0` means offline.
 	Status *string `json:"status,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserConnectionStatusResponseResult UserConnectionStatusResponseResult
 
 // NewUserConnectionStatusResponseResult instantiates a new UserConnectionStatusResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o UserConnectionStatusResponseResult) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserConnectionStatusResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varUserConnectionStatusResponseResult := _UserConnectionStatusResponseResult{}
+
+	err = json.Unmarshal(data, &varUserConnectionStatusResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserConnectionStatusResponseResult(varUserConnectionStatusResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserConnectionStatusResponseResult struct {

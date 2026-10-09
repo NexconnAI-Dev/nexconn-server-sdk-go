@@ -21,7 +21,10 @@ var _ MappedNullable = &GroupChannelUserMuteListGetRequest{}
 type GroupChannelUserMuteListGetRequest struct {
 	// Optional group channel ID filter.
 	ChannelId *string `json:"channelId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelUserMuteListGetRequest GroupChannelUserMuteListGetRequest
 
 // NewGroupChannelUserMuteListGetRequest instantiates a new GroupChannelUserMuteListGetRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o GroupChannelUserMuteListGetRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.ChannelId) {
 		toSerialize["channelId"] = o.ChannelId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelUserMuteListGetRequest) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelUserMuteListGetRequest := _GroupChannelUserMuteListGetRequest{}
+
+	err = json.Unmarshal(data, &varGroupChannelUserMuteListGetRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelUserMuteListGetRequest(varGroupChannelUserMuteListGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelUserMuteListGetRequest struct {

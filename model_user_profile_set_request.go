@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type UserProfileSetRequest struct {
 	UserProfile map[string]interface{}
 	// Extended profile payload. Keys are case-sensitive, should use the `ext_` prefix, and values must be strings. Either `userProfile` or `userExtProfile` must be provided. 
 	UserExtProfile *map[string]string
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserProfileSetRequest UserProfileSetRequest
@@ -152,6 +152,11 @@ func (o UserProfileSetRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UserExtProfile) {
 		toSerialize["userExtProfile"] = o.UserExtProfile
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -179,15 +184,22 @@ func (o *UserProfileSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserProfileSetRequest := _UserProfileSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserProfileSetRequest)
+	err = json.Unmarshal(data, &varUserProfileSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserProfileSetRequest(varUserProfileSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "userProfile")
+		delete(additionalProperties, "userExtProfile")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

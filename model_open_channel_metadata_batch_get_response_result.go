@@ -20,7 +20,10 @@ var _ MappedNullable = &OpenChannelMetadataBatchGetResponseResult{}
 // OpenChannelMetadataBatchGetResponseResult struct for OpenChannelMetadataBatchGetResponseResult
 type OpenChannelMetadataBatchGetResponseResult struct {
 	Metadata []OpenChannelMetadataEntry `json:"metadata,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelMetadataBatchGetResponseResult OpenChannelMetadataBatchGetResponseResult
 
 // NewOpenChannelMetadataBatchGetResponseResult instantiates a new OpenChannelMetadataBatchGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o OpenChannelMetadataBatchGetResponseResult) ToMap() (map[string]interface
 	if !IsNil(o.Metadata) {
 		toSerialize["metadata"] = o.Metadata
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelMetadataBatchGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelMetadataBatchGetResponseResult := _OpenChannelMetadataBatchGetResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelMetadataBatchGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelMetadataBatchGetResponseResult(varOpenChannelMetadataBatchGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "metadata")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelMetadataBatchGetResponseResult struct {

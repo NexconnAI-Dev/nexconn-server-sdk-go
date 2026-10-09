@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type OpenChannelGlobalMuteListRemoveRequest struct {
 	// Notification extra payload in JSON string format.
 	Extra *string `json:"extra,omitempty"`
 	NeedNotify *bool `json:"needNotify,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelGlobalMuteListRemoveRequest OpenChannelGlobalMuteListRemoveRequest
@@ -152,6 +152,11 @@ func (o OpenChannelGlobalMuteListRemoveRequest) ToMap() (map[string]interface{},
 	if !IsNil(o.NeedNotify) {
 		toSerialize["needNotify"] = o.NeedNotify
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -179,15 +184,22 @@ func (o *OpenChannelGlobalMuteListRemoveRequest) UnmarshalJSON(data []byte) (err
 
 	varOpenChannelGlobalMuteListRemoveRequest := _OpenChannelGlobalMuteListRemoveRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelGlobalMuteListRemoveRequest)
+	err = json.Unmarshal(data, &varOpenChannelGlobalMuteListRemoveRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelGlobalMuteListRemoveRequest(varOpenChannelGlobalMuteListRemoveRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participantIds")
+		delete(additionalProperties, "extra")
+		delete(additionalProperties, "needNotify")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -22,7 +22,10 @@ type GroupChannelListRequest struct {
 	PageToken *string `json:"pageToken,omitempty"`
 	PageSize *int32 `json:"pageSize,omitempty"`
 	Order *int32 `json:"order,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelListRequest GroupChannelListRequest
 
 // NewGroupChannelListRequest instantiates a new GroupChannelListRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -156,7 +159,35 @@ func (o GroupChannelListRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelListRequest) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelListRequest := _GroupChannelListRequest{}
+
+	err = json.Unmarshal(data, &varGroupChannelListRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelListRequest(varGroupChannelListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelListRequest struct {

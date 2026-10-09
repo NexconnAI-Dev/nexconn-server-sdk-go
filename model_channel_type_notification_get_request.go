@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ChannelTypeNotificationGetRequest struct {
 	ChannelType string `json:"channelType"`
 	// User ID whose channel-type notification setting is queried.
 	RequestId string `json:"requestId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelTypeNotificationGetRequest ChannelTypeNotificationGetRequest
@@ -108,6 +108,11 @@ func (o ChannelTypeNotificationGetRequest) ToMap() (map[string]interface{}, erro
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelType"] = o.ChannelType
 	toSerialize["requestId"] = o.RequestId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *ChannelTypeNotificationGetRequest) UnmarshalJSON(data []byte) (err erro
 
 	varChannelTypeNotificationGetRequest := _ChannelTypeNotificationGetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelTypeNotificationGetRequest)
+	err = json.Unmarshal(data, &varChannelTypeNotificationGetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelTypeNotificationGetRequest(varChannelTypeNotificationGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "requestId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

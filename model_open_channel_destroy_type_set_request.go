@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type OpenChannelDestroyTypeSetRequest struct {
 	ChannelId string `json:"channelId"`
 	DestroyType *int32 `json:"destroyType,omitempty"`
 	TtlMinutes *int32 `json:"ttlMinutes,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelDestroyTypeSetRequest OpenChannelDestroyTypeSetRequest
@@ -151,6 +151,11 @@ func (o OpenChannelDestroyTypeSetRequest) ToMap() (map[string]interface{}, error
 	if !IsNil(o.TtlMinutes) {
 		toSerialize["ttlMinutes"] = o.TtlMinutes
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -178,15 +183,22 @@ func (o *OpenChannelDestroyTypeSetRequest) UnmarshalJSON(data []byte) (err error
 
 	varOpenChannelDestroyTypeSetRequest := _OpenChannelDestroyTypeSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelDestroyTypeSetRequest)
+	err = json.Unmarshal(data, &varOpenChannelDestroyTypeSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelDestroyTypeSetRequest(varOpenChannelDestroyTypeSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "destroyType")
+		delete(additionalProperties, "ttlMinutes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

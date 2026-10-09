@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type GroupChannelUserMuteListRemoveRequest struct {
 	// Optional. When omitted, the operation applies to all group channels according to the PDF.
 	ChannelId *string `json:"channelId,omitempty"`
 	UserIds []string `json:"userIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelUserMuteListRemoveRequest GroupChannelUserMuteListRemoveRequest
@@ -116,6 +116,11 @@ func (o GroupChannelUserMuteListRemoveRequest) ToMap() (map[string]interface{}, 
 		toSerialize["channelId"] = o.ChannelId
 	}
 	toSerialize["userIds"] = o.UserIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,15 +148,21 @@ func (o *GroupChannelUserMuteListRemoveRequest) UnmarshalJSON(data []byte) (err 
 
 	varGroupChannelUserMuteListRemoveRequest := _GroupChannelUserMuteListRemoveRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelUserMuteListRemoveRequest)
+	err = json.Unmarshal(data, &varGroupChannelUserMuteListRemoveRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelUserMuteListRemoveRequest(varGroupChannelUserMuteListRemoveRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "userIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

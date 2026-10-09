@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type FriendProfileSetRequest struct {
 	Alias *string `json:"alias,omitempty"`
 	// Custom friend extension attributes. Keys should match `ext_xxxxx`, may contain letters, digits, and underscores, and support up to 10 entries. 
 	FriendExtProfile *map[string]string `json:"friendExtProfile,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FriendProfileSetRequest FriendProfileSetRequest
@@ -180,6 +180,11 @@ func (o FriendProfileSetRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FriendExtProfile) {
 		toSerialize["friendExtProfile"] = o.FriendExtProfile
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -208,15 +213,23 @@ func (o *FriendProfileSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varFriendProfileSetRequest := _FriendProfileSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFriendProfileSetRequest)
+	err = json.Unmarshal(data, &varFriendProfileSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FriendProfileSetRequest(varFriendProfileSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "targetId")
+		delete(additionalProperties, "alias")
+		delete(additionalProperties, "friendExtProfile")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

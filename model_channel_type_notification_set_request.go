@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type ChannelTypeNotificationSetRequest struct {
 	RequestId string `json:"requestId"`
 	// Do-not-disturb level for the specified channel type.
 	NoDisturbLevel int32 `json:"noDisturbLevel"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelTypeNotificationSetRequest ChannelTypeNotificationSetRequest
@@ -136,6 +136,11 @@ func (o ChannelTypeNotificationSetRequest) ToMap() (map[string]interface{}, erro
 	toSerialize["channelType"] = o.ChannelType
 	toSerialize["requestId"] = o.RequestId
 	toSerialize["noDisturbLevel"] = o.NoDisturbLevel
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *ChannelTypeNotificationSetRequest) UnmarshalJSON(data []byte) (err erro
 
 	varChannelTypeNotificationSetRequest := _ChannelTypeNotificationSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelTypeNotificationSetRequest)
+	err = json.Unmarshal(data, &varChannelTypeNotificationSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelTypeNotificationSetRequest(varChannelTypeNotificationSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "requestId")
+		delete(additionalProperties, "noDisturbLevel")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

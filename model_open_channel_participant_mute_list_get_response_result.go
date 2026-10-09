@@ -20,7 +20,10 @@ var _ MappedNullable = &OpenChannelParticipantMuteListGetResponseResult{}
 // OpenChannelParticipantMuteListGetResponseResult struct for OpenChannelParticipantMuteListGetResponseResult
 type OpenChannelParticipantMuteListGetResponseResult struct {
 	MutedParticipants []OpenChannelMutedParticipantItem `json:"mutedParticipants,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelParticipantMuteListGetResponseResult OpenChannelParticipantMuteListGetResponseResult
 
 // NewOpenChannelParticipantMuteListGetResponseResult instantiates a new OpenChannelParticipantMuteListGetResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o OpenChannelParticipantMuteListGetResponseResult) ToMap() (map[string]int
 	if !IsNil(o.MutedParticipants) {
 		toSerialize["mutedParticipants"] = o.MutedParticipants
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelParticipantMuteListGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelParticipantMuteListGetResponseResult := _OpenChannelParticipantMuteListGetResponseResult{}
+
+	err = json.Unmarshal(data, &varOpenChannelParticipantMuteListGetResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelParticipantMuteListGetResponseResult(varOpenChannelParticipantMuteListGetResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "mutedParticipants")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelParticipantMuteListGetResponseResult struct {

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &OpenChannelDestroyRequest{}
 type OpenChannelDestroyRequest struct {
 	// Legacy `chatroomIds`.
 	ChannelIds []string `json:"channelIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelDestroyRequest OpenChannelDestroyRequest
@@ -80,6 +80,11 @@ func (o OpenChannelDestroyRequest) MarshalJSON() ([]byte, error) {
 func (o OpenChannelDestroyRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelIds"] = o.ChannelIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *OpenChannelDestroyRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varOpenChannelDestroyRequest := _OpenChannelDestroyRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelDestroyRequest)
+	err = json.Unmarshal(data, &varOpenChannelDestroyRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelDestroyRequest(varOpenChannelDestroyRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

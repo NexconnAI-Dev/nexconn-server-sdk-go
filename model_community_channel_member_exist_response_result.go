@@ -20,7 +20,10 @@ var _ MappedNullable = &CommunityChannelMemberExistResponseResult{}
 // CommunityChannelMemberExistResponseResult struct for CommunityChannelMemberExistResponseResult
 type CommunityChannelMemberExistResponseResult struct {
 	IsMember *bool `json:"isMember,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommunityChannelMemberExistResponseResult CommunityChannelMemberExistResponseResult
 
 // NewCommunityChannelMemberExistResponseResult instantiates a new CommunityChannelMemberExistResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o CommunityChannelMemberExistResponseResult) ToMap() (map[string]interface
 	if !IsNil(o.IsMember) {
 		toSerialize["isMember"] = o.IsMember
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommunityChannelMemberExistResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varCommunityChannelMemberExistResponseResult := _CommunityChannelMemberExistResponseResult{}
+
+	err = json.Unmarshal(data, &varCommunityChannelMemberExistResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommunityChannelMemberExistResponseResult(varCommunityChannelMemberExistResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "isMember")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommunityChannelMemberExistResponseResult struct {

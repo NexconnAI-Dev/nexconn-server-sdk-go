@@ -20,7 +20,10 @@ var _ MappedNullable = &UserProfileListResponseResult{}
 // UserProfileListResponseResult struct for UserProfileListResponseResult
 type UserProfileListResponseResult struct {
 	Users []UserProfileListItem `json:"users,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserProfileListResponseResult UserProfileListResponseResult
 
 // NewUserProfileListResponseResult instantiates a new UserProfileListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o UserProfileListResponseResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Users) {
 		toSerialize["users"] = o.Users
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserProfileListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varUserProfileListResponseResult := _UserProfileListResponseResult{}
+
+	err = json.Unmarshal(data, &varUserProfileListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserProfileListResponseResult(varUserProfileListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "users")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserProfileListResponseResult struct {

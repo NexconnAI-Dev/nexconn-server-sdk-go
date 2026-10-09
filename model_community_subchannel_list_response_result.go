@@ -21,7 +21,10 @@ var _ MappedNullable = &CommunitySubchannelListResponseResult{}
 type CommunitySubchannelListResponseResult struct {
 	// Lowercase property name from `CommunityChannelListResult` (`/v4/community-channel/subchannel/list`).
 	Subchannels []CommunitySubchannelItem `json:"subchannels,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommunitySubchannelListResponseResult CommunitySubchannelListResponseResult
 
 // NewCommunitySubchannelListResponseResult instantiates a new CommunitySubchannelListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o CommunitySubchannelListResponseResult) ToMap() (map[string]interface{}, 
 	if !IsNil(o.Subchannels) {
 		toSerialize["subchannels"] = o.Subchannels
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommunitySubchannelListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varCommunitySubchannelListResponseResult := _CommunitySubchannelListResponseResult{}
+
+	err = json.Unmarshal(data, &varCommunitySubchannelListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommunitySubchannelListResponseResult(varCommunitySubchannelListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "subchannels")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommunitySubchannelListResponseResult struct {

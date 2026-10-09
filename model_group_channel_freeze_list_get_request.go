@@ -23,7 +23,10 @@ type GroupChannelFreezeListGetRequest struct {
 	ChannelIds []string `json:"channelIds,omitempty"`
 	Page *int32 `json:"page,omitempty"`
 	PageSize *int32 `json:"pageSize,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelFreezeListGetRequest GroupChannelFreezeListGetRequest
 
 // NewGroupChannelFreezeListGetRequest instantiates a new GroupChannelFreezeListGetRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -157,7 +160,35 @@ func (o GroupChannelFreezeListGetRequest) ToMap() (map[string]interface{}, error
 	if !IsNil(o.PageSize) {
 		toSerialize["pageSize"] = o.PageSize
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelFreezeListGetRequest) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelFreezeListGetRequest := _GroupChannelFreezeListGetRequest{}
+
+	err = json.Unmarshal(data, &varGroupChannelFreezeListGetRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelFreezeListGetRequest(varGroupChannelFreezeListGetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelIds")
+		delete(additionalProperties, "page")
+		delete(additionalProperties, "pageSize")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelFreezeListGetRequest struct {

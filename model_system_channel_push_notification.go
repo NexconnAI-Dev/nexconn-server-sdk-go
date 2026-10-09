@@ -25,7 +25,10 @@ type SystemChannelPushNotification struct {
 	Ios map[string]interface{} `json:"ios,omitempty"`
 	Android map[string]interface{} `json:"android,omitempty"`
 	HarmonyOS map[string]interface{} `json:"harmonyOS,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SystemChannelPushNotification SystemChannelPushNotification
 
 // NewSystemChannelPushNotification instantiates a new SystemChannelPushNotification object
 // This constructor will assign default values to properties that have it defined,
@@ -264,7 +267,38 @@ func (o SystemChannelPushNotification) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.HarmonyOS) {
 		toSerialize["harmonyOS"] = o.HarmonyOS
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SystemChannelPushNotification) UnmarshalJSON(data []byte) (err error) {
+	varSystemChannelPushNotification := _SystemChannelPushNotification{}
+
+	err = json.Unmarshal(data, &varSystemChannelPushNotification)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SystemChannelPushNotification(varSystemChannelPushNotification)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "forceShowPushContent")
+		delete(additionalProperties, "alert")
+		delete(additionalProperties, "ios")
+		delete(additionalProperties, "android")
+		delete(additionalProperties, "harmonyOS")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSystemChannelPushNotification struct {

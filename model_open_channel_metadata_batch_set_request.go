@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type OpenChannelMetadataBatchSetRequest struct {
 	Metadata map[string]string `json:"metadata"`
 	// `0` keeps metadata after the owner leaves and `1` removes it automatically.
 	ShouldAutoDelete *int32 `json:"shouldAutoDelete,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelMetadataBatchSetRequest OpenChannelMetadataBatchSetRequest
@@ -172,6 +172,11 @@ func (o OpenChannelMetadataBatchSetRequest) ToMap() (map[string]interface{}, err
 	if !IsNil(o.ShouldAutoDelete) {
 		toSerialize["shouldAutoDelete"] = o.ShouldAutoDelete
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -201,15 +206,23 @@ func (o *OpenChannelMetadataBatchSetRequest) UnmarshalJSON(data []byte) (err err
 
 	varOpenChannelMetadataBatchSetRequest := _OpenChannelMetadataBatchSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelMetadataBatchSetRequest)
+	err = json.Unmarshal(data, &varOpenChannelMetadataBatchSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelMetadataBatchSetRequest(varOpenChannelMetadataBatchSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "metadataOwnerId")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "shouldAutoDelete")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

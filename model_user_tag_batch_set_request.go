@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type UserTagBatchSetRequest struct {
 	UserIds []string `json:"userIds"`
 	// Full replacement set of user tags. Sending an empty array clears all tags.
 	Tags []string `json:"tags"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserTagBatchSetRequest UserTagBatchSetRequest
@@ -107,6 +107,11 @@ func (o UserTagBatchSetRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userIds"] = o.UserIds
 	toSerialize["tags"] = o.Tags
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *UserTagBatchSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserTagBatchSetRequest := _UserTagBatchSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserTagBatchSetRequest)
+	err = json.Unmarshal(data, &varUserTagBatchSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserTagBatchSetRequest(varUserTagBatchSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userIds")
+		delete(additionalProperties, "tags")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

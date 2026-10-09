@@ -21,7 +21,10 @@ var _ MappedNullable = &StreamMessageSendResponseResult{}
 type StreamMessageSendResponseResult struct {
 	// Stream message unique ID. Only present in the response to the first chunk.
 	MessageId *string `json:"messageId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _StreamMessageSendResponseResult StreamMessageSendResponseResult
 
 // NewStreamMessageSendResponseResult instantiates a new StreamMessageSendResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o StreamMessageSendResponseResult) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.MessageId) {
 		toSerialize["messageId"] = o.MessageId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *StreamMessageSendResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varStreamMessageSendResponseResult := _StreamMessageSendResponseResult{}
+
+	err = json.Unmarshal(data, &varStreamMessageSendResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = StreamMessageSendResponseResult(varStreamMessageSendResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableStreamMessageSendResponseResult struct {

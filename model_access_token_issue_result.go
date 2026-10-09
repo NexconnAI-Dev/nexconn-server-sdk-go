@@ -23,7 +23,10 @@ type AccessTokenIssueResult struct {
 	UserId *string `json:"userId,omitempty"`
 	// Issued access token for subsequent user-authenticated requests.
 	AccessToken *string `json:"accessToken,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _AccessTokenIssueResult AccessTokenIssueResult
 
 // NewAccessTokenIssueResult instantiates a new AccessTokenIssueResult object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o AccessTokenIssueResult) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AccessToken) {
 		toSerialize["accessToken"] = o.AccessToken
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *AccessTokenIssueResult) UnmarshalJSON(data []byte) (err error) {
+	varAccessTokenIssueResult := _AccessTokenIssueResult{}
+
+	err = json.Unmarshal(data, &varAccessTokenIssueResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = AccessTokenIssueResult(varAccessTokenIssueResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "accessToken")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableAccessTokenIssueResult struct {

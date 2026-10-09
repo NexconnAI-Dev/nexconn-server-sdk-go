@@ -22,7 +22,10 @@ type GroupChannelMemberFavoritesListResponseResult struct {
 	UserId *string `json:"userId,omitempty"`
 	ChannelId *string `json:"channelId,omitempty"`
 	Favorites []GroupChannelFavoriteItem `json:"favorites,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelMemberFavoritesListResponseResult GroupChannelMemberFavoritesListResponseResult
 
 // NewGroupChannelMemberFavoritesListResponseResult instantiates a new GroupChannelMemberFavoritesListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -156,7 +159,35 @@ func (o GroupChannelMemberFavoritesListResponseResult) ToMap() (map[string]inter
 	if !IsNil(o.Favorites) {
 		toSerialize["favorites"] = o.Favorites
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelMemberFavoritesListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelMemberFavoritesListResponseResult := _GroupChannelMemberFavoritesListResponseResult{}
+
+	err = json.Unmarshal(data, &varGroupChannelMemberFavoritesListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelMemberFavoritesListResponseResult(varGroupChannelMemberFavoritesListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "favorites")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelMemberFavoritesListResponseResult struct {

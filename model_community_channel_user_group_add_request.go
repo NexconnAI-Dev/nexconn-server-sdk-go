@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CommunityChannelUserGroupAddRequest{}
 type CommunityChannelUserGroupAddRequest struct {
 	ChannelId string `json:"channelId"`
 	UserGroups []CommunityChannelUserGroupItem `json:"userGroups"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommunityChannelUserGroupAddRequest CommunityChannelUserGroupAddRequest
@@ -106,6 +106,11 @@ func (o CommunityChannelUserGroupAddRequest) ToMap() (map[string]interface{}, er
 	toSerialize := map[string]interface{}{}
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["userGroups"] = o.UserGroups
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *CommunityChannelUserGroupAddRequest) UnmarshalJSON(data []byte) (err er
 
 	varCommunityChannelUserGroupAddRequest := _CommunityChannelUserGroupAddRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommunityChannelUserGroupAddRequest)
+	err = json.Unmarshal(data, &varCommunityChannelUserGroupAddRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommunityChannelUserGroupAddRequest(varCommunityChannelUserGroupAddRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "userGroups")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -20,7 +20,10 @@ var _ MappedNullable = &CommunityChannelAllowedSenderItem{}
 // CommunityChannelAllowedSenderItem struct for CommunityChannelAllowedSenderItem
 type CommunityChannelAllowedSenderItem struct {
 	UserId *string `json:"userId,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommunityChannelAllowedSenderItem CommunityChannelAllowedSenderItem
 
 // NewCommunityChannelAllowedSenderItem instantiates a new CommunityChannelAllowedSenderItem object
 // This constructor will assign default values to properties that have it defined,
@@ -84,7 +87,33 @@ func (o CommunityChannelAllowedSenderItem) ToMap() (map[string]interface{}, erro
 	if !IsNil(o.UserId) {
 		toSerialize["userId"] = o.UserId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommunityChannelAllowedSenderItem) UnmarshalJSON(data []byte) (err error) {
+	varCommunityChannelAllowedSenderItem := _CommunityChannelAllowedSenderItem{}
+
+	err = json.Unmarshal(data, &varCommunityChannelAllowedSenderItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommunityChannelAllowedSenderItem(varCommunityChannelAllowedSenderItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommunityChannelAllowedSenderItem struct {

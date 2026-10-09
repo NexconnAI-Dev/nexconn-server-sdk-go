@@ -21,7 +21,10 @@ var _ MappedNullable = &UserBanListRequest{}
 type UserBanListRequest struct {
 	Page *int32 `json:"page,omitempty"`
 	PageSize *int32 `json:"pageSize,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserBanListRequest UserBanListRequest
 
 // NewUserBanListRequest instantiates a new UserBanListRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -124,7 +127,34 @@ func (o UserBanListRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PageSize) {
 		toSerialize["pageSize"] = o.PageSize
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserBanListRequest) UnmarshalJSON(data []byte) (err error) {
+	varUserBanListRequest := _UserBanListRequest{}
+
+	err = json.Unmarshal(data, &varUserBanListRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserBanListRequest(varUserBanListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "page")
+		delete(additionalProperties, "pageSize")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserBanListRequest struct {

@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UserBanRequest{}
 type UserBanRequest struct {
 	UserIds []string `json:"userIds"`
 	DurationMinutes int32 `json:"durationMinutes"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UserBanRequest UserBanRequest
@@ -106,6 +106,11 @@ func (o UserBanRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userIds"] = o.UserIds
 	toSerialize["durationMinutes"] = o.DurationMinutes
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *UserBanRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUserBanRequest := _UserBanRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUserBanRequest)
+	err = json.Unmarshal(data, &varUserBanRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UserBanRequest(varUserBanRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userIds")
+		delete(additionalProperties, "durationMinutes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

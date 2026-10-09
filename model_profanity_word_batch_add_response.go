@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ProfanityWordBatchAddResponse{}
 type ProfanityWordBatchAddResponse struct {
 	Code int32 `json:"code"`
 	Result *ProfanityWordBatchAddResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProfanityWordBatchAddResponse ProfanityWordBatchAddResponse
@@ -115,6 +115,11 @@ func (o ProfanityWordBatchAddResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *ProfanityWordBatchAddResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varProfanityWordBatchAddResponse := _ProfanityWordBatchAddResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProfanityWordBatchAddResponse)
+	err = json.Unmarshal(data, &varProfanityWordBatchAddResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProfanityWordBatchAddResponse(varProfanityWordBatchAddResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &UserTagBatchGetItem{}
 type UserTagBatchGetItem struct {
 	UserId *string `json:"userId,omitempty"`
 	Tags []string `json:"tags,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UserTagBatchGetItem UserTagBatchGetItem
 
 // NewUserTagBatchGetItem instantiates a new UserTagBatchGetItem object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o UserTagBatchGetItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Tags) {
 		toSerialize["tags"] = o.Tags
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UserTagBatchGetItem) UnmarshalJSON(data []byte) (err error) {
+	varUserTagBatchGetItem := _UserTagBatchGetItem{}
+
+	err = json.Unmarshal(data, &varUserTagBatchGetItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UserTagBatchGetItem(varUserTagBatchGetItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "tags")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUserTagBatchGetItem struct {

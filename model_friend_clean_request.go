@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &FriendCleanRequest{}
 // FriendCleanRequest struct for FriendCleanRequest
 type FriendCleanRequest struct {
 	UserId string `json:"userId"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FriendCleanRequest FriendCleanRequest
@@ -79,6 +79,11 @@ func (o FriendCleanRequest) MarshalJSON() ([]byte, error) {
 func (o FriendCleanRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userId"] = o.UserId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *FriendCleanRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varFriendCleanRequest := _FriendCleanRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFriendCleanRequest)
+	err = json.Unmarshal(data, &varFriendCleanRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FriendCleanRequest(varFriendCleanRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

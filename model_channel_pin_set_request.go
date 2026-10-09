@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type ChannelPinSetRequest struct {
 	ChannelId string `json:"channelId"`
 	// JSON field name used by the server. `true` pins the conversation and `false` cancels the pin.
 	IsPin bool `json:"isPin"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChannelPinSetRequest ChannelPinSetRequest
@@ -163,6 +163,11 @@ func (o ChannelPinSetRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["channelType"] = o.ChannelType
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["isPin"] = o.IsPin
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -193,15 +198,23 @@ func (o *ChannelPinSetRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varChannelPinSetRequest := _ChannelPinSetRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChannelPinSetRequest)
+	err = json.Unmarshal(data, &varChannelPinSetRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChannelPinSetRequest(varChannelPinSetRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "channelType")
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "isPin")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

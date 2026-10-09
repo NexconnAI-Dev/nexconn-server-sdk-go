@@ -22,7 +22,10 @@ type OpenChannelMutedParticipantItem struct {
 	ParticipantId *string `json:"participantId,omitempty"`
 	// Mute expiration time in `YYYY-MM-DD HH:MM:SS` format.
 	MuteExpiresAt *string `json:"muteExpiresAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _OpenChannelMutedParticipantItem OpenChannelMutedParticipantItem
 
 // NewOpenChannelMutedParticipantItem instantiates a new OpenChannelMutedParticipantItem object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o OpenChannelMutedParticipantItem) ToMap() (map[string]interface{}, error)
 	if !IsNil(o.MuteExpiresAt) {
 		toSerialize["muteExpiresAt"] = o.MuteExpiresAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *OpenChannelMutedParticipantItem) UnmarshalJSON(data []byte) (err error) {
+	varOpenChannelMutedParticipantItem := _OpenChannelMutedParticipantItem{}
+
+	err = json.Unmarshal(data, &varOpenChannelMutedParticipantItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = OpenChannelMutedParticipantItem(varOpenChannelMutedParticipantItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "participantId")
+		delete(additionalProperties, "muteExpiresAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableOpenChannelMutedParticipantItem struct {

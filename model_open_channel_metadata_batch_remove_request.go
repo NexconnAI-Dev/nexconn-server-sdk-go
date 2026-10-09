@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type OpenChannelMetadataBatchRemoveRequest struct {
 	// Legacy `entryOwnerId`.
 	MetadataOwnerId string `json:"metadataOwnerId"`
 	MetadataKeys []string `json:"metadataKeys"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelMetadataBatchRemoveRequest OpenChannelMetadataBatchRemoveRequest
@@ -134,6 +134,11 @@ func (o OpenChannelMetadataBatchRemoveRequest) ToMap() (map[string]interface{}, 
 	toSerialize["channelId"] = o.ChannelId
 	toSerialize["metadataOwnerId"] = o.MetadataOwnerId
 	toSerialize["metadataKeys"] = o.MetadataKeys
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -163,15 +168,22 @@ func (o *OpenChannelMetadataBatchRemoveRequest) UnmarshalJSON(data []byte) (err 
 
 	varOpenChannelMetadataBatchRemoveRequest := _OpenChannelMetadataBatchRemoveRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelMetadataBatchRemoveRequest)
+	err = json.Unmarshal(data, &varOpenChannelMetadataBatchRemoveRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelMetadataBatchRemoveRequest(varOpenChannelMetadataBatchRemoveRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "channelId")
+		delete(additionalProperties, "metadataOwnerId")
+		delete(additionalProperties, "metadataKeys")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

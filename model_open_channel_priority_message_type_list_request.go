@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &OpenChannelPriorityMessageTypeListRequest{}
 // OpenChannelPriorityMessageTypeListRequest struct for OpenChannelPriorityMessageTypeListRequest
 type OpenChannelPriorityMessageTypeListRequest struct {
 	MessageTypes []string `json:"messageTypes"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _OpenChannelPriorityMessageTypeListRequest OpenChannelPriorityMessageTypeListRequest
@@ -79,6 +79,11 @@ func (o OpenChannelPriorityMessageTypeListRequest) MarshalJSON() ([]byte, error)
 func (o OpenChannelPriorityMessageTypeListRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["messageTypes"] = o.MessageTypes
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *OpenChannelPriorityMessageTypeListRequest) UnmarshalJSON(data []byte) (
 
 	varOpenChannelPriorityMessageTypeListRequest := _OpenChannelPriorityMessageTypeListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varOpenChannelPriorityMessageTypeListRequest)
+	err = json.Unmarshal(data, &varOpenChannelPriorityMessageTypeListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = OpenChannelPriorityMessageTypeListRequest(varOpenChannelPriorityMessageTypeListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "messageTypes")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

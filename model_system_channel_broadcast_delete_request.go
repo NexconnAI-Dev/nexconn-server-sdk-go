@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type SystemChannelBroadcastDeleteRequest struct {
 	IsAdmin *int32 `json:"isAdmin,omitempty"`
 	Extra *string `json:"extra,omitempty"`
 	DisableUpdateLastMsg *bool `json:"disableUpdateLastMsg,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SystemChannelBroadcastDeleteRequest SystemChannelBroadcastDeleteRequest
@@ -250,6 +250,11 @@ func (o SystemChannelBroadcastDeleteRequest) ToMap() (map[string]interface{}, er
 	if !IsNil(o.DisableUpdateLastMsg) {
 		toSerialize["disableUpdateLastMsg"] = o.DisableUpdateLastMsg
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -278,15 +283,25 @@ func (o *SystemChannelBroadcastDeleteRequest) UnmarshalJSON(data []byte) (err er
 
 	varSystemChannelBroadcastDeleteRequest := _SystemChannelBroadcastDeleteRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSystemChannelBroadcastDeleteRequest)
+	err = json.Unmarshal(data, &varSystemChannelBroadcastDeleteRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SystemChannelBroadcastDeleteRequest(varSystemChannelBroadcastDeleteRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fromUserId")
+		delete(additionalProperties, "messageId")
+		delete(additionalProperties, "sentAt")
+		delete(additionalProperties, "isAdmin")
+		delete(additionalProperties, "extra")
+		delete(additionalProperties, "disableUpdateLastMsg")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

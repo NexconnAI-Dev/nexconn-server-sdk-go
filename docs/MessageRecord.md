@@ -10,10 +10,10 @@ Name | Type | Description | Notes
 **MessageId** | Pointer to **string** | Unique message ID. | [optional] 
 **SentAt** | Pointer to **int64** | Message send timestamp in milliseconds. | [optional] 
 **MessageType** | Pointer to **string** | Message type of the stored message. | [optional] 
-**ChannelType** | Pointer to **int32** | Channel type of the stored message. | [optional] 
 **Content** | Pointer to **string** | Raw message content payload as stored by the service. | [optional] 
 **HasMetadata** | Pointer to **bool** | Whether the message has metadata entries attached. | [optional] 
-**Metadata** | Pointer to [**[]MessageMetadataListItem**](MessageMetadataListItem.md) | List of metadata entries (&#x60;CommunityHistoryMessage&#x60; uses &#x60;List&lt;MetadataItem&gt;&#x60;, not a map). | [optional] 
+**Metadata** | Pointer to [**[]MessageMetadataListItem**](MessageMetadataListItem.md) | Structured message metadata entries. Omitted when the original metadata is empty or cannot be parsed. | [optional] 
+**Quote** | Pointer to **string** | Quoted message details as a JSON string containing msgUID, objectName and fromUserId. Omitted for messages without a quote. | [optional] 
 
 ## Methods
 
@@ -184,31 +184,6 @@ SetMessageType sets MessageType field to given value.
 
 HasMessageType returns a boolean if a field has been set.
 
-### GetChannelType
-
-`func (o *MessageRecord) GetChannelType() int32`
-
-GetChannelType returns the ChannelType field if non-nil, zero value otherwise.
-
-### GetChannelTypeOk
-
-`func (o *MessageRecord) GetChannelTypeOk() (*int32, bool)`
-
-GetChannelTypeOk returns a tuple with the ChannelType field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetChannelType
-
-`func (o *MessageRecord) SetChannelType(v int32)`
-
-SetChannelType sets ChannelType field to given value.
-
-### HasChannelType
-
-`func (o *MessageRecord) HasChannelType() bool`
-
-HasChannelType returns a boolean if a field has been set.
-
 ### GetContent
 
 `func (o *MessageRecord) GetContent() string`
@@ -283,6 +258,31 @@ SetMetadata sets Metadata field to given value.
 `func (o *MessageRecord) HasMetadata() bool`
 
 HasMetadata returns a boolean if a field has been set.
+
+### GetQuote
+
+`func (o *MessageRecord) GetQuote() string`
+
+GetQuote returns the Quote field if non-nil, zero value otherwise.
+
+### GetQuoteOk
+
+`func (o *MessageRecord) GetQuoteOk() (*string, bool)`
+
+GetQuoteOk returns a tuple with the Quote field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetQuote
+
+`func (o *MessageRecord) SetQuote(v string)`
+
+SetQuote sets Quote field to given value.
+
+### HasQuote
+
+`func (o *MessageRecord) HasQuote() bool`
+
+HasQuote returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

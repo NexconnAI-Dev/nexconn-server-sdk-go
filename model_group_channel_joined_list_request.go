@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type GroupChannelJoinedListRequest struct {
 	PageSize *int32 `json:"pageSize,omitempty"`
 	// Sort order by join time. `0` ascending and `1` descending.
 	Order *int32 `json:"order,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelJoinedListRequest GroupChannelJoinedListRequest
@@ -228,6 +228,11 @@ func (o GroupChannelJoinedListRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -255,15 +260,24 @@ func (o *GroupChannelJoinedListRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varGroupChannelJoinedListRequest := _GroupChannelJoinedListRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelJoinedListRequest)
+	err = json.Unmarshal(data, &varGroupChannelJoinedListRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelJoinedListRequest(varGroupChannelJoinedListRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "role")
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "pageSize")
+		delete(additionalProperties, "order")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &GroupChannelFavoriteItem{}
 type GroupChannelFavoriteItem struct {
 	UserId *string `json:"userId,omitempty"`
 	FavoritedAt *int64 `json:"favoritedAt,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelFavoriteItem GroupChannelFavoriteItem
 
 // NewGroupChannelFavoriteItem instantiates a new GroupChannelFavoriteItem object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o GroupChannelFavoriteItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FavoritedAt) {
 		toSerialize["favoritedAt"] = o.FavoritedAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelFavoriteItem) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelFavoriteItem := _GroupChannelFavoriteItem{}
+
+	err = json.Unmarshal(data, &varGroupChannelFavoriteItem)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelFavoriteItem(varGroupChannelFavoriteItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "favoritedAt")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelFavoriteItem struct {

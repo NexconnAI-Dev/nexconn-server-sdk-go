@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &GroupChannelMemberListResponse{}
 type GroupChannelMemberListResponse struct {
 	Code int32 `json:"code"`
 	Result *GroupChannelMemberListResponseResult `json:"result,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _GroupChannelMemberListResponse GroupChannelMemberListResponse
@@ -115,6 +115,11 @@ func (o GroupChannelMemberListResponse) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.Result) {
 		toSerialize["result"] = o.Result
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -142,15 +147,21 @@ func (o *GroupChannelMemberListResponse) UnmarshalJSON(data []byte) (err error) 
 
 	varGroupChannelMemberListResponse := _GroupChannelMemberListResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varGroupChannelMemberListResponse)
+	err = json.Unmarshal(data, &varGroupChannelMemberListResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = GroupChannelMemberListResponse(varGroupChannelMemberListResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "result")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

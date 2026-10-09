@@ -12,7 +12,6 @@ package ncsdk
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &FriendDeleteRequest{}
 type FriendDeleteRequest struct {
 	UserId string `json:"userId"`
 	TargetIds []string `json:"targetIds"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _FriendDeleteRequest FriendDeleteRequest
@@ -106,6 +106,11 @@ func (o FriendDeleteRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["userId"] = o.UserId
 	toSerialize["targetIds"] = o.TargetIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *FriendDeleteRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varFriendDeleteRequest := _FriendDeleteRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varFriendDeleteRequest)
+	err = json.Unmarshal(data, &varFriendDeleteRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = FriendDeleteRequest(varFriendDeleteRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "userId")
+		delete(additionalProperties, "targetIds")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

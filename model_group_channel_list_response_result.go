@@ -21,7 +21,10 @@ var _ MappedNullable = &GroupChannelListResponseResult{}
 type GroupChannelListResponseResult struct {
 	PageToken *string `json:"pageToken,omitempty"`
 	Groups []GroupChannelSummaryItem `json:"groups,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _GroupChannelListResponseResult GroupChannelListResponseResult
 
 // NewGroupChannelListResponseResult instantiates a new GroupChannelListResponseResult object
 // This constructor will assign default values to properties that have it defined,
@@ -120,7 +123,34 @@ func (o GroupChannelListResponseResult) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.Groups) {
 		toSerialize["groups"] = o.Groups
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *GroupChannelListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	varGroupChannelListResponseResult := _GroupChannelListResponseResult{}
+
+	err = json.Unmarshal(data, &varGroupChannelListResponseResult)
+
+	if err != nil {
+		return err
+	}
+
+	*o = GroupChannelListResponseResult(varGroupChannelListResponseResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "pageToken")
+		delete(additionalProperties, "groups")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableGroupChannelListResponseResult struct {
